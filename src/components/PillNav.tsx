@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { gsap } from "gsap";
 import "./PillNav.css";
 
@@ -36,12 +37,14 @@ export default function PillNav({
 }: PillNavProps) {
   const resolvedPillTextColor = pillTextColor ?? baseColor;
 
-  const [activeHref, setActiveHref] = useState<string>(() => {
-    if (typeof window === "undefined") return items[0]?.href ?? "";
-    const path = window.location.pathname;
+  const pathname = usePathname();
+  const [activeHref, setActiveHref] = useState<string>("");
+
+  useEffect(() => {
+    const path = pathname.replace(/\/$/, "") || "/";
     const match = items.find((i) => i.href === path);
-    return match ? match.href : items[0]?.href ?? "";
-  });
+    setActiveHref(match ? match.href : "");
+  }, [pathname, items]);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const circleRefs   = useRef<(HTMLSpanElement | null)[]>([]);
