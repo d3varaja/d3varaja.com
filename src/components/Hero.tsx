@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import GlareHover from "./GlareHover";
+import { Button } from "@/components/ui/button";
 
 const TICKER_ITEMS = [
   "Product Design", "UX Research", "Design Systems",
@@ -170,53 +171,37 @@ export default function Hero() {
           }}
         >
           {/* Hire me */}
-          <a
-            href="mailto:tharun@d3varaja.com"
+          <Button
+            variant="default"
+            asChild
+            className="rounded-full uppercase font-bold tracking-[0.16em] bg-black text-white hover:bg-black/80 hover:-translate-y-0.5 hover:scale-[1.04] active:scale-[0.97] active:translate-y-0 shadow-none"
             style={{
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
               height: "37px",
               minWidth: "clamp(80px, 13.1vw, 98px)",
-              padding: "0 clamp(.75rem, 2vw, 1.25rem)",
-              background: "#000000",
-              color: "#ffffff",
               fontSize: "clamp(10px, 1.87vw, 14px)",
-              fontWeight: 700,
-              letterSpacing: "0.16em",
-              textTransform: "uppercase",
-              textDecoration: "none",
-              borderRadius: "25px",
+              padding: "0 clamp(.75rem, 2vw, 1.25rem)",
               whiteSpace: "nowrap",
             }}
           >
-            Hire me
-          </a>
+            <a href="mailto:tharun@d3varaja.com">Hire me</a>
+          </Button>
 
-          {/* Mail me */}
-          <button
+          {/* Mail me — shadcn button-outline-4: variant="outline" + rounded-full */}
+          <Button
+            variant="outline"
             onClick={handleMailMe}
+            className="rounded-full uppercase font-bold tracking-[0.16em] border-black text-black bg-white hover:bg-black hover:text-white hover:-translate-y-0.5 hover:scale-[1.04] active:scale-[0.97] active:translate-y-0 shadow-none"
             style={{
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
               height: "37px",
               minWidth: "clamp(80px, 13.1vw, 98px)",
-              padding: "0 clamp(.75rem, 2vw, 1.25rem)",
-              background: "#ffffff",
-              color: "#000000",
               fontSize: "clamp(10px, 1.87vw, 14px)",
-              fontWeight: 700,
-              letterSpacing: "0.16em",
-              textTransform: "uppercase",
-              border: "1px solid #000000",
-              borderRadius: "25px",
+              padding: "0 clamp(.75rem, 2vw, 1.25rem)",
               cursor: "none",
               whiteSpace: "nowrap",
             }}
           >
             {copied ? "Copied ✓" : "Mail me"}
-          </button>
+          </Button>
 
           {/* Social icons — pushed right */}
           <div
