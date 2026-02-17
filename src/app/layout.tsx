@@ -1,31 +1,29 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import ClickSpark from "@/components/ClickSpark";
+import Cursor from "@/components/Cursor";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Coming Soon | d3varaja",
-  description: "Something extraordinary is in the works. Stay tuned for an amazing experience.",
-  keywords: ["coming soon", "launch", "new website"],
-  openGraph: {
-    title: "Coming Soon | d3varaja",
-    description: "Something extraordinary is in the works. Stay tuned for an amazing experience.",
-    type: "website",
-  },
+  title: "Tharun Devaraja — Product Designer",
+  description: "Product Designer based in Sri Lanka.",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.variable} font-sans antialiased`}>
+    <html lang="en" className={inter.variable}>
+      <body>
+        <Cursor />
+        <ClickSpark />
         {children}
       </body>
     </html>
