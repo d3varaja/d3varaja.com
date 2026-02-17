@@ -7,7 +7,7 @@ import Cursor from "@/components/Cursor";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
-  weight: ["300", "400", "500", "600", "700", "900"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 

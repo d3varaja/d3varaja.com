@@ -42,24 +42,37 @@ export default function ClickSpark({
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sparksRef = useRef<Spark[]>([]);
-  const rafRef = useRef<number>(0);
+  const rafRef    = useRef<number>(0);
+  // Shared ref so the click handler can start the loop
+  const drawRef   = useRef<((ts: number) => void) | null>(null);
 
-  // Resize canvas to viewport
+  // Resize canvas — debounced so it doesn't fire hundreds of times per second
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+
     const resize = () => {
-      canvas.width = window.innerWidth;
+      canvas.width  = window.innerWidth;
       canvas.height = window.innerHeight;
     };
     resize();
-    window.addEventListener("resize", resize);
-    return () => window.removeEventListener("resize", resize);
+
+    let timer: ReturnType<typeof setTimeout>;
+    const debouncedResize = () => {
+      clearTimeout(timer);
+      timer = setTimeout(resize, 150);
+    };
+
+    window.addEventListener("resize", debouncedResize, { passive: true });
+    return () => {
+      window.removeEventListener("resize", debouncedResize);
+      clearTimeout(timer);
+    };
   }, []);
 
   const easeOut = useCallback((t: number) => t * (2 - t), []);
 
-  // Animation loop
+  // Animation loop — only runs while sparks are alive (on-demand)
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -73,40 +86,51 @@ export default function ClickSpark({
         if (elapsed >= duration) return false;
 
         const progress = elapsed / duration;
-        const eased = easeOut(progress);
+        const eased    = easeOut(progress);
         const distance = eased * sparkRadius;
-        const lineLength = sparkSize * (1 - eased);
+        const lineLen  = sparkSize * (1 - eased);
 
         const x1 = spark.x + distance * Math.cos(spark.angle);
         const y1 = spark.y + distance * Math.sin(spark.angle);
-        const x2 = spark.x + (distance + lineLength) * Math.cos(spark.angle);
-        const y2 = spark.y + (distance + lineLength) * Math.sin(spark.angle);
+        const x2 = spark.x + (distance + lineLen) * Math.cos(spark.angle);
+        const y2 = spark.y + (distance + lineLen) * Math.sin(spark.angle);
 
-        ctx.strokeStyle = spark.color;
-        ctx.lineWidth = 2;
-        ctx.globalAlpha = 1 - progress * 0.6;
+        ctx.strokeStyle  = spark.color;
+        ctx.lineWidth    = 2;
+        ctx.globalAlpha  = 1 - progress * 0.6;
         ctx.beginPath();
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
         ctx.stroke();
-        ctx.globalAlpha = 1;
+        ctx.globalAlpha  = 1;
 
         return true;
       });
 
-      rafRef.current = requestAnimationFrame(draw);
+      if (sparksRef.current.length > 0) {
+        // Keep looping while sparks remain
+        rafRef.current = requestAnimationFrame(draw);
+      } else {
+        // All sparks done — stop the loop until next click
+        rafRef.current = 0;
+      }
     };
 
-    rafRef.current = requestAnimationFrame(draw);
-    return () => cancelAnimationFrame(rafRef.current);
+    drawRef.current = draw;
+    // Don't start the loop here — it starts on first click
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = 0;
+    };
   }, [sparkSize, sparkRadius, duration, easeOut]);
 
-  // Click listener on document
+  // Click listener — spawns sparks and kicks off the RAF loop if idle
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
-      const bgColor = getColorAtPoint(e.clientX, e.clientY);
+      const bgColor    = getColorAtPoint(e.clientX, e.clientY);
       const sparkColor = isLight(bgColor) ? "#0c0c0c" : "#f2f1ef";
-      const now = performance.now();
+      const now        = performance.now();
+
       const newSparks: Spark[] = Array.from({ length: sparkCount }, (_, i) => ({
         x: e.clientX,
         y: e.clientY,
@@ -114,7 +138,13 @@ export default function ClickSpark({
         startTime: now,
         color: sparkColor,
       }));
+
       sparksRef.current.push(...newSparks);
+
+      // Start the RAF loop only if it isn't already running
+      if (!rafRef.current && drawRef.current) {
+        rafRef.current = requestAnimationFrame(drawRef.current);
+      }
     };
 
     document.addEventListener("click", handleClick);

@@ -120,7 +120,14 @@ export default function PillNav({
     };
 
     layout();
-    window.addEventListener("resize", layout);
+
+    // Debounce resize so heavy getBoundingClientRect work only runs after user stops resizing
+    let resizeTimer: ReturnType<typeof setTimeout>;
+    const debouncedLayout = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(layout, 150);
+    };
+    window.addEventListener("resize", debouncedLayout, { passive: true });
     document.fonts?.ready?.then(layout).catch(() => {});
 
     const menu = mobileMenuRef.current;
@@ -132,7 +139,10 @@ export default function PillNav({
       gsap.to(navItemsRef.current, { width: "auto", duration: 0.6, ease });
     }
 
-    return () => window.removeEventListener("resize", layout);
+    return () => {
+      window.removeEventListener("resize", debouncedLayout);
+      clearTimeout(resizeTimer);
+    };
   }, [items, ease, initialLoadAnimation]);
 
   const handleLogoEnter = () => {

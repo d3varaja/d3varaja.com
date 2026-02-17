@@ -7,34 +7,57 @@ export default function Cursor() {
   const elRef   = useRef<HTMLDivElement>(null);
   const pos     = useRef({ x: -100, y: -100 });
   const rafRef  = useRef<number>(0);
+  // Track actual values in refs to avoid redundant setState calls
+  const hiddenRef = useRef(false);
+  const hoverRef  = useRef(false);
   const [hover, setHover]   = useState(false);
   const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
-    // Inject global cursor: none
-    const style = document.createElement("style");
-    style.id = "custom-cursor-style";
-    style.textContent = `*, *::before, *::after { cursor: none !important; }`;
-    document.head.appendChild(style);
-    return () => style.remove();
+    // Inject global cursor: none — guard against duplicate tags
+    if (!document.getElementById("custom-cursor-style")) {
+      const style = document.createElement("style");
+      style.id = "custom-cursor-style";
+      style.textContent = `*, *::before, *::after { cursor: none !important; }`;
+      document.head.appendChild(style);
+      return () => style.remove();
+    }
   }, []);
 
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
       pos.current = { x: e.clientX, y: e.clientY };
-      setHidden(false);
+      // Only trigger a re-render when transitioning from hidden → visible
+      if (hiddenRef.current) {
+        hiddenRef.current = false;
+        setHidden(false);
+      }
     };
-    const onLeave = () => setHidden(true);
-    const onEnter = () => setHidden(false);
+    const onLeave = () => {
+      hiddenRef.current = true;
+      setHidden(true);
+    };
+    const onEnter = () => {
+      if (hiddenRef.current) {
+        hiddenRef.current = false;
+        setHidden(false);
+      }
+    };
     const onOver  = (e: MouseEvent) => {
       const el = (e.target as Element).closest("a, button, [role='button'], input, select, label");
-      setHover(!!el);
+      const next = !!el;
+      // Only re-render when hover state actually changes
+      if (next !== hoverRef.current) {
+        hoverRef.current = next;
+        setHover(next);
+      }
     };
 
-    document.addEventListener("mousemove", onMove);
-    document.addEventListener("mouseleave", onLeave);
-    document.addEventListener("mouseenter", onEnter);
-    document.addEventListener("mouseover", onOver);
+    // passive: true lets the browser skip waiting on JS before scrolling
+    document.addEventListener("mousemove",  onMove,  { passive: true });
+    document.addEventListener("mouseleave", onLeave, { passive: true });
+    document.addEventListener("mouseenter", onEnter, { passive: true });
+    document.addEventListener("mouseover",  onOver,  { passive: true });
 
     const animate = () => {
       if (elRef.current) {
@@ -45,10 +68,10 @@ export default function Cursor() {
     rafRef.current = requestAnimationFrame(animate);
 
     return () => {
-      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mousemove",  onMove);
       document.removeEventListener("mouseleave", onLeave);
       document.removeEventListener("mouseenter", onEnter);
-      document.removeEventListener("mouseover", onOver);
+      document.removeEventListener("mouseover",  onOver);
       cancelAnimationFrame(rafRef.current);
     };
   }, []);
