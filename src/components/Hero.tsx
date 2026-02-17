@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import GlareHover from "./GlareHover";
-import { Button } from "@/components/ui/button";
 
 const TICKER_ITEMS = [
   "Product Design", "UX Research", "Design Systems",
@@ -171,37 +170,44 @@ export default function Hero() {
           }}
         >
           {/* Hire me */}
-          <Button
-            variant="default"
-            asChild
-            className="rounded-full uppercase font-bold tracking-[0.16em] bg-black text-white hover:bg-black/80 hover:-translate-y-0.5 hover:scale-[1.04] active:scale-[0.97] active:translate-y-0 shadow-none"
-            style={{
-              height: "37px",
-              minWidth: "clamp(80px, 13.1vw, 98px)",
-              fontSize: "clamp(10px, 1.87vw, 14px)",
-              padding: "0 clamp(.75rem, 2vw, 1.25rem)",
-              whiteSpace: "nowrap",
-            }}
+          <a
+            href="mailto:tharun@d3varaja.com"
+            aria-label="Send email to hire Tharun"
+            style={{ width: 108 }}
+            className="relative bg-zinc-200 rounded-full overflow-hidden hover:bg-zinc-300 transition-colors duration-200 local-focus-ring flex items-center justify-center h-10 px-3.5 whitespace-nowrap no-underline touch-manipulation"
           >
-            <a href="mailto:tharun@d3varaja.com">Hire me</a>
-          </Button>
+            <span className="flex gap-1.5 items-center h-6 text-base font-medium text-zinc-600">
+              Hire me
+            </span>
+          </a>
 
-          {/* Mail me — shadcn button-outline-4: variant="outline" + rounded-full */}
-          <Button
-            variant="outline"
+          {/* Mail me — label slide on hover */}
+          <button
             onClick={handleMailMe}
-            className="rounded-full uppercase font-bold tracking-[0.16em] border-black text-black bg-white hover:bg-black hover:text-white hover:-translate-y-0.5 hover:scale-[1.04] active:scale-[0.97] active:translate-y-0 shadow-none"
-            style={{
-              height: "37px",
-              minWidth: "clamp(80px, 13.1vw, 98px)",
-              fontSize: "clamp(10px, 1.87vw, 14px)",
-              padding: "0 clamp(.75rem, 2vw, 1.25rem)",
-              cursor: "none",
-              whiteSpace: "nowrap",
-            }}
+            aria-label="Copy email address"
+            className="group bg-zinc-200 h-10 px-3.5 w-[110px] hover:w-[130px] rounded-full hover:bg-zinc-300 transition-[width,background-color] duration-200 ease-out local-focus-ring relative overflow-hidden border-0 touch-manipulation"
           >
-            {copied ? "Copied ✓" : "Mail me"}
-          </Button>
+            <span className="flex items-center justify-center w-full h-full">
+              {copied ? (
+                <span className="flex gap-1.5 items-center h-6 text-base font-medium text-zinc-600">
+                  Copied ✓
+                </span>
+              ) : (
+                <span className="h-6 overflow-hidden">
+                  <span className="flex flex-col items-center transition-transform duration-200 ease-out group-hover:-translate-y-6">
+                    <span className="flex gap-1.5 items-center justify-center h-6 text-base font-medium text-zinc-600 w-full">
+                      <MailIcon />
+                      Mail me
+                    </span>
+                    <span className="flex gap-1.5 items-center justify-center h-6 text-base font-medium text-zinc-600 w-full">
+                      <CopyIcon />
+                      Copy email
+                    </span>
+                  </span>
+                </span>
+              )}
+            </span>
+          </button>
 
           {/* Social icons — pushed right */}
           <div
@@ -285,6 +291,26 @@ function SocialLink({
     >
       {children}
     </a>
+  );
+}
+
+/* ── Button icons ───────────────────────────────── */
+
+function MailIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <rect x="1" y="2.5" width="12" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M1 5l6 4 6-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function CopyIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <rect x="4.5" y="1" width="8.5" height="8.5" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
+      <rect x="1" y="4.5" width="8.5" height="8.5" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
+    </svg>
   );
 }
 
