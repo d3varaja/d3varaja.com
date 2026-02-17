@@ -190,7 +190,8 @@ export default function Hero() {
             <span className="flex items-center justify-center w-full h-full">
               {copied ? (
                 <span className="flex gap-1.5 items-center h-6 text-base font-medium text-zinc-600">
-                  Copied ✓
+                  <CheckIcon />
+                  Copied
                 </span>
               ) : (
                 <span className="h-6 overflow-hidden">
@@ -295,6 +296,14 @@ function SocialLink({
 }
 
 /* ── Button icons ───────────────────────────────── */
+
+function CheckIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <path d="M2 7l3.5 3.5L12 4" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
 
 function MailIcon() {
   return (
