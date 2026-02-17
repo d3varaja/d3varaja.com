@@ -130,6 +130,12 @@ a, button { cursor: none; }
   opacity: .6;
 }
 
+/* ─── Pill button focus ring ─────────────────────────── */
+.local-focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(12, 12, 12, 0.2);
+}
+
 /* ─── Scrollbar ──────────────────────────────────── */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--white); }
