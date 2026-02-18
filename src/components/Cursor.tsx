@@ -79,6 +79,7 @@ export default function Cursor() {
   return (
     <div
       ref={elRef}
+      className="custom-cursor"
       style={{
         position: "fixed",
         top: 0,

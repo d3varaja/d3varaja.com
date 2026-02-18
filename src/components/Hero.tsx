@@ -70,6 +70,7 @@ export default function Hero() {
       {/* ── Business Card ─────────────────────────── */}
       <GlareHover
         ref={cardRef}
+        className="hero-card"
         glareColor="#000000"
         glareOpacity={0.07}
         glareAngle={-30}
@@ -90,8 +91,12 @@ export default function Hero() {
           gap: "clamp(1.25rem, 6.5vw, 3.1875rem)",
         }}
       >
+        {/* ── Desktop card content ────────────────── */}
+        <div className="hero-desktop-content">
+
         {/* ── Main row: text + photo ──────────────── */}
         <div
+          className="hero-main-row"
           style={{
             display: "flex",
             gap: "clamp(.5rem, 1.6vw, .75rem)",
@@ -187,6 +192,7 @@ export default function Hero() {
 
           {/* Right — profile photo */}
           <div
+            className="hero-photo"
             style={{
               width: "clamp(110px, 33.1vw, 217px)",
               aspectRatio: "217 / 247",
@@ -209,6 +215,7 @@ export default function Hero() {
 
         {/* ── Bottom CTA bar ──────────────────────── */}
         <div
+          className="hero-bottom-bar"
           style={{
             display: "flex",
             alignItems: "center",
@@ -282,6 +289,165 @@ export default function Hero() {
             </SocialLink>
           </div>
         </div>
+        </div>{/* /hero-desktop-content */}
+
+        {/* ── Mobile card content ─────────────────── */}
+        <div className="hero-mobile-content">
+
+          {/* Eyebrow */}
+          <p
+            style={{
+              fontSize: "13px",
+              fontWeight: 500,
+              letterSpacing: "2.08px",
+              textTransform: "uppercase",
+              color: "#838383",
+              lineHeight: 0.95,
+            }}
+          >
+            Product Designer
+          </p>
+
+          {/* Name */}
+          <h1
+            style={{
+              fontSize: "36px",
+              fontWeight: 600,
+              lineHeight: 0.95,
+              color: "#000000",
+            }}
+          >
+            Tharun Devaraja
+          </h1>
+
+          {/* Photo */}
+          <div
+            style={{
+              width: "65%",
+              maxWidth: "217px",
+              aspectRatio: "217 / 247",
+              borderRadius: "12px",
+              border: "3px solid #000000",
+              overflow: "hidden",
+              position: "relative",
+              flexShrink: 0,
+            }}
+          >
+            <Image
+              src="/profile.jpg"
+              alt="Tharun Devaraja"
+              fill
+              style={{ objectFit: "cover", objectPosition: "center top" }}
+            />
+          </div>
+
+          {/* Description */}
+          <p
+            style={{
+              fontSize: "16px",
+              fontWeight: 400,
+              lineHeight: 1.13,
+              color: "#000000",
+            }}
+          >
+            2+ years of experience designing thoughtful, scalable products
+            that solve real user problems through design and development.
+          </p>
+
+          {/* Resume button */}
+          <a
+            href="/tharun-devaraja-resume.pdf"
+            download
+            onClick={handleDownload}
+            aria-label="Download Resume"
+            style={{ height: 40 }}
+            className={`bg-black rounded-full overflow-hidden transition-[width,background-color] duration-200 ease-out local-focus-ring flex items-center justify-center no-underline touch-manipulation px-5 ${
+              isDownloading ? "w-[165px] pointer-events-none" : "w-[132px]"
+            }`}
+          >
+            <span className="flex items-center justify-center w-full h-full">
+              {isDownloading ? (
+                <span className="flex gap-2 items-center h-6 text-base font-medium text-white whitespace-nowrap">
+                  <SpinnerIcon />
+                  Downloading
+                </span>
+              ) : (
+                <span className="flex gap-2 items-center h-6 text-base font-medium text-white whitespace-nowrap">
+                  Resume
+                  <DownloadIcon />
+                </span>
+              )}
+            </span>
+          </a>
+
+          {/* Divider + CTA buttons */}
+          <div
+            style={{
+              width: "100%",
+              borderTop: "1px solid var(--rule)",
+              paddingTop: "1.25rem",
+              display: "flex",
+              justifyContent: "center",
+              gap: "20px",
+            }}
+          >
+            <a
+              href="mailto:tharun@d3varaja.com"
+              aria-label="Send email to hire Tharun"
+              style={{ width: 108 }}
+              className="bg-zinc-200 rounded-full overflow-hidden hover:bg-zinc-300 transition-colors duration-200 local-focus-ring flex items-center justify-center h-10 px-3.5 whitespace-nowrap no-underline touch-manipulation"
+            >
+              <span className="flex gap-1.5 items-center h-6 text-base font-medium text-zinc-600">
+                Hire me
+              </span>
+            </a>
+            <button
+              onClick={handleMailMe}
+              aria-label="Copy email address"
+              style={{ border: "none", outline: "none", width: 110 }}
+              className="bg-zinc-200 h-10 px-3.5 rounded-full hover:bg-zinc-300 transition-colors duration-200 local-focus-ring relative overflow-hidden touch-manipulation"
+            >
+              <span className="flex items-center justify-center w-full h-full">
+                {copied ? (
+                  <span className="flex gap-1.5 items-center h-6 text-base font-medium text-zinc-600">
+                    <CheckIcon />
+                    Copied
+                  </span>
+                ) : (
+                  <span className="flex gap-1.5 items-center h-6 text-base font-medium text-zinc-600">
+                    <MailIcon />
+                    Mail me
+                  </span>
+                )}
+              </span>
+            </button>
+          </div>
+
+          {/* Social icons */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "clamp(.75rem, 2.7vw, 1.25rem)",
+            }}
+          >
+            <SocialLink href="https://github.com/d3varaja" label="GitHub">
+              <GitHubIcon />
+            </SocialLink>
+            <SocialLink href="https://www.behance.net/d3varaja" label="Behance">
+              <BehanceIcon />
+            </SocialLink>
+            <SocialLink href="https://dribbble.com/d3varaja" label="Dribbble">
+              <DribbbleIcon />
+            </SocialLink>
+            <SocialLink href="https://linkedin.com/in/d3varaja" label="LinkedIn">
+              <LinkedInIcon />
+            </SocialLink>
+          </div>
+
+        </div>{/* /hero-mobile-content */}
+
       </GlareHover>
 
       {/* ── Ticker ────────────────────────────────── */}

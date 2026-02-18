@@ -224,3 +224,52 @@ a, button { cursor: none; }
     @apply bg-background text-foreground;
   }
 }
+
+/* ─── Hero content switching ────────────────────── */
+.hero-desktop-content { display: contents; }
+.hero-mobile-content  { display: none; }
+
+/* ─── Mobile ─────────────────────────────────────── */
+@media (max-width: 768px) {
+
+  /* Hero: swap to mobile layout */
+  .hero-desktop-content { display: none; }
+  .hero-mobile-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Hide custom cursor, restore native cursor */
+  .custom-cursor { display: none !important; }
+  body { cursor: auto !important; }
+  body * { cursor: auto !important; }
+
+  /* Hero card: reduce border radius */
+  .hero-card {
+    border-radius: 14px !important;
+  }
+
+  /* About: single column — info card stacks below bio */
+  .about-bio-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2rem 0 !important;
+  }
+
+  /* Timeline: single column */
+  .timeline-item {
+    grid-template-columns: 1fr !important;
+    gap: .25rem 0 !important;
+  }
+
+  .timeline-left {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: .75rem !important;
+    align-items: baseline !important;
+    padding-bottom: .5rem !important;
+  }
+}

@@ -90,6 +90,7 @@ export default function About() {
           </div>
 
           <div
+            className="about-bio-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "1fr clamp(0px, 35%, 380px)",
