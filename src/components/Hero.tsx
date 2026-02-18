@@ -14,6 +14,7 @@ const TICKER_TEXT = [...TICKER_ITEMS, ...TICKER_ITEMS].map((t) => `${t}  ·`).jo
 export default function Hero() {
   const cardRef = useRef<HTMLDivElement>(null);
   const [copied, setCopied] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   useEffect(() => {
     const el = cardRef.current;
@@ -32,6 +33,19 @@ export default function Hero() {
     }, 80);
     return () => clearTimeout(id);
   }, []);
+
+  const handleDownload = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    if (isDownloading) return;
+    setIsDownloading(true);
+    const link = document.createElement("a");
+    link.href = "/tharun-devaraja-resume.pdf";
+    link.download = "tharun-devaraja-resume.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => setIsDownloading(false), 3000);
+  };
 
   const handleMailMe = () => {
     navigator.clipboard.writeText("tharun@d3varaja.com").then(() => {
@@ -81,7 +95,7 @@ export default function Hero() {
           style={{
             display: "flex",
             gap: "clamp(.5rem, 1.6vw, .75rem)",
-            alignItems: "flex-start",
+            alignItems: "stretch",
           }}
         >
           {/* Left — text */}
@@ -101,7 +115,7 @@ export default function Hero() {
                 letterSpacing: "0.16em",
                 textTransform: "uppercase",
                 color: "#838383",
-                lineHeight: 1,
+                lineHeight: 0.95,
               }}
             >
               Product Designer
@@ -113,7 +127,6 @@ export default function Hero() {
                 fontSize: "clamp(1.75rem, 6.14vw, 46px)",
                 fontWeight: 600,
                 lineHeight: 0.95,
-                letterSpacing: "-0.01em",
                 color: "#000000",
               }}
             >
@@ -134,6 +147,42 @@ export default function Hero() {
               2+ years of experience designing thoughtful, scalable products
               that solve real user problems through design and development.
             </p>
+
+            {/* Download Resume */}
+            <a
+              href="/tharun-devaraja-resume.pdf"
+              download
+              onClick={handleDownload}
+              aria-label="Download Resume"
+              style={{ height: 40, marginTop: "auto" }}
+              className={`group bg-black rounded-full overflow-hidden transition-[width,background-color] duration-200 ease-out local-focus-ring flex items-center justify-center no-underline touch-manipulation self-start px-5 ${
+                isDownloading
+                  ? "w-[165px] pointer-events-none"
+                  : "w-[132px] hover:w-[210px] hover:bg-zinc-800"
+              }`}
+            >
+              <span className="flex items-center justify-center w-full h-full">
+                {isDownloading ? (
+                  <span className="flex gap-2 items-center h-6 text-base font-medium text-white whitespace-nowrap">
+                    <SpinnerIcon />
+                    Downloading
+                  </span>
+                ) : (
+                  <span className="h-6 overflow-hidden">
+                    <span className="flex flex-col items-center transition-transform duration-200 ease-out group-hover:-translate-y-6">
+                      <span className="flex gap-2 items-center justify-center h-6 text-base font-medium text-white whitespace-nowrap w-full">
+                        Resume
+                        <DownloadIcon />
+                      </span>
+                      <span className="flex gap-2 items-center justify-center h-6 text-base font-medium text-white whitespace-nowrap w-full">
+                        Download Resume
+                        <DownloadIcon />
+                      </span>
+                    </span>
+                  </span>
+                )}
+              </span>
+            </a>
           </div>
 
           {/* Right — profile photo */}
@@ -190,7 +239,8 @@ export default function Hero() {
             <span className="flex items-center justify-center w-full h-full">
               {copied ? (
                 <span className="flex gap-1.5 items-center h-6 text-base font-medium text-zinc-600">
-                  Copied ✓
+                  <CheckIcon />
+                  Copied
                 </span>
               ) : (
                 <span className="h-6 overflow-hidden">
@@ -295,6 +345,31 @@ function SocialLink({
 }
 
 /* ── Button icons ───────────────────────────────── */
+
+function SpinnerIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="animate-spin" style={{ flexShrink: 0 }}>
+      <circle cx="8" cy="8" r="6" stroke="white" strokeWidth="2" strokeOpacity="0.25" />
+      <path d="M8 2a6 6 0 0 1 6 6" stroke="white" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function DownloadIcon() {
+  return (
+    <svg width="21" height="21" viewBox="0 0 21 21" fill="none" aria-hidden="true" style={{ flexShrink: 0 }}>
+      <path d="M10.1719 13.5739C10.0698 13.5371 9.975 13.475 9.8875 13.3875L6.7375 10.2375C6.5625 10.0625 6.4785 9.85833 6.4855 9.625C6.4925 9.39167 6.5765 9.1875 6.7375 9.0125C6.9125 8.8375 7.12046 8.7465 7.36138 8.7395C7.60229 8.7325 7.80996 8.81621 7.98438 8.99062L9.625 10.6313V4.375C9.625 4.12708 9.709 3.91942 9.877 3.752C10.045 3.58458 10.2527 3.50058 10.5 3.5C10.7473 3.49942 10.9553 3.58342 11.1239 3.752C11.2925 3.92058 11.3762 4.12825 11.375 4.375V10.6313L13.0156 8.99062C13.1906 8.81562 13.3986 8.73163 13.6395 8.73863C13.8804 8.74563 14.0881 8.83692 14.2625 9.0125C14.4229 9.1875 14.5069 9.39167 14.5145 9.625C14.5221 9.85833 14.4381 10.0625 14.2625 10.2375L11.1125 13.3875C11.025 13.475 10.9302 13.5371 10.8281 13.5739C10.726 13.6106 10.6167 13.6287 10.5 13.6281C10.3833 13.6275 10.274 13.6095 10.1719 13.5739ZM5.25 17.5C4.76875 17.5 4.35692 17.3288 4.0145 16.9864C3.67208 16.644 3.50058 16.2318 3.5 15.75V14C3.5 13.7521 3.584 13.5444 3.752 13.377C3.92 13.2096 4.12767 13.1256 4.375 13.125C4.62233 13.1244 4.83029 13.2084 4.99887 13.377C5.16746 13.5456 5.25117 13.7533 5.25 14V15.75H15.75V14C15.75 13.7521 15.834 13.5444 16.002 13.377C16.17 13.2096 16.3777 13.1256 16.625 13.125C16.8723 13.1244 17.0803 13.2084 17.2489 13.377C17.4175 13.5456 17.5012 13.7533 17.5 14V15.75C17.5 16.2313 17.3288 16.6434 16.9864 16.9864C16.644 17.3294 16.2318 17.5006 15.75 17.5H5.25Z" fill="white"/>
+    </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <path d="M2 7l3.5 3.5L12 4" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
 
 function MailIcon() {
   return (
