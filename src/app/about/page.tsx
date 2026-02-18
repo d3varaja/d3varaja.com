@@ -3,40 +3,45 @@ import TimelineItem, { type TimelineItemProps } from "@/components/TimelineItem"
 
 const EXPERIENCE: TimelineItemProps[] = [
   {
-    company: "Company Name",
-    title: "Product Designer",
-    period: "2024 — Present",
-    location: "Remote",
+    company: "Lankans",
+    title: "Founder",
+    period: "Nov 2023 — Present · 2 yrs",
+    location: "Sri Lanka",
     type: "work",
+    logo: "/logos/lankans.jpeg",
+    bullets: [],
+  },
+  {
+    company: "BitByBit · Part-time",
+    title: "UX R&D Contributor",
+    period: "Jul 2025 — Present · 8 mos",
+    type: "work",
+    logo: "/logos/bitbybit.png",
+    bullets: [],
+  },
+  {
+    company: "RE24 · Internship",
+    title: "Software Developer Intern",
+    period: "Jul 2025 — Oct 2025 · 4 mos",
+    location: "London, United Kingdom · Remote",
+    type: "internship",
+    logo: "/logos/re24.png",
     bullets: [
-      "Placeholder bullet — describe impact, not tasks.",
-      "Placeholder bullet — lead with outcome, follow with method.",
-      "Placeholder bullet — include a number if you can.",
+      "Started my summer internship as a software developer intern at RE24, actively contributing and learning while collaborating with the team to support software development efforts.",
     ],
   },
   {
-    company: "Company Name",
-    title: "Junior Designer",
-    period: "2022 — 2024",
-    location: "City, Country",
-    type: "work",
-    bullets: [
-      "Placeholder bullet.",
-      "Placeholder bullet.",
-    ],
-  },
-  {
-    company: "University / Institution",
-    title: "Degree, Field of Study",
-    period: "20XX — 20XX",
+    company: "University of Westminster",
+    title: "BSc Computer Science",
+    period: "2024 — 2028",
     type: "education",
+    logo: "/logos/uow.jpeg",
     bullets: [],
   },
 ];
 
 const CERTS = [
-  { name: "Certification Name", issuer: "Issuer", year: "2025" },
-  { name: "Certification Name", issuer: "Issuer", year: "2024" },
+  { name: "Foundations of User Experience (UX) Design", issuer: "Google", year: "Feb 2026", credentialId: "VOPJ9SQ0295C", href: "https://www.coursera.org/account/accomplishments/verify/VOPJ9SQ0295C" },
 ];
 
 export default function About() {
@@ -105,8 +110,7 @@ export default function About() {
                   maxWidth: "38ch",
                 }}
               >
-                Placeholder first paragraph — one or two sentences that say something
-                true and specific about how you think. Not a job description.
+                I'm focused on developing human experiences not just interfaces. I care about how people move through a product, how it feels, and how every detail shapes that journey.
               </p>
               <p
                 style={{
@@ -116,26 +120,35 @@ export default function About() {
                   marginBottom: "1rem",
                 }}
               >
-                Placeholder second paragraph — background, approach, what you care about.
-                Keep it honest and trim.
+                I work across the full product flow from thinking and strategy to design, development, testing, and refinement. I don't see these as separate roles, but as connected parts of one system.
               </p>
               <p style={{ fontSize: "var(--body)", color: "var(--mid)", lineHeight: 1.8 }}>
-                Placeholder third paragraph — one thing that differentiates you. Could be
-                domain knowledge, a point of view, or a way of working.
+                What differentiates me is that I build what I design. I think end-to-end, which allows me to shape experiences with both vision and execution in mind.
               </p>
             </div>
 
             {/* Info card */}
             <div>
               <InfoRow label="Based"     value="Western Province, Sri Lanka" />
-              <InfoRow label="Status"    value="[Open to work / Employed]" />
+              <InfoRow label="Status"    value="Open to work" />
               <InfoRow label="Education" value="University of Westminster" />
-              <InfoRow label="Email"     value="[your@email.com]" href="mailto:your@email.com" />
+              <InfoRow label="Email"     value="tharunrandiv@gmail.com" href="mailto:tharunrandiv@gmail.com" />
 
               <div style={{ marginTop: "2rem", display: "flex", flexDirection: "column", gap: ".75rem" }}>
                 {CERTS.map((c, i) => (
                   <div key={i}>
-                    <p style={{ fontSize: "var(--small)", fontWeight: 500 }}>{c.name}</p>
+                    {c.href ? (
+                      <a
+                        href={c.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ fontSize: "var(--small)", fontWeight: 500, color: "var(--black)", textDecoration: "none", borderBottom: "1px solid var(--rule)" }}
+                      >
+                        {c.name} ↗
+                      </a>
+                    ) : (
+                      <p style={{ fontSize: "var(--small)", fontWeight: 500 }}>{c.name}</p>
+                    )}
                     <p
                       style={{
                         fontSize: "var(--label)",

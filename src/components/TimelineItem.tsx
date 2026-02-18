@@ -4,8 +4,9 @@ export interface TimelineItemProps {
   period: string;
   location?: string;
   bullets: string[];
-  type: "work" | "education" | "volunteer";
+  type: "work" | "education" | "volunteer" | "internship";
   placeholder?: boolean;
+  logo?: string;
 }
 
 export default function TimelineItem({
@@ -16,6 +17,7 @@ export default function TimelineItem({
   bullets,
   type,
   placeholder,
+  logo,
 }: TimelineItemProps) {
   return (
     <div
@@ -48,26 +50,61 @@ export default function TimelineItem({
 
       {/* Right */}
       <div>
-        <p
-          style={{
-            fontSize: "var(--h2)",
-            fontWeight: 600,
-            letterSpacing: "-.015em",
-            lineHeight: 1.25,
-            marginBottom: ".2rem",
-          }}
-        >
-          {title}
-        </p>
-        <p
-          style={{
-            fontSize: "var(--body)",
-            color: "var(--mid)",
-            marginBottom: bullets.length ? "1rem" : 0,
-          }}
-        >
-          {company}
-        </p>
+        {/* Logo + title row */}
+        <div style={{ display: "flex", alignItems: "flex-start", gap: ".875rem", marginBottom: ".75rem" }}>
+          {/* Logo */}
+          {logo ? (
+            <img
+              src={logo}
+              alt={company}
+              style={{
+                width: 48,
+                height: 48,
+                borderRadius: 10,
+                objectFit: "contain",
+                border: "1px solid var(--rule)",
+                background: "transparent",
+                flexShrink: 0,
+              }}
+            />
+          ) : (
+            <div
+              style={{
+                width: 48,
+                height: 48,
+                borderRadius: 10,
+                border: "1px solid var(--rule)",
+                background: "var(--white)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "var(--small)",
+                fontWeight: 600,
+                color: "var(--mid)",
+                flexShrink: 0,
+              }}
+            >
+              {company.charAt(0).toUpperCase()}
+            </div>
+          )}
+          {/* Title + company */}
+          <div>
+            <p
+              style={{
+                fontSize: "var(--h2)",
+                fontWeight: 600,
+                letterSpacing: "-.015em",
+                lineHeight: 1.25,
+                marginBottom: ".2rem",
+              }}
+            >
+              {title}
+            </p>
+            <p style={{ fontSize: "var(--body)", color: "var(--mid)" }}>
+              {company}
+            </p>
+          </div>
+        </div>
         {bullets.length > 0 && (
           <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: ".35rem" }}>
             {bullets.map((b, i) => (
