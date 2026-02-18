@@ -14,6 +14,7 @@ const TICKER_TEXT = [...TICKER_ITEMS, ...TICKER_ITEMS].map((t) => `${t}  ·`).jo
 export default function Hero() {
   const cardRef = useRef<HTMLDivElement>(null);
   const [copied, setCopied] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   useEffect(() => {
     const el = cardRef.current;
@@ -32,6 +33,19 @@ export default function Hero() {
     }, 80);
     return () => clearTimeout(id);
   }, []);
+
+  const handleDownload = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    if (isDownloading) return;
+    setIsDownloading(true);
+    const link = document.createElement("a");
+    link.href = "/tharun-devaraja-resume.pdf";
+    link.download = "tharun-devaraja-resume.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => setIsDownloading(false), 3000);
+  };
 
   const handleMailMe = () => {
     navigator.clipboard.writeText("tharun@d3varaja.com").then(() => {
@@ -136,16 +150,38 @@ export default function Hero() {
 
             {/* Download Resume */}
             <a
-              href="/resume.pdf"
+              href="/tharun-devaraja-resume.pdf"
               download
+              onClick={handleDownload}
               aria-label="Download Resume"
-              style={{ width: 210, height: 40, paddingLeft: 20, paddingRight: 19, marginTop: "auto" }}
-              className="relative bg-black rounded-full overflow-hidden hover:bg-zinc-800 transition-colors duration-200 local-focus-ring flex items-center gap-2 whitespace-nowrap no-underline touch-manipulation self-start"
+              style={{ height: 40, marginTop: "auto" }}
+              className={`group bg-black rounded-full overflow-hidden transition-[width,background-color] duration-200 ease-out local-focus-ring flex items-center justify-center no-underline touch-manipulation self-start px-5 ${
+                isDownloading
+                  ? "w-[165px] pointer-events-none"
+                  : "w-[132px] hover:w-[210px] hover:bg-zinc-800"
+              }`}
             >
-              <span className="flex-1 text-base font-medium text-white leading-6">
-                Download Resume
+              <span className="flex items-center justify-center w-full h-full">
+                {isDownloading ? (
+                  <span className="flex gap-2 items-center h-6 text-base font-medium text-white whitespace-nowrap">
+                    <SpinnerIcon />
+                    Downloading
+                  </span>
+                ) : (
+                  <span className="h-6 overflow-hidden">
+                    <span className="flex flex-col items-center transition-transform duration-200 ease-out group-hover:-translate-y-6">
+                      <span className="flex gap-2 items-center justify-center h-6 text-base font-medium text-white whitespace-nowrap w-full">
+                        Resume
+                        <DownloadIcon />
+                      </span>
+                      <span className="flex gap-2 items-center justify-center h-6 text-base font-medium text-white whitespace-nowrap w-full">
+                        Download Resume
+                        <DownloadIcon />
+                      </span>
+                    </span>
+                  </span>
+                )}
               </span>
-              <DownloadIcon />
             </a>
           </div>
 
@@ -309,6 +345,15 @@ function SocialLink({
 }
 
 /* ── Button icons ───────────────────────────────── */
+
+function SpinnerIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="animate-spin" style={{ flexShrink: 0 }}>
+      <circle cx="8" cy="8" r="6" stroke="white" strokeWidth="2" strokeOpacity="0.25" />
+      <path d="M8 2a6 6 0 0 1 6 6" stroke="white" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
 
 function DownloadIcon() {
   return (
