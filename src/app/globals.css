@@ -238,7 +238,7 @@ a, button { cursor: none; }
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.25rem;
+    gap: 0.75rem;
     width: 100%;
     text-align: center;
   }

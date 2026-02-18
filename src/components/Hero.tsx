@@ -323,8 +323,8 @@ export default function Hero() {
           {/* Photo */}
           <div
             style={{
-              width: "65%",
-              maxWidth: "217px",
+              width: "56%",
+              maxWidth: "210px",
               aspectRatio: "217 / 247",
               borderRadius: "12px",
               border: "3px solid #000000",
@@ -385,7 +385,7 @@ export default function Hero() {
             style={{
               width: "100%",
               borderTop: "1px solid var(--rule)",
-              paddingTop: "1.25rem",
+              paddingTop: "0.875rem",
               display: "flex",
               justifyContent: "center",
               gap: "20px",
