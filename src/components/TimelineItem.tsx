@@ -21,6 +21,7 @@ export default function TimelineItem({
 }: TimelineItemProps) {
   return (
     <div
+      className="timeline-item"
       style={{
         display: "grid",
         gridTemplateColumns: "clamp(9rem,22%,13rem) 1fr",
@@ -31,7 +32,7 @@ export default function TimelineItem({
       }}
     >
       {/* Left */}
-      <div>
+      <div className="timeline-left">
         <p
           className="eyebrow"
           style={{ marginBottom: ".5rem" }}
