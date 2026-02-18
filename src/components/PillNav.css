@@ -14,8 +14,11 @@
   }
 }
 
-.pill-nav {
+.pill-nav-container {
   --nav-h: 42px;
+}
+
+.pill-nav {
   --logo: 36px;
   --pill-pad-x: 18px;
   --pill-gap: 3px;
@@ -176,20 +179,48 @@
   }
 }
 
+.mobile-close-button {
+  width: var(--nav-h);
+  height: var(--nav-h);
+  border-radius: 50%;
+  background: #0c0c0c;
+  border: none;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: none;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .mobile-close-button.is-visible {
+    display: flex;
+  }
+  .pill-nav.is-open {
+    justify-content: flex-start;
+    gap: 12px;
+  }
+}
+
 .mobile-menu-button {
   width: var(--nav-h);
   height: var(--nav-h);
   border-radius: 50%;
-  background: var(--base, #000);
+  background: transparent;
   border: none;
   display: none;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
   cursor: none;
   padding: 0;
   position: relative;
+}
+
+.hamburger-icon-img {
+  width: var(--nav-h);
+  height: var(--nav-h);
+  display: block;
 }
 
 @media (max-width: 768px) {
@@ -198,21 +229,15 @@
   }
 }
 
-.hamburger-line {
-  width: 16px;
-  height: 2px;
-  background: var(--pill-bg, #fff);
-  border-radius: 1px;
-  transform-origin: center;
-}
 
 .mobile-menu-popover {
   position: absolute;
-  top: 3em;
+  top: calc(var(--nav-h) + 15px);
   left: 0;
   right: 0;
   background: var(--base, #000);
-  border-radius: 27px;
+  border-radius: 30px;
+  overflow: hidden;
   z-index: 998;
   opacity: 0;
   transform-origin: top center;
@@ -222,22 +247,24 @@
 .mobile-menu-list {
   list-style: none;
   margin: 0;
-  padding: 3px;
+  padding: 4px;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
 }
 
 .mobile-menu-popover .mobile-menu-link {
-  display: block;
-  padding: 12px 16px;
-  color: var(--pill-text, #fff);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  height: 52px;
+  color: var(--pill-text, #000);
   background-color: var(--pill-bg, #fff);
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
-  border-radius: 50px;
-  letter-spacing: 0.05em;
+  border-radius: 26px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 

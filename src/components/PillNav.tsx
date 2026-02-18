@@ -239,7 +239,7 @@ export default function PillNav({
 
   return (
     <div className="pill-nav-container">
-      <nav className="pill-nav" aria-label="Primary" style={cssVars}>
+      <nav className={`pill-nav${isMobileMenuOpen ? " is-open" : ""}`} aria-label="Primary" style={cssVars}>
 
         {/* Logo */}
         <a href="/" className="pill-nav-logo" aria-label="Home" onMouseEnter={handleLogoEnter}>
@@ -274,19 +274,51 @@ export default function PillNav({
           </ul>
         </div>
 
+        {/* Mobile close button — visible only when menu is open */}
+        <button
+          className={`mobile-close-button mobile-only${isMobileMenuOpen ? " is-visible" : ""}`}
+          onClick={toggleMobileMenu}
+          aria-label="Close menu"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M4 4L16 16M16 4L4 16" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+          </svg>
+        </button>
+
         <button
           className="mobile-menu-button mobile-only"
           onClick={toggleMobileMenu}
           aria-label="Toggle menu"
           ref={hamburgerRef}
         >
-          <span className="hamburger-line" />
-          <span className="hamburger-line" />
+          <img src="/navbar-icon.svg" alt="Menu" className="hamburger-icon-img" />
         </button>
       </nav>
 
       <div className="mobile-menu-popover mobile-only" ref={mobileMenuRef} style={cssVars}>
         <ul className="mobile-menu-list">
+          {/* HOME always first on mobile since the logo link is hidden */}
+          <li>
+            <a
+              href="/"
+              className={`mobile-menu-link${activeHref === "/" ? " is-active" : ""}`}
+              onClick={(e) => {
+                e.preventDefault();
+                handleClick("/");
+                setIsMobileMenuOpen(false);
+                const menu = mobileMenuRef.current;
+                if (menu) hideMenu(menu);
+                const hamburger = hamburgerRef.current;
+                if (hamburger) {
+                  const lines = hamburger.querySelectorAll<HTMLElement>(".hamburger-line");
+                  gsap.to(lines[0], { rotation: 0, y: 0, duration: 0.3, ease });
+                  gsap.to(lines[1], { rotation: 0, y: 0, duration: 0.3, ease });
+                }
+              }}
+            >
+              Home
+            </a>
+          </li>
           {items.map((item) => (
             <li key={item.href}>
               <a
