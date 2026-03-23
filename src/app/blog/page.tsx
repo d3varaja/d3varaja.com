@@ -1,12 +1,20 @@
+import type { Metadata } from "next";
+import { getAllPosts } from "@/lib/blog";
 import PillNav from "@/components/PillNav";
 
-const POSTS = [
-  { title: "Article title goes here", date: "Month 2025", readTime: "— min", href: "#" },
-  { title: "Article title goes here", date: "Month 2025", readTime: "— min", href: "#" },
-  { title: "Article title goes here", date: "Month 2025", readTime: "— min", href: "#" },
-];
+export const metadata: Metadata = {
+  title: "Blog",
+  description:
+    "Writing on product design, UX, and building digital experiences by Tharun Devaraja.",
+  openGraph: {
+    title: "Blog — Tharun Devaraja",
+    description: "Writing on product design, UX, and building digital experiences.",
+  },
+};
 
 export default function Blog() {
+  const posts = getAllPosts();
+
   return (
     <>
       <PillNav />
@@ -49,58 +57,56 @@ export default function Blog() {
           {/* Post list */}
           <div className="sec-head" style={{ paddingTop: 0 }}>
             <h2>All Posts</h2>
-            <span>({String(POSTS.length).padStart(2, "0")})</span>
+            <span>({String(posts.length).padStart(2, "0")})</span>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column" }}>
-            {POSTS.map((post, i) => (
-              <div
-                key={i}
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr auto",
-                  alignItems: "center",
-                  gap: "2rem",
-                  padding: "1.375rem var(--gap)",
-                  marginInline: "calc(var(--gap) * -1)",
-                  borderTop: "1px solid var(--rule)",
-                  opacity: 0.28,
-                }}
-              >
-                <span
+            {posts.map((post) => {
+              const formatted = new Date(post.date).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+              });
+
+              return (
+                <a
+                  key={post.slug}
+                  href={`/blog/${post.slug}`}
                   style={{
-                    fontSize: "clamp(1.0625rem, 2vw, 1.375rem)",
-                    fontWeight: 600,
-                    letterSpacing: "-.02em",
-                    lineHeight: 1.2,
+                    display: "grid",
+                    gridTemplateColumns: "1fr auto",
+                    alignItems: "center",
+                    gap: "2rem",
+                    padding: "1.375rem var(--gap)",
+                    marginInline: "calc(var(--gap) * -1)",
+                    borderTop: "1px solid var(--rule)",
+                    textDecoration: "none",
+                    color: "inherit",
+                    transition: "opacity .15s",
                   }}
                 >
-                  {post.title}
-                </span>
-                <div style={{ textAlign: "right", flexShrink: 0 }}>
-                  <p style={{ fontSize: "var(--small)", color: "var(--mid)", whiteSpace: "nowrap" }}>
-                    {post.date}
-                  </p>
-                  <p style={{ fontSize: "var(--label)", color: "var(--mid)", letterSpacing: ".04em", marginTop: ".1rem" }}>
-                    {post.readTime} read
-                  </p>
-                </div>
-              </div>
-            ))}
+                  <span
+                    style={{
+                      fontSize: "clamp(1.0625rem, 2vw, 1.375rem)",
+                      fontWeight: 600,
+                      letterSpacing: "-.02em",
+                      lineHeight: 1.2,
+                    }}
+                  >
+                    {post.title}
+                  </span>
+                  <div style={{ textAlign: "right", flexShrink: 0 }}>
+                    <p style={{ fontSize: "var(--small)", color: "var(--mid)", whiteSpace: "nowrap" }}>
+                      {formatted}
+                    </p>
+                    <p style={{ fontSize: "var(--label)", color: "var(--mid)", letterSpacing: ".04em", marginTop: ".1rem" }}>
+                      {post.readTime} read
+                    </p>
+                  </div>
+                </a>
+              );
+            })}
             <div style={{ borderTop: "1px solid var(--rule)" }} />
           </div>
-
-          {/* Coming soon note */}
-          <p
-            style={{
-              marginTop: "2rem",
-              fontSize: "var(--small)",
-              color: "var(--mid)",
-              fontStyle: "italic",
-            }}
-          >
-            Writing coming soon — check back later.
-          </p>
 
         </div>
       </main>
@@ -114,7 +120,7 @@ export default function Blog() {
             href="/"
             style={{ fontSize: "var(--small)", color: "var(--mid)", textDecoration: "none", letterSpacing: ".02em" }}
           >
-            ← Back
+            &larr; Back
           </a>
           <p style={{ fontSize: "var(--small)", color: "var(--mid)" }}>
             Tharun Devaraja

@@ -25,6 +25,7 @@ export default function Home() {
             <FootLink href="https://x.com/d3varaja">X</FootLink>
             <FootLink href="https://github.com/d3varaja">GitHub</FootLink>
             <FootLink href="https://linkedin.com/in/d3varaja">LinkedIn</FootLink>
+            <FootLink href="https://behance.net/d3varaja">Behance</FootLink>
           </div>
         </div>
       </footer>

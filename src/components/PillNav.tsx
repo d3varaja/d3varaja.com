@@ -1,9 +1,29 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
-import { gsap } from "gsap";
+import { usePathname, useRouter } from "next/navigation";
 import "./PillNav.css";
+
+type GsapTween    = { kill: () => void };
+type GsapTimeline = { duration: () => number; tweenTo: (...a: unknown[]) => GsapTween; kill: () => void };
+
+// Module-level GSAP loader — imports the library once on first use,
+// then reuses the cached instance. Keeps GSAP out of the initial JS bundle.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let _gsapCache: any = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let _gsapLoading: Promise<any> | null = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function loadGsap(): Promise<any> {
+  if (_gsapCache) return Promise.resolve(_gsapCache);
+  if (!_gsapLoading) {
+    _gsapLoading = import("gsap").then((m) => {
+      _gsapCache = m.gsap;
+      return m.gsap;
+    });
+  }
+  return _gsapLoading;
+}
 
 interface NavItem {
   label: string;
@@ -37,6 +57,7 @@ export default function PillNav({
 }: PillNavProps) {
   const resolvedPillTextColor = pillTextColor ?? baseColor;
 
+  const router = useRouter();
   const pathname = usePathname();
   const [activeHref, setActiveHref] = useState<string>("");
 
@@ -48,13 +69,15 @@ export default function PillNav({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const circleRefs   = useRef<(HTMLSpanElement | null)[]>([]);
-  const tlRefs       = useRef<(gsap.core.Timeline | null)[]>([]);
-  const activeTweens = useRef<(gsap.core.Tween | null)[]>([]);
+  const tlRefs       = useRef<(GsapTimeline | null)[]>([]);
+  const activeTweens = useRef<(GsapTween | null)[]>([]);
   const hamburgerRef  = useRef<HTMLButtonElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const navItemsRef   = useRef<HTMLDivElement>(null);
   const logoImgRef   = useRef<HTMLImageElement>(null);
-  const logoTweenRef = useRef<gsap.core.Tween | null>(null);
+  const logoTweenRef = useRef<GsapTween | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const gsapRef      = useRef<any>(null);
 
   /* ── Active section via IntersectionObserver ─────────── */
   useEffect(() => {
@@ -75,79 +98,89 @@ export default function PillNav({
     return () => observers.forEach((o) => o.disconnect());
   }, [items]);
 
-  /* ── GSAP pill hover setup ───────────────────────────── */
+  /* ── GSAP pill hover setup — loaded lazily ───────────── */
   useEffect(() => {
-    const layout = () => {
-      circleRefs.current.forEach((circle, index) => {
-        if (!circle?.parentElement) return;
-
-        const pill = circle.parentElement;
-        const rect = pill.getBoundingClientRect();
-        const { width: w, height: h } = rect;
-        const R = ((w * w) / 4 + h * h) / (2 * h);
-        const D = Math.ceil(2 * R) + 2;
-        const delta = Math.ceil(R - Math.sqrt(Math.max(0, R * R - (w * w) / 4))) + 1;
-        const originY = D - delta;
-
-        circle.style.width  = `${D}px`;
-        circle.style.height = `${D}px`;
-        circle.style.bottom = `-${delta}px`;
-
-        gsap.set(circle, {
-          xPercent: -50,
-          scale: 0,
-          transformOrigin: `50% ${originY}px`,
-        });
-
-        const label = pill.querySelector<HTMLElement>(".pill-label");
-        const white = pill.querySelector<HTMLElement>(".pill-label-hover");
-
-        if (label) gsap.set(label, { y: 0 });
-        if (white) gsap.set(white, { y: h + 12, opacity: 0 });
-
-        tlRefs.current[index]?.kill();
-        const tl = gsap.timeline({ paused: true });
-
-        tl.to(circle, { scale: 1.2, xPercent: -50, duration: 2, ease, overwrite: "auto" }, 0);
-        if (label) tl.to(label, { y: -(h + 8), duration: 2, ease, overwrite: "auto" }, 0);
-        if (white) {
-          gsap.set(white, { y: Math.ceil(h + 100), opacity: 0 });
-          tl.to(white, { y: 0, opacity: 1, duration: 2, ease, overwrite: "auto" }, 0);
-        }
-
-        tlRefs.current[index] = tl;
-      });
-    };
-
-    layout();
-
-    // Debounce resize so heavy getBoundingClientRect work only runs after user stops resizing
     let resizeTimer: ReturnType<typeof setTimeout>;
-    const debouncedLayout = () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(layout, 150);
-    };
-    window.addEventListener("resize", debouncedLayout, { passive: true });
-    document.fonts?.ready?.then(layout).catch(() => {});
+    let removeResize: (() => void) | undefined;
 
-    const menu = mobileMenuRef.current;
-    if (menu) gsap.set(menu, { visibility: "hidden", opacity: 0 });
+    loadGsap().then((gsap) => {
+      gsapRef.current = gsap;
 
-    const isHome = typeof window !== "undefined" && window.location.pathname === "/";
-    if (initialLoadAnimation && isHome && navItemsRef.current) {
-      gsap.set(navItemsRef.current, { width: 0, overflow: "hidden" });
-      gsap.to(navItemsRef.current, { width: "auto", duration: 0.6, ease });
-    }
+      const layout = () => {
+        circleRefs.current.forEach((circle, index) => {
+          if (!circle?.parentElement) return;
+
+          const pill = circle.parentElement;
+          const rect = pill.getBoundingClientRect();
+          const { width: w, height: h } = rect;
+          const R = ((w * w) / 4 + h * h) / (2 * h);
+          const D = Math.ceil(2 * R) + 2;
+          const delta = Math.ceil(R - Math.sqrt(Math.max(0, R * R - (w * w) / 4))) + 1;
+          const originY = D - delta;
+
+          circle.style.width  = `${D}px`;
+          circle.style.height = `${D}px`;
+          circle.style.bottom = `-${delta}px`;
+
+          gsap.set(circle, {
+            xPercent: -50,
+            scale: 0,
+            transformOrigin: `50% ${originY}px`,
+          });
+
+          const label = pill.querySelector<HTMLElement>(".pill-label");
+          const white = pill.querySelector<HTMLElement>(".pill-label-hover");
+
+          if (label) gsap.set(label, { y: 0 });
+          if (white) gsap.set(white, { y: h + 12, opacity: 0 });
+
+          tlRefs.current[index]?.kill();
+          const tl = gsap.timeline({ paused: true });
+
+          tl.to(circle, { scale: 1.2, xPercent: -50, duration: 2, ease, overwrite: "auto" }, 0);
+          if (label) tl.to(label, { y: -(h + 8), duration: 2, ease, overwrite: "auto" }, 0);
+          if (white) {
+            gsap.set(white, { y: Math.ceil(h + 100), opacity: 0 });
+            tl.to(white, { y: 0, opacity: 1, duration: 2, ease, overwrite: "auto" }, 0);
+          }
+
+          tlRefs.current[index] = tl;
+        });
+      };
+
+      layout();
+
+      const debouncedLayout = () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(layout, 150);
+      };
+      window.addEventListener("resize", debouncedLayout, { passive: true });
+      document.fonts?.ready?.then(layout).catch(() => {});
+
+      const menu = mobileMenuRef.current;
+      if (menu) gsap.set(menu, { visibility: "hidden", opacity: 0 });
+
+      const isHome = typeof window !== "undefined" && window.location.pathname === "/";
+      if (initialLoadAnimation && isHome && navItemsRef.current) {
+        gsap.set(navItemsRef.current, { width: 0, overflow: "hidden" });
+        gsap.to(navItemsRef.current, { width: "auto", duration: 0.6, ease });
+      }
+
+      removeResize = () => {
+        window.removeEventListener("resize", debouncedLayout);
+      };
+    });
 
     return () => {
-      window.removeEventListener("resize", debouncedLayout);
+      removeResize?.();
       clearTimeout(resizeTimer);
     };
   }, [items, ease, initialLoadAnimation]);
 
   const handleLogoEnter = () => {
+    const gsap = gsapRef.current;
     const img = logoImgRef.current;
-    if (!img) return;
+    if (!gsap || !img) return;
     logoTweenRef.current?.kill();
     gsap.set(img, { rotate: 0 });
     logoTweenRef.current = gsap.to(img, {
@@ -179,7 +212,12 @@ export default function PillNav({
   const handleClick = (href: string) => {
     setActiveHref(href);
     if (href.startsWith("/") && !href.startsWith("/#")) {
-      window.location.href = href;
+      if (typeof document !== "undefined" && "startViewTransition" in document) {
+        (document as Document & { startViewTransition: (cb: () => void) => void })
+          .startViewTransition(() => router.push(href));
+      } else {
+        router.push(href);
+      }
       return;
     }
     const hash = href.includes("#") ? "#" + href.split("#")[1] : href;
@@ -188,6 +226,8 @@ export default function PillNav({
   };
 
   const hideMenu = (menu: HTMLDivElement) => {
+    const gsap = gsapRef.current;
+    if (!gsap) return;
     gsap.to(menu, {
       opacity: 0,
       y: 10,
@@ -202,10 +242,11 @@ export default function PillNav({
     const next = !isMobileMenuOpen;
     setIsMobileMenuOpen(next);
 
+    const gsap = gsapRef.current;
     const hamburger = hamburgerRef.current;
     const menu = mobileMenuRef.current;
 
-    if (hamburger) {
+    if (gsap && hamburger) {
       const lines = hamburger.querySelectorAll<HTMLElement>(".hamburger-line");
       if (next) {
         gsap.to(lines[0], { rotation: 45,  y:  3, duration: 0.3, ease });
@@ -217,14 +258,14 @@ export default function PillNav({
     }
 
     if (menu) {
-      if (next) {
+      if (gsap && next) {
         gsap.set(menu, { visibility: "visible" });
         gsap.fromTo(
           menu,
           { opacity: 0, y: 10 },
           { opacity: 1, y: 0, duration: 0.3, ease, transformOrigin: "top center" }
         );
-      } else {
+      } else if (!next) {
         hideMenu(menu);
       }
     }
@@ -308,8 +349,9 @@ export default function PillNav({
                 setIsMobileMenuOpen(false);
                 const menu = mobileMenuRef.current;
                 if (menu) hideMenu(menu);
+                const gsap = gsapRef.current;
                 const hamburger = hamburgerRef.current;
-                if (hamburger) {
+                if (gsap && hamburger) {
                   const lines = hamburger.querySelectorAll<HTMLElement>(".hamburger-line");
                   gsap.to(lines[0], { rotation: 0, y: 0, duration: 0.3, ease });
                   gsap.to(lines[1], { rotation: 0, y: 0, duration: 0.3, ease });
@@ -330,8 +372,9 @@ export default function PillNav({
                   setIsMobileMenuOpen(false);
                   const menu = mobileMenuRef.current;
                   if (menu) hideMenu(menu);
+                  const gsap = gsapRef.current;
                   const hamburger = hamburgerRef.current;
-                  if (hamburger) {
+                  if (gsap && hamburger) {
                     const lines = hamburger.querySelectorAll<HTMLElement>(".hamburger-line");
                     gsap.to(lines[0], { rotation: 0, y: 0, duration: 0.3, ease });
                     gsap.to(lines[1], { rotation: 0, y: 0, duration: 0.3, ease });

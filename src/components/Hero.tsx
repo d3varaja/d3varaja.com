@@ -88,7 +88,7 @@ export default function Hero() {
           padding: "clamp(1rem, 3.8vw, 1.75rem) clamp(1rem, 3.8vw, 1.75rem) clamp(1rem, 3.8vw, 1.75rem) clamp(1.25rem, 4.9vw, 2.3125rem)",
           display: "flex",
           flexDirection: "column",
-          gap: "clamp(1.25rem, 6.5vw, 3.1875rem)",
+          gap: "clamp(.75rem, 3vw, 1.25rem)",
         }}
       >
         {/* ── Desktop card content ────────────────── */}
