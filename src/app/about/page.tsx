@@ -1,5 +1,17 @@
+import type { Metadata } from "next";
 import PillNav from "@/components/PillNav";
 import TimelineItem, { type TimelineItemProps } from "@/components/TimelineItem";
+
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "Product Designer based in Sri Lanka. Focused on developing human experiences — not just interfaces — across design, development, and strategy.",
+  openGraph: {
+    title: "About — Tharun Devaraja",
+    description:
+      "Focused on developing human experiences across the full product flow: design, development, and strategy.",
+  },
+};
 
 const EXPERIENCE: TimelineItemProps[] = [
   {
@@ -17,17 +29,24 @@ const EXPERIENCE: TimelineItemProps[] = [
     period: "Jul 2025 — Present · 8 mos",
     type: "work",
     logo: "/logos/bitbybit.png",
-    bullets: [],
+    bullets: [
+      "Delivered and leading end-to-end UX design across 3 client consultations, from research and wireframing to high-fidelity Figma prototypes.",
+      "Nisalwila Foundation Admin Portal — leading ongoing UX for a multi-role admin portal covering donation verification, charity management, and analytics. Designed for bilingual use (English & Sinhala).",
+      "Lions Club Plymouth Website — designed an accessibility-focused UX for a senior-led club with an elderly user base, prioritising clear navigation and readable layouts.",
+      "Project Labor Tracker — designed UX for a labour management system targeting low-technical-literacy workers, focused on simple workflows and reduced operational friction.",
+    ],
   },
   {
     company: "RE24 · Internship",
     title: "Software Developer Intern",
-    period: "Jul 2025 — Oct 2025 · 4 mos",
+    period: "Jun 2025 — Oct 2025 · 5 mos",
     location: "London, United Kingdom · Remote",
     type: "internship",
     logo: "/logos/re24.png",
     bullets: [
-      "Started my summer internship as a software developer intern at RE24, actively contributing and learning while collaborating with the team to support software development efforts.",
+      "Led UX design and frontend implementation for the Admin Portal & RE24 Intelligence — delivering dashboards, approval workflows, role-based access, and user management.",
+      "Designed the full landing page and reusable UI component library, establishing a consistent design system that accelerated product development.",
+      "Led UX and frontend for RE24 Insights Live Dashboard, translating complex energy plant data into clear, real-time visualisations — shipped to production and used by 2 enterprise clients.",
     ],
   },
   {
@@ -41,7 +60,8 @@ const EXPERIENCE: TimelineItemProps[] = [
 ];
 
 const CERTS = [
-  { name: "Foundations of User Experience (UX) Design", issuer: "Google", year: "Feb 2026", credentialId: "VOPJ9SQ0295C", href: "https://www.coursera.org/account/accomplishments/verify/VOPJ9SQ0295C" },
+  { name: "Google UX Design Professional Certificate", issuer: "Google", year: "Mar 2026", credentialId: "VOPJ9SQ0295C", href: "https://www.coursera.org/account/accomplishments/verify/VOPJ9SQ0295C" },
+  { name: "Postman API Fundamentals Student Expert", issuer: "Postman", year: "Aug 2025" },
 ];
 
 export default function About() {
@@ -169,6 +189,7 @@ export default function About() {
                 <SocialLink href="https://x.com/d3varaja">X</SocialLink>
                 <SocialLink href="https://github.com/d3varaja">GitHub</SocialLink>
                 <SocialLink href="https://linkedin.com/in/d3varaja">LinkedIn</SocialLink>
+                <SocialLink href="https://behance.net/d3varaja">Behance</SocialLink>
               </div>
             </div>
           </div>

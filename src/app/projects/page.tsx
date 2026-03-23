@@ -1,46 +1,42 @@
+import type { Metadata } from "next";
 import PillNav from "@/components/PillNav";
 import WorkRow, { type WorkRowProps } from "@/components/WorkRow";
+
+export const metadata: Metadata = {
+  title: "Projects",
+  description:
+    "Selected work by Tharun Devaraja — product design, UX research, design systems, and interaction design.",
+  openGraph: {
+    title: "Projects — Tharun Devaraja",
+    description:
+      "Selected work spanning product design, UX research, design systems, and interaction design.",
+  },
+};
 
 const WORK: WorkRowProps[] = [
   {
     index: "01",
-    title: "Project Name",
-    role: "Product Design",
-    year: "2025",
-    href: "https://placeholder.com",
+    title: "OLO — XR Companion for Workplace Focus",
+    role: "UX Design · XR",
+    year: "2026",
   },
   {
     index: "02",
-    title: "Project Name",
-    role: "Design System",
-    year: "2025",
-    href: "https://placeholder.com",
+    title: "Project CROW — Unified Interaction Intelligence Platform",
+    role: "UX Design · Frontend Development",
+    year: "2025–2026",
   },
   {
     index: "03",
-    title: "Project Name",
-    role: "UX Research",
-    year: "2024",
-    href: "https://placeholder.com",
+    title: "Med-Essence — Offline-First Healthcare App",
+    role: "UX Design · AI/ML",
+    year: "2025",
   },
   {
     index: "04",
-    title: "Project Name",
-    role: "Interaction Design",
-    year: "2024",
-  },
-  {
-    index: "05",
-    title: "Project Name",
-    role: "Visual Design",
-    year: "2024",
-  },
-  {
-    index: "06",
-    title: "Project Name",
-    role: "Brand Identity",
-    year: "2023",
-    placeholder: true,
+    title: "Orator — Accessibility-First Reading Companion",
+    role: "UX Design · Development",
+    year: "2025",
   },
 ];
 
