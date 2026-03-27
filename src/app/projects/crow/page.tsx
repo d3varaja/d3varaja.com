@@ -1,5 +1,13 @@
 import type { Metadata } from "next";
 import PillNav from "@/components/PillNav";
+import ImageLightbox from "@/components/ImageLightbox";
+import { Sora } from "next/font/google";
+
+const sora = Sora({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Project CROW",
@@ -22,6 +30,32 @@ const LINKS = [
   { label: "GitHub", href: "https://github.com/CROW-B3" },
   { label: "Docs", href: "https://docs.crow.bbyb.dev" },
 ];
+
+const COLORS = [
+  { name: "Core Purple", hex: "#6B3FA0" },
+  { name: "Background Deep", hex: "#0D0617" },
+  { name: "Accent Lavender", hex: "#A78BDA" },
+];
+
+const COMP_IMAGES: { src: string; label: string; wide?: boolean }[] = [
+  { src: "/projects/crow/components/Button.png", label: "Action Button" },
+  { src: "/projects/crow/components/Frame 49.png", label: "Billing Toggle" },
+  { src: "/projects/crow/components/Frame 1.png", label: "Ask CROW Search Bar", wide: true },
+  { src: "/projects/crow/components/Frame 10123356.png", label: "Overview Stat Cards" },
+  { src: "/projects/crow/components/Overlay+Border+Shadow+OverlayBlur.png", label: "Component Card" },
+  { src: "/projects/crow/components/Overlay+Border.png", label: "Feature Configuration Card" },
+];
+
+const SCREENS = [
+  { src: "/projects/crow/Dashboard - Overview.png", label: "Dashboard Overview" },
+  { src: "/projects/crow/Dashboard - Ask CROW.png", label: "Ask CROW" },
+  { src: "/projects/crow/Connect Sources.png", label: "Connect Sources" },
+  { src: "/projects/crow/Dashboard Analysis Interactions.png", label: "Interaction Analysis" },
+  { src: "/projects/crow/CROW - Select Plan.png", label: "Plan Selection" },
+  { src: "/projects/crow/Dashboard Analytics Patterns.png", label: "Analytics Patterns" },
+];
+
+const IMG: React.CSSProperties = { width: "100%", borderRadius: 8, border: "1px solid var(--rule)" };
 
 export default function CrowProject() {
   return (
@@ -102,16 +136,17 @@ export default function CrowProject() {
             ))}
           </div>
 
-          {/* Hero image */}
-          <img
-            src="/projects/crow/Landing Page.png"
-            alt="CROW landing page showcasing the unified intelligence platform"
-            style={{ width: "100%", maxHeight: 480, objectFit: "cover", objectPosition: "top", borderRadius: 8, border: "1px solid var(--rule)", marginBottom: "clamp(2.5rem, 5vw, 3.5rem)" }}
-          />
+          {/* Hero — smaller landing page preview */}
+          <div style={{ maxWidth: 520, margin: "0 auto clamp(2.5rem, 5vw, 3.5rem)" }}>
+            <img
+              src="/projects/crow/Landing Page.png"
+              alt="CROW landing page"
+              style={{ width: "100%", maxHeight: 340, objectFit: "cover", objectPosition: "top", borderRadius: 8, border: "1px solid var(--rule)" }}
+            />
+          </div>
 
           {/* Story */}
           <article className="prose">
-
             <h2>The Problem</h2>
             <p>
               Customer interaction data is messy. It lives across channels — emails, chats, calls, tickets — and extracting meaning from it usually means jumping between dashboards, writing queries, or waiting on analysts. Most teams don't have a fast way to ask a simple question and get a real answer.
@@ -124,65 +159,155 @@ export default function CrowProject() {
             <p>
               I solely owned the design and frontend for the entire product. Starting from research and wireframing in Figma, I designed 30+ screens covering the full user journey — from onboarding and query input to results visualisation, conversation replay, and admin management.
             </p>
-
-            <img src="/projects/crow/Dashboard - Overview.png" alt="CROW dashboard overview with key metrics and recent interactions" style={{ borderRadius: 8, border: "1px solid var(--rule)" }} />
-
             <p>
               Then I built it. The frontend runs on React and Next.js 15, connected to a backend powered by Cloudflare D1 for persistence and Cloudflare Queues for async processing. I also built the core intelligence layer: multi-agent analysis that breaks down queries into subtasks, an AI vision extraction pipeline for processing visual content, and vector search for semantic retrieval across interaction histories.
             </p>
-
-            <img src="/projects/crow/Dashboard - Ask CROW.png" alt="Ask CROW — natural language query interface" style={{ borderRadius: 8, border: "1px solid var(--rule)" }} />
 
             <h2>Connecting the Sources</h2>
             <p>
               The platform's value depends on the breadth of data it can ingest. I designed and built the source connection flow — a guided setup where users can link web analytics, CCTV feeds, and social media channels into a single unified pipeline.
             </p>
 
-            <img src="/projects/crow/Connect Sources.png" alt="Connect data sources — Web, CCTV, and Social integrations" style={{ borderRadius: 8, border: "1px solid var(--rule)" }} />
-
             <h2>Notifications at Scale</h2>
             <p>
               Reliable communication was critical — users needed to be notified about query completions, anomaly alerts, and team activity. I implemented a queue-based async notification service using Cloudflare Queues with Resend API on the delivery side. This decoupled notification dispatch from the main request path and ensured emails were delivered reliably even under load.
             </p>
+          </article>
 
-            <img src="/projects/crow/Dashboard Analysis Interactions.png" alt="Interaction analysis table with sentiment and source data" style={{ borderRadius: 8, border: "1px solid var(--rule)" }} />
-
-            <h2>Testing & Documentation</h2>
-            <p>
-              I shipped a 288-test Playwright end-to-end suite covering the critical paths across the platform. This gave the team confidence to iterate fast without breaking existing flows. I also authored public documentation at <a href="https://docs.crow.bbyb.dev" target="_blank" rel="noopener noreferrer">docs.crow.bbyb.dev</a>, covering setup, architecture, and API reference.
-            </p>
-
-            <img src="/projects/crow/CROW - Select Plan.png" alt="CROW pricing tiers — Web, CCTV, and Social plans" style={{ borderRadius: 8, border: "1px solid var(--rule)" }} />
-
-            <hr />
-
-            {/* Stats */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
-                gap: "1.5rem",
-                textAlign: "center",
-                padding: "1.5rem 0",
-              }}
-            >
-              <Stat value="30+" label="Screens designed & built" />
-              <Stat value="288" label="E2E tests shipped" />
-              <Stat value="In production" label="Used internally" />
+          {/* ── Design System ── */}
+          <div style={{ marginTop: "clamp(2.5rem, 5vw, 3.5rem)" }}>
+            <div className="sec-head">
+              <h2>Design System</h2>
             </div>
 
-            <hr />
+            <div style={{ paddingTop: "2rem", paddingBottom: "2.5rem" }}>
+              {/* Typography */}
+              <p style={{ fontSize: "var(--label)", fontWeight: 500, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--mid)", marginBottom: "1rem" }}>
+                Typography
+              </p>
+              <p className={sora.className} style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 700, letterSpacing: "-.03em", lineHeight: 1.1 }}>
+                Sora
+              </p>
+              <div className={sora.className} style={{ display: "flex", gap: "1.5rem", marginTop: ".75rem", marginBottom: "2rem" }}>
+                <span style={{ fontSize: "var(--body)", fontWeight: 700 }}>Bold</span>
+                <span style={{ fontSize: "var(--body)", fontWeight: 500 }}>Medium</span>
+                <span style={{ fontSize: "var(--body)", fontWeight: 400 }}>Regular</span>
+              </div>
 
-            <a href="/projects/crow/screens" style={{ display: "block", textAlign: "center", padding: "2rem", border: "1px solid var(--rule)", borderRadius: 8, textDecoration: "none", color: "var(--black)", fontWeight: 600, fontSize: "var(--body)" }}>
-              View all 20 screens →
-            </a>
+              {/* Color Palette */}
+              <p style={{ fontSize: "var(--label)", fontWeight: 500, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--mid)", marginBottom: "1rem" }}>
+                Color Palette
+              </p>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem", marginBottom: "2rem" }}>
+                {COLORS.map((c) => (
+                  <div key={c.name}>
+                    <div style={{ aspectRatio: "4/3", borderRadius: 8, background: c.hex }} />
+                    <p style={{ fontSize: "var(--small)", fontWeight: 600, marginTop: ".5rem" }}>{c.name}</p>
+                    <p style={{ fontSize: "var(--label)", color: "var(--mid)", fontFamily: "monospace" }}>{c.hex}</p>
+                  </div>
+                ))}
+              </div>
 
-            <h2>Outcome</h2>
-            <p>
-              CROW is used internally in production. It replaced a fragmented workflow of spreadsheets and manual reporting with a conversational interface that any team member can use. The natural-language query layer became the primary way the team accesses customer interaction data.
-            </p>
+              {/* Core Components */}
+              <p style={{ fontSize: "var(--label)", fontWeight: 500, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--mid)", marginBottom: "1rem" }}>
+                Core Components
+              </p>
 
-          </article>
+              {/* Row 1: Action Button + Billing Toggle */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1rem" }}>
+                <CompCard src="/projects/crow/components/Button.png" label="Action Button" />
+                <CompCard src="/projects/crow/components/Frame 49.png" label="Billing Toggle" />
+              </div>
+
+              {/* Row 2: Ask CROW Search Bar (full width) */}
+              <div style={{ marginBottom: "1rem" }}>
+                <CompCard src="/projects/crow/components/Frame 1.png" label="Ask CROW Search Bar" />
+              </div>
+
+              {/* Row 3: Overview Stat Cards + Feature Configuration */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr", gap: "1rem", marginBottom: "1rem" }}>
+                <CompCard src="/projects/crow/components/Frame 10123356.png" label="Overview Stat Cards" />
+                <CompCard src="/projects/crow/components/Overlay+Border.png" label="Feature Configuration Card" />
+              </div>
+
+              {/* Row 4: Component Card (full width) */}
+              <div style={{ maxWidth: "50%" }}>
+                <CompCard src="/projects/crow/components/Overlay+Border+Shadow+OverlayBlur.png" label="Component Card" />
+              </div>
+            </div>
+          </div>
+
+          {/* ── Interfaces ── */}
+          <div>
+            <div className="sec-head">
+              <h2>Interfaces</h2>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", paddingTop: "2rem", paddingBottom: "2.5rem" }}>
+              {SCREENS.map((s) => (
+                <div key={s.label}>
+                  <ImageLightbox src={s.src} alt={s.label} style={IMG} />
+                  <p style={{ fontSize: "var(--label)", color: "var(--mid)", marginTop: ".5rem", textAlign: "center" }}>{s.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── Technical Architecture ── */}
+          <div>
+            <div className="sec-head">
+              <h2>Technical Architecture</h2>
+            </div>
+
+            <article className="prose" style={{ paddingTop: "2rem" }}>
+              <h3>Frontend — React & Next.js 15</h3>
+              <p>
+                Solely built the full frontend across 30+ screens. Next.js 15 App Router with React for the component layer. Server components for initial data loading, client components for interactive dashboards and real-time query interfaces.
+              </p>
+
+              <h3>Intelligence Layer — RAG & LLM Orchestration</h3>
+              <p>
+                Built multi-agent analysis that decomposes complex queries into subtasks. AI vision extraction pipeline processes visual content from CCTV and web sources. Vector search enables semantic retrieval across interaction histories.
+              </p>
+
+              <h3>Infrastructure — Cloudflare Stack</h3>
+              <p>
+                Cloudflare D1 for serverless SQL persistence. Cloudflare Queues for async job processing. Queue-based notification service with Resend API for reliable email delivery at scale.
+              </p>
+
+              <h3>Testing — Playwright E2E</h3>
+              <p>
+                288-test Playwright end-to-end suite covering critical paths. Public documentation at <a href="https://docs.crow.bbyb.dev" target="_blank" rel="noopener noreferrer">docs.crow.bbyb.dev</a> covering setup, architecture, and API reference.
+              </p>
+
+              <hr />
+
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, 1fr)",
+                  gap: "1.5rem",
+                  textAlign: "center",
+                  padding: "1.5rem 0",
+                }}
+              >
+                <Stat value="30+" label="Screens designed & built" />
+                <Stat value="288" label="E2E tests shipped" />
+                <Stat value="In production" label="Used internally" />
+              </div>
+
+              <hr />
+
+              <a href="/projects/crow/screens" style={{ display: "block", textAlign: "center", padding: "2rem", border: "1px solid var(--rule)", borderRadius: 8, textDecoration: "none", color: "var(--black)", fontWeight: 600, fontSize: "var(--body)" }}>
+                View all 20 screens →
+              </a>
+
+              <h2>Outcome</h2>
+              <p>
+                CROW is used internally in production. It replaced a fragmented workflow of spreadsheets and manual reporting with a conversational interface that any team member can use. The natural-language query layer became the primary way the team accesses customer interaction data.
+              </p>
+            </article>
+          </div>
 
         </div>
       </main>
@@ -221,6 +346,15 @@ function Stat({ value, label }: { value: string; label: string }) {
         {value}
       </p>
       <p style={{ fontSize: "var(--label)", color: "var(--mid)", marginTop: ".25rem" }}>{label}</p>
+    </div>
+  );
+}
+
+function CompCard({ src, label }: { src: string; label: string }) {
+  return (
+    <div>
+      <img src={src} alt={label} style={{ width: "100%", borderRadius: 8, border: "1px solid var(--rule)" }} />
+      <p style={{ fontSize: "var(--label)", color: "var(--mid)", marginTop: ".5rem", textAlign: "center" }}>{label}</p>
     </div>
   );
 }

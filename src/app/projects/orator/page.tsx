@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import PillNav from "@/components/PillNav";
+import ImageLightbox from "@/components/ImageLightbox";
 
 export const metadata: Metadata = {
   title: "Orator",
@@ -18,6 +19,19 @@ const STACK = [
 
 const LINKS = [
   { label: "GitHub", href: "https://github.com/d3varaja/orator" },
+];
+
+const COLORS = [
+  { name: "Deep Charcoal", hex: "#1a1a2e", light: false },
+  { name: "Warm Cream", hex: "#f5f0eb", light: true },
+  { name: "Sepia Tone", hex: "#f4ecd8", light: true },
+];
+
+const THEMES = [
+  { name: "Dark", bg: "#1a1a2e", fg: "#e0e0e0" },
+  { name: "Light", bg: "#ffffff", fg: "#1a1a1a" },
+  { name: "Sepia", bg: "#f4ecd8", fg: "#5b4636" },
+  { name: "Blue", bg: "#1e2a3a", fg: "#c8d6e5" },
 ];
 
 export default function OratorProject() {
@@ -99,6 +113,21 @@ export default function OratorProject() {
             ))}
           </div>
 
+          {/* Hero — 3 phones side by side */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(3, 1fr)",
+              gap: "1rem",
+              maxWidth: 580,
+              margin: "0 auto clamp(2.5rem, 5vw, 3.5rem)",
+            }}
+          >
+            <img src="/projects/orator/Orator-ss-1.png" alt="Orator home screen" style={{ width: "100%", borderRadius: 12, border: "1px solid var(--rule)" }} />
+            <img src="/projects/orator/Orator-ss-2.png" alt="Orator library screen" style={{ width: "100%", borderRadius: 12, border: "1px solid var(--rule)" }} />
+            <img src="/projects/orator/Orator-ss-3.png" alt="Orator settings screen" style={{ width: "100%", borderRadius: 12, border: "1px solid var(--rule)" }} />
+          </div>
+
           {/* Story */}
           <article className="prose">
 
@@ -118,46 +147,166 @@ export default function OratorProject() {
               The interface follows WCAG compliance standards — not as a checkbox, but as a design philosophy. I prototyped in Figma, testing layouts at various text sizes and with simulated visual impairments to ensure the experience held up across conditions.
             </p>
 
-            <h2>Multi-Format Reading Engine</h2>
-            <p>
-              Orator supports TXT, EPUB, and PDF — covering the three formats that account for most personal and professional reading. Each format has its own parsing and rendering pipeline built in React Native with Expo, with a unified reading experience across all three: consistent typography, bookmarks, chapter navigation, and a multi-theme system that includes high-contrast and night modes.
-            </p>
-
-            <h2>AI-Powered Content Analysis</h2>
-            <p>
-              Integrated Google's Gemini API to add an intelligence layer on top of the reading experience. Users can get summaries of chapters, extract key points, or ask questions about what they're reading. For elderly users who might read in shorter sessions, this means they can quickly catch up on where they left off without re-reading entire sections.
-            </p>
-
-            <h2>Text-to-Speech</h2>
-            <p>
-              A built-in TTS engine lets users listen to their documents. This is particularly valuable for users with declining vision or reading fatigue — they can switch between reading and listening seamlessly, without leaving the app for a separate audio tool.
-            </p>
-
-            <hr />
-
-            {/* Stats */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
-                gap: "1.5rem",
-                textAlign: "center",
-                padding: "1.5rem 0",
-              }}
-            >
-              <Stat value="3" label="Formats supported" />
-              <Stat value="WCAG" label="Compliant layouts" />
-              <Stat value="v1.0" label="Shipped & in use" />
+            <div style={{ maxWidth: 280, margin: "1.5rem auto" }}>
+              <img src="/projects/orator/Orator-ss-4.png" alt="Book details screen with AI-generated summary and metadata" style={{ width: "100%", borderRadius: 12, border: "1px solid var(--rule)", margin: 0 }} />
             </div>
 
-            <hr />
-
-            <h2>Outcome</h2>
-            <p>
-              Orator shipped as v1.0.0 and is used by 2 initial clients. It demonstrates that accessibility-first design isn't a constraint — it's a lens that produces better products for everyone. The same clarity and simplicity that helps an elderly user also makes the app genuinely pleasant for any reader.
-            </p>
-
           </article>
+
+          {/* ── Design System ── */}
+          <div style={{ marginTop: "clamp(2.5rem, 5vw, 3.5rem)" }}>
+            <div className="sec-head">
+              <h2>Design System</h2>
+            </div>
+
+            <div style={{ paddingTop: "2rem", paddingBottom: "2.5rem" }}>
+              {/* Typography */}
+              <p style={{ fontSize: "var(--label)", fontWeight: 500, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--mid)", marginBottom: "1rem" }}>
+                Typography
+              </p>
+              <p style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 700, letterSpacing: "-.03em", lineHeight: 1.1 }}>
+                System Default
+              </p>
+              <p style={{ fontSize: "var(--small)", color: "var(--mid)", marginTop: ".5rem", marginBottom: "2rem" }}>
+                Bold · Medium · Regular — adaptive sizes from 16px to 24px for maximum readability
+              </p>
+
+              {/* Color Palette */}
+              <p style={{ fontSize: "var(--label)", fontWeight: 500, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--mid)", marginBottom: "1rem" }}>
+                Color Palette
+              </p>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem", marginBottom: "2rem" }}>
+                {COLORS.map((c) => (
+                  <div key={c.name}>
+                    <div style={{ aspectRatio: "4/3", borderRadius: 8, background: c.hex, border: c.light ? "1px solid var(--rule)" : "none" }} />
+                    <p style={{ fontSize: "var(--small)", fontWeight: 600, marginTop: ".5rem" }}>{c.name}</p>
+                    <p style={{ fontSize: "var(--label)", color: "var(--mid)", fontFamily: "monospace" }}>{c.hex}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Reading Themes */}
+              <p style={{ fontSize: "var(--label)", fontWeight: 500, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--mid)", marginBottom: "1rem" }}>
+                Reading Themes
+              </p>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: ".75rem" }}>
+                {THEMES.map((t) => (
+                  <div key={t.name} style={{ borderRadius: 8, background: t.bg, padding: "1rem .75rem", border: "1px solid var(--rule)", textAlign: "center" }}>
+                    <p style={{ fontSize: "var(--small)", fontWeight: 600, color: t.fg }}>{t.name}</p>
+                    <p style={{ fontSize: "var(--label)", color: t.fg, opacity: .6, marginTop: ".25rem", fontFamily: "monospace" }}>{t.bg}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* ── Interfaces ── */}
+          <div>
+            <div className="sec-head">
+              <h2>Interfaces</h2>
+            </div>
+
+            <div style={{ paddingTop: "2rem", paddingBottom: "2.5rem" }}>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, 1fr)",
+                  gap: "1rem",
+                  maxWidth: 580,
+                  margin: "0 auto",
+                }}
+              >
+                <div>
+                  <ImageLightbox src="/projects/orator/Orator-ss-5.png" alt="Reading screen with sentence navigation" style={{ width: "100%", borderRadius: 12, border: "1px solid var(--rule)" }} />
+                  <p style={{ fontSize: "var(--label)", color: "var(--mid)", marginTop: ".5rem", textAlign: "center" }}>Reading</p>
+                </div>
+                <div>
+                  <ImageLightbox src="/projects/orator/Orator-ss-6.png" alt="Bookmark and progress tracking" style={{ width: "100%", borderRadius: 12, border: "1px solid var(--rule)" }} />
+                  <p style={{ fontSize: "var(--label)", color: "var(--mid)", marginTop: ".5rem", textAlign: "center" }}>Bookmarks</p>
+                </div>
+                <div>
+                  <ImageLightbox src="/projects/orator/Orator-ss-4.png" alt="Book details with AI analysis" style={{ width: "100%", borderRadius: 12, border: "1px solid var(--rule)" }} />
+                  <p style={{ fontSize: "var(--label)", color: "var(--mid)", marginTop: ".5rem", textAlign: "center" }}>Book Details</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Technical Architecture ── */}
+          <div>
+            <div className="sec-head">
+              <h2>Technical Architecture</h2>
+            </div>
+
+            <article className="prose" style={{ paddingTop: "2rem" }}>
+              <h3>Multi-Format Parsing Engine</h3>
+              <p>
+                Each file format — TXT, EPUB, and PDF — has its own dedicated parser. Plain text is tokenised into sentences for navigation. EPUB is parsed by extracting chapters and rendering structured HTML content. PDF extraction is powered by Google Gemini's vision capabilities, converting scanned or complex layouts into clean, readable text.
+              </p>
+
+              <h3>AI Content Analysis Pipeline</h3>
+              <p>
+                When a user imports a document, the Gemini API analyses it to detect the content type (book, article, research paper, essay, news, story, or document), identify the author and genre, generate a summary, and suggest improved titles. This metadata enriches the library view and helps users manage larger collections.
+              </p>
+
+              <h3>Text-to-Speech Engine</h3>
+              <p>
+                The TTS system is built on top of React Native's speech synthesis APIs with custom playback controls — play, pause, skip forward/back by sentence. It synchronises with the reader's current position, so switching between reading and listening is seamless.
+              </p>
+
+              <h3>Data Persistence & State</h3>
+              <p>
+                All reading progress, bookmarks, settings, and library metadata are persisted locally using a custom store layer. The app works fully offline after initial content import — no account required, no cloud sync dependency.
+              </p>
+
+              <h3>Project Structure</h3>
+              <pre><code>{`orator/
+├── src/
+│   ├── core/
+│   │   ├── analysis/        # AI content analysis (Gemini)
+│   │   ├── notifications/   # Reading reminders
+│   │   ├── sources/         # TXT, EPUB, PDF parsers
+│   │   ├── speech/          # TTS engine + controls
+│   │   └── store/           # Local data persistence
+│   └── ui/
+│       ├── HomeScreen.tsx
+│       ├── LibraryScreen.tsx
+│       ├── ReaderScreen.tsx
+│       ├── SettingsScreen.tsx
+│       └── themes.ts        # 4 reading themes
+├── App.tsx
+└── package.json`}</code></pre>
+
+              <hr />
+
+              {/* Stats */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, 1fr)",
+                  gap: "1.5rem",
+                  textAlign: "center",
+                  padding: "1.5rem 0",
+                }}
+              >
+                <Stat value="3" label="Formats supported" />
+                <Stat value="WCAG" label="Compliant layouts" />
+                <Stat value="v1.0" label="Shipped & in use" />
+              </div>
+
+              <hr />
+
+              <a href="/projects/orator/screens" style={{ display: "block", textAlign: "center", padding: "2rem", border: "1px solid var(--rule)", borderRadius: 8, textDecoration: "none", color: "var(--black)", fontWeight: 600, fontSize: "var(--body)" }}>
+                View all 6 screens →
+              </a>
+
+              <h2>Outcome</h2>
+              <p>
+                Orator shipped as v1.0.0 and is used by 2 initial clients. It demonstrates that accessibility-first design isn't a constraint — it's a lens that produces better products for everyone. The same clarity and simplicity that helps an elderly user also makes the app genuinely pleasant for any reader.
+              </p>
+
+            </article>
+          </div>
 
         </div>
       </main>
