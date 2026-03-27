@@ -20,9 +20,8 @@ const IMG_STYLE: React.CSSProperties = {
 
 const LANDING_STYLE: React.CSSProperties = {
   ...IMG_STYLE,
-  maxHeight: 500,
-  objectFit: "cover",
-  objectPosition: "top",
+  width: "100%",
+  height: "auto",
 };
 
 const GRID: React.CSSProperties = {
@@ -75,15 +74,10 @@ export default function CrowScreens() {
           <div className="sec-head" style={{ paddingTop: 0 }}>
             <h2>Landing</h2>
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: "1rem", paddingTop: "2rem", paddingBottom: "clamp(2.5rem, 5vw, 3.5rem)" }}>
+          <div style={{ paddingTop: "2rem", paddingBottom: "clamp(2.5rem, 5vw, 3.5rem)", maxWidth: 480, margin: "0 auto" }}>
             <img
               src="/projects/crow/Landing Page.png"
-              alt="CROW landing page — hero section with platform overview"
-              style={LANDING_STYLE}
-            />
-            <img
-              src="/projects/crow/Landing Page-1.png"
-              alt="CROW landing page — features and call-to-action section"
+              alt="CROW landing page — full page overview"
               style={LANDING_STYLE}
             />
           </div>
