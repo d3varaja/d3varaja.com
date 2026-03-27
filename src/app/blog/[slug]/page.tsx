@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { marked } from "marked";
 import { getAllPosts, getPostBySlug } from "@/lib/blog";
 import PillNav from "@/components/PillNav";
+import LikeButton from "@/components/LikeButton";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -83,6 +84,11 @@ export default async function BlogPost({ params }: Props) {
             className="prose"
             dangerouslySetInnerHTML={{ __html: html }}
           />
+
+          {/* Like button */}
+          <div style={{ marginTop: "clamp(3rem, 6vw, 5rem)", display: "flex", justifyContent: "center" }}>
+            <LikeButton slug={slug} />
+          </div>
         </div>
       </main>
 
