@@ -1,7 +1,11 @@
 {
   "name": "d3varaja-com",
   "compatibility_date": "2025-11-27",
-  "pages_build_output_dir": "./out",
+  "main": "worker/index.ts",
+  "assets": {
+    "directory": "./out",
+    "binding": "ASSETS"
+  },
   "kv_namespaces": [
     {
       "binding": "LIKES",
