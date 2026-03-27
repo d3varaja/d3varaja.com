@@ -399,6 +399,33 @@ a, button { cursor: none; }
 
 .prose img {
   max-width: 100%;
+  height: auto;
   border-radius: 8px;
   margin-block: 1.5rem;
+  display: block;
+}
+
+.prose figure {
+  margin-block: 2rem;
+  margin-inline: auto;
+  border-radius: 16px;
+  background: #e2e1de;
+  padding: 14px 14px 0;
+  max-width: 480px;
+}
+
+.prose figure img {
+  width: 100%;
+  margin-block: 0;
+  border-radius: 7px;
+  display: block;
+}
+
+.prose figcaption {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--mid);
+  text-align: center;
+  padding: 0.75rem 0.5rem;
+  letter-spacing: 0;
 }
