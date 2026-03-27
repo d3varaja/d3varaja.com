@@ -75,6 +75,11 @@ a, button { cursor: none; }
 ::selection { background: var(--black); color: var(--white); }
 :focus-visible { outline: 1.5px solid var(--black); outline-offset: 3px; }
 
+/* ─── Back button: hidden on mobile ──────────────── */
+@media (max-width: 767px) {
+  .back-button { display: none !important; }
+}
+
 /* ─── Layout ─────────────────────────────────────── */
 .wrap {
   width: 100%;

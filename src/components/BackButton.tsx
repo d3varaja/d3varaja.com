@@ -5,25 +5,32 @@ import { usePathname, useRouter } from "next/navigation";
 export default function BackButton() {
   const pathname = usePathname();
   const router = useRouter();
-  const isHome = (pathname.replace(/\/$/, "") || "/") === "/";
+  const cleanPath = pathname.replace(/\/$/, "") || "/";
+  const isHome = cleanPath === "/";
 
   if (isHome) return null;
+
+  // Navigate to parent path: /projects/crow/screens → /projects/crow → /projects → /
+  const parentPath = cleanPath.includes("/")
+    ? cleanPath.substring(0, cleanPath.lastIndexOf("/")) || "/"
+    : "/";
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (typeof document !== "undefined" && "startViewTransition" in document) {
       (document as Document & { startViewTransition: (cb: () => void) => void })
-        .startViewTransition(() => router.push("/"));
+        .startViewTransition(() => router.push(parentPath));
     } else {
-      router.push("/");
+      router.push(parentPath);
     }
   };
 
   return (
     <a
-      href="/"
+      href={parentPath}
       onClick={handleClick}
       aria-label="Go home"
+      className="back-button"
       style={{
         position: "fixed",
         top: "1.15rem",

@@ -123,7 +123,7 @@ export default function Hero() {
                 lineHeight: 0.95,
               }}
             >
-              Product Designer
+              Design Engineer
             </p>
 
             {/* Name */}
@@ -305,7 +305,7 @@ export default function Hero() {
               lineHeight: 0.95,
             }}
           >
-            Product Designer
+            Design Engineer
           </p>
 
           {/* Name */}

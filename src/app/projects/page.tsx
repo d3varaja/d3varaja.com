@@ -16,27 +16,38 @@ export const metadata: Metadata = {
 const WORK: WorkRowProps[] = [
   {
     index: "01",
-    title: "OLO — XR Companion for Workplace Focus",
-    role: "UX Design · XR",
-    year: "2026",
-  },
-  {
-    index: "02",
     title: "Project CROW — Unified Interaction Intelligence Platform",
     role: "UX Design · Frontend Development",
     year: "2025–2026",
+    href: "/projects/crow",
   },
   {
-    index: "03",
+    index: "02",
     title: "Med-Essence — Offline-First Healthcare App",
     role: "UX Design · AI/ML",
     year: "2025",
+    href: "/projects/med-essence",
   },
   {
-    index: "04",
+    index: "03",
     title: "Orator — Accessibility-First Reading Companion",
     role: "UX Design · Development",
     year: "2025",
+    href: "/projects/orator",
+  },
+  {
+    index: "04",
+    title: "Lions Club Plymouth — Community Platform Design",
+    role: "UX Design · Client Project",
+    year: "2025",
+    href: "/projects/lions-plymouth",
+  },
+  {
+    index: "05",
+    title: "CodeClub — Admin Portal for StemUp Sri Lanka",
+    role: "UX Design · Frontend Development",
+    year: "2025",
+    href: "/projects/code-club",
   },
 ];
 
@@ -99,12 +110,6 @@ export default function Projects() {
           className="wrap"
           style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}
         >
-          <a
-            href="/"
-            style={{ fontSize: "var(--small)", color: "var(--mid)", textDecoration: "none", letterSpacing: ".02em" }}
-          >
-            ← Back
-          </a>
           <p style={{ fontSize: "var(--small)", color: "var(--mid)" }}>
             Tharun Devaraja
           </p>
