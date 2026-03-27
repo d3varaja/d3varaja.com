@@ -52,21 +52,6 @@ export default async function BlogPost({ params }: Props) {
         }}
       >
         <div className="wrap" style={{ maxWidth: 720 }}>
-          {/* Back link */}
-          <a
-            href="/blog"
-            style={{
-              display: "inline-block",
-              fontSize: "var(--small)",
-              color: "var(--mid)",
-              textDecoration: "none",
-              letterSpacing: ".02em",
-              marginBottom: "2.5rem",
-            }}
-          >
-            &larr; All posts
-          </a>
-
           {/* Article header */}
           <header style={{ marginBottom: "clamp(2rem, 4vw, 3rem)" }}>
             <h1
@@ -112,17 +97,6 @@ export default async function BlogPost({ params }: Props) {
             gap: "1rem",
           }}
         >
-          <a
-            href="/blog"
-            style={{
-              fontSize: "var(--small)",
-              color: "var(--mid)",
-              textDecoration: "none",
-              letterSpacing: ".02em",
-            }}
-          >
-            &larr; All posts
-          </a>
           <p style={{ fontSize: "var(--small)", color: "var(--mid)" }}>
             Tharun Devaraja
           </p>

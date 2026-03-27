@@ -13,27 +13,27 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "Tharun Devaraja — Product Designer",
+    default: "Tharun Devaraja — Design Engineer",
     template: "%s — Tharun Devaraja",
   },
   description:
-    "Product Designer based in Sri Lanka with 2+ years designing thoughtful, scalable products that solve real user problems.",
+    "Design Engineer based in Sri Lanka with 2+ years designing thoughtful, scalable products that solve real user problems.",
   openGraph: {
     type: "website",
     url: "https://d3varaja.com",
     siteName: "Tharun Devaraja",
-    title: "Tharun Devaraja — Product Designer",
+    title: "Tharun Devaraja — Design Engineer",
     description:
-      "Product Designer based in Sri Lanka with 2+ years designing thoughtful, scalable products that solve real user problems.",
+      "Design Engineer based in Sri Lanka with 2+ years designing thoughtful, scalable products that solve real user problems.",
     locale: "en_US",
   },
   twitter: {
     card: "summary",
     site: "@d3varaja",
     creator: "@d3varaja",
-    title: "Tharun Devaraja — Product Designer",
+    title: "Tharun Devaraja — Design Engineer",
     description:
-      "Product Designer based in Sri Lanka with 2+ years designing thoughtful, scalable products.",
+      "Design Engineer based in Sri Lanka with 2+ years designing thoughtful, scalable products.",
   },
   robots: {
     index: true,

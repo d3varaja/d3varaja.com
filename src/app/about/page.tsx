@@ -5,7 +5,7 @@ import TimelineItem, { type TimelineItemProps } from "@/components/TimelineItem"
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Product Designer based in Sri Lanka. Focused on developing human experiences — not just interfaces — across design, development, and strategy.",
+    "Design Engineer based in Sri Lanka. Focused on developing human experiences — not just interfaces — across design, development, and strategy.",
   openGraph: {
     title: "About — Tharun Devaraja",
     description:
@@ -219,12 +219,6 @@ export default function About() {
             gap: "1rem",
           }}
         >
-          <a
-            href="/"
-            style={{ fontSize: "var(--small)", color: "var(--mid)", textDecoration: "none" }}
-          >
-            ← Back
-          </a>
           <p style={{ fontSize: "var(--small)", color: "var(--mid)" }}>
             Tharun Devaraja
           </p>

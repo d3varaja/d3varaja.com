@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 
 export interface WorkRowProps {
   index: string;
@@ -126,17 +127,32 @@ export default function WorkRow({ index, title, role, year, href, placeholder }:
   };
 
   if (href) {
+    const isExternal = href.startsWith("http");
+
+    if (isExternal) {
+      return (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={base}
+          onMouseEnter={handleEnter}
+          onMouseLeave={handleLeave}
+        >
+          {inner}
+        </a>
+      );
+    }
+
     return (
-      <a
+      <Link
         href={href}
-        target="_blank"
-        rel="noopener noreferrer"
         style={base}
         onMouseEnter={handleEnter}
         onMouseLeave={handleLeave}
       >
         {inner}
-      </a>
+      </Link>
     );
   }
 

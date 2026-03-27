@@ -116,12 +116,6 @@ export default function Blog() {
           className="wrap"
           style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}
         >
-          <a
-            href="/"
-            style={{ fontSize: "var(--small)", color: "var(--mid)", textDecoration: "none", letterSpacing: ".02em" }}
-          >
-            &larr; Back
-          </a>
           <p style={{ fontSize: "var(--small)", color: "var(--mid)" }}>
             Tharun Devaraja
           </p>
