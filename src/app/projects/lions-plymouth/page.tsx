@@ -25,6 +25,7 @@ const STACK = [
 ];
 
 const LINKS = [
+  { label: "Live Site", href: "https://lionsplymouth.org.uk/" },
   { label: "Behance", href: "https://www.behance.net/gallery/246190855/Lions-Club-Plymouth-Community-Platform-Design" },
 ];
 
@@ -35,12 +36,12 @@ const COLORS = [
 ];
 
 const COMP_IMAGES = [
-  { src: "/projects/lions-plymouth/components/Group 10123381.png", label: "Action Button" },
-  { src: "/projects/lions-plymouth/components/Frame 10123345.png", label: "Campaign Progress" },
-  { src: "/projects/lions-plymouth/components/Group 10123382.png", label: "Content Card" },
-  { src: "/projects/lions-plymouth/components/Pagination Small.png", label: "Page Navigation" },
-  { src: "/projects/lions-plymouth/components/Frame 10123207.png", label: "Testimonial Card" },
-  { src: "/projects/lions-plymouth/components/Input.png", label: "Form Input" },
+  { src: "/projects/lions-plymouth/components/Group 10123381.svg", label: "Action Button" },
+  { src: "/projects/lions-plymouth/components/Frame 10123345.svg", label: "Campaign Progress" },
+  { src: "/projects/lions-plymouth/components/Group 10123382.svg", label: "Content Card" },
+  { src: "/projects/lions-plymouth/components/Pagination Small.svg", label: "Page Navigation" },
+  { src: "/projects/lions-plymouth/components/Frame 10123207.svg", label: "Testimonial Card" },
+  { src: "/projects/lions-plymouth/components/Input.svg", label: "Form Input" },
 ];
 
 const INTERFACES = [
@@ -96,14 +97,22 @@ export default function LionsPlymouthProject() {
             </p>
 
             {/* Links */}
-            <div style={{ display: "flex", gap: "1.5rem", marginTop: "1.25rem" }}>
+            <div style={{ display: "flex", gap: ".75rem", marginTop: "1.25rem", flexWrap: "wrap" }}>
               {LINKS.map((l) => (
                 <a
                   key={l.label}
                   href={l.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ fontSize: "var(--small)", color: "var(--mid)", textDecoration: "none", fontWeight: 500 }}
+                  style={{
+                    fontSize: "var(--small)",
+                    fontWeight: 600,
+                    color: "var(--white)",
+                    background: "var(--black)",
+                    textDecoration: "none",
+                    padding: ".5rem 1.25rem",
+                    borderRadius: "99px",
+                  }}
                 >
                   {l.label} ↗
                 </a>
@@ -205,11 +214,11 @@ export default function LionsPlymouthProject() {
             </div>
 
             <div style={{ paddingTop: "2rem", paddingBottom: "2.5rem" }}>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "1rem" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "1.5rem" }}>
                 {COMP_IMAGES.map((c) => (
                   <div key={c.label}>
-                    <img src={c.src} alt={c.label} style={{ width: "100%", borderRadius: 8, border: "1px solid var(--rule)" }} />
-                    <p style={{ fontSize: "var(--label)", color: "var(--mid)", marginTop: ".5rem", textAlign: "center" }}>{c.label}</p>
+                    <p style={{ fontSize: "var(--small)", fontWeight: 600, color: "var(--black)", marginBottom: ".5rem", textAlign: "center" }}>{c.label}</p>
+                    <img src={c.src} alt={c.label} style={{ width: "100%", borderRadius: 8 }} />
                   </div>
                 ))}
               </div>
@@ -268,7 +277,7 @@ export default function LionsPlymouthProject() {
 
             <hr />
 
-            <a href="/projects/lions-plymouth/screens" style={{ display: "block", textAlign: "center", padding: "2rem", border: "1px solid var(--rule)", borderRadius: 8, textDecoration: "none", color: "var(--black)", fontWeight: 600, fontSize: "var(--body)" }}>
+            <a href="/projects/lions-plymouth/screens" style={{ display: "block", textAlign: "center", padding: "1rem 2rem", background: "var(--black)", color: "var(--white)", borderRadius: "99px", textDecoration: "none", fontWeight: 600, fontSize: "var(--small)" }}>
               View all screens →
             </a>
 
