@@ -88,14 +88,22 @@ export default function MedEssenceProject() {
             </p>
 
             {/* Links */}
-            <div style={{ display: "flex", gap: "1.5rem", marginTop: "1.25rem" }}>
+            <div style={{ display: "flex", gap: ".75rem", marginTop: "1.25rem", flexWrap: "wrap" }}>
               {LINKS.map((l) => (
                 <a
                   key={l.label}
                   href={l.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ fontSize: "var(--small)", color: "var(--mid)", textDecoration: "none", fontWeight: 500 }}
+                  style={{
+                    fontSize: "var(--small)",
+                    fontWeight: 600,
+                    color: "var(--white)",
+                    background: "var(--black)",
+                    textDecoration: "none",
+                    padding: ".5rem 1.25rem",
+                    borderRadius: "99px",
+                  }}
                 >
                   {l.label} ↗
                 </a>
@@ -269,7 +277,7 @@ export default function MedEssenceProject() {
 
               <hr />
 
-              <a href="/projects/med-essence/screens" style={{ display: "block", textAlign: "center", padding: "2rem", border: "1px solid var(--rule)", borderRadius: 8, textDecoration: "none", color: "var(--black)", fontWeight: 600, fontSize: "var(--body)" }}>
+              <a href="/projects/med-essence/screens" style={{ display: "block", textAlign: "center", padding: "1rem 2rem", background: "var(--black)", color: "var(--white)", borderRadius: "99px", textDecoration: "none", fontWeight: 600, fontSize: "var(--small)" }}>
                 View all screens →
               </a>
 

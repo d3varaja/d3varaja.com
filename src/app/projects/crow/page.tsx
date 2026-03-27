@@ -26,6 +26,7 @@ const STACK = [
 ];
 
 const LINKS = [
+  { label: "Live Site", href: "https://crowai.dev/" },
   { label: "Figma", href: "https://www.figma.com/design/ivrc5MYJvZv8zTatZXWjU9/CROW---Unified-Customer-Interaction-Intelligence-Platform?node-id=0-1&p=f" },
   { label: "GitHub", href: "https://github.com/CROW-B3" },
   { label: "Docs", href: "https://docs.crow.bbyb.dev" },
@@ -37,14 +38,6 @@ const COLORS = [
   { name: "Accent Lavender", hex: "#A78BDA" },
 ];
 
-const COMP_IMAGES: { src: string; label: string; wide?: boolean }[] = [
-  { src: "/projects/crow/components/Button.png", label: "Action Button" },
-  { src: "/projects/crow/components/Frame 49.png", label: "Billing Toggle" },
-  { src: "/projects/crow/components/Frame 1.png", label: "Ask CROW Search Bar", wide: true },
-  { src: "/projects/crow/components/Frame 10123356.png", label: "Overview Stat Cards" },
-  { src: "/projects/crow/components/Overlay+Border+Shadow+OverlayBlur.png", label: "Component Card" },
-  { src: "/projects/crow/components/Overlay+Border.png", label: "Feature Configuration Card" },
-];
 
 const SCREENS = [
   { src: "/projects/crow/Dashboard - Overview.png", label: "Dashboard Overview" },
@@ -101,14 +94,22 @@ export default function CrowProject() {
             </p>
 
             {/* Links */}
-            <div style={{ display: "flex", gap: "1.5rem", marginTop: "1.25rem" }}>
+            <div style={{ display: "flex", gap: ".75rem", marginTop: "1.25rem", flexWrap: "wrap" }}>
               {LINKS.map((l) => (
                 <a
                   key={l.label}
                   href={l.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ fontSize: "var(--small)", color: "var(--mid)", textDecoration: "none", fontWeight: 500 }}
+                  style={{
+                    fontSize: "var(--small)",
+                    fontWeight: 600,
+                    color: "var(--white)",
+                    background: "var(--black)",
+                    textDecoration: "none",
+                    padding: ".5rem 1.25rem",
+                    borderRadius: "99px",
+                  }}
                 >
                   {l.label} ↗
                 </a>
@@ -212,27 +213,26 @@ export default function CrowProject() {
               <p style={{ fontSize: "var(--label)", fontWeight: 500, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--mid)", marginBottom: "1rem" }}>
                 Core Components
               </p>
-
-              {/* Row 1: Action Button + Billing Toggle */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1rem" }}>
-                <CompCard src="/projects/crow/components/Button.png" label="Action Button" />
-                <CompCard src="/projects/crow/components/Frame 49.png" label="Billing Toggle" />
+              {/* Row 1: Action Button | Billing Toggle */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem", marginBottom: "1.5rem" }}>
+                <CompCard src="/projects/crow/components/Button.svg" label="Action Button" />
+                <CompCard src="/projects/crow/components/Frame 49.svg" label="Billing Toggle" />
               </div>
 
               {/* Row 2: Ask CROW Search Bar (full width) */}
-              <div style={{ marginBottom: "1rem" }}>
-                <CompCard src="/projects/crow/components/Frame 1.png" label="Ask CROW Search Bar" />
+              <div style={{ marginBottom: "1.5rem" }}>
+                <CompCard src="/projects/crow/components/Frame 1.svg" label="Ask CROW Search Bar" />
               </div>
 
-              {/* Row 3: Overview Stat Cards + Feature Configuration */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr", gap: "1rem", marginBottom: "1rem" }}>
-                <CompCard src="/projects/crow/components/Frame 10123356.png" label="Overview Stat Cards" />
-                <CompCard src="/projects/crow/components/Overlay+Border.png" label="Feature Configuration Card" />
+              {/* Row 3: Component Card | Overview Stat Cards */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem", marginBottom: "1.5rem" }}>
+                <CompCard src="/projects/crow/components/Overlay+Border+Shadow+OverlayBlur.svg" label="Component Card" />
+                <CompCard src="/projects/crow/components/Frame 10123356.svg" label="Overview Stat Cards" />
               </div>
 
-              {/* Row 4: Component Card (full width) */}
-              <div style={{ maxWidth: "50%" }}>
-                <CompCard src="/projects/crow/components/Overlay+Border+Shadow+OverlayBlur.png" label="Component Card" />
+              {/* Row 4: Feature Configuration Card (full width) */}
+              <div>
+                <CompCard src="/projects/crow/components/Overlay+Border.svg" label="Feature Configuration Card" />
               </div>
             </div>
           </div>
@@ -298,7 +298,7 @@ export default function CrowProject() {
 
               <hr />
 
-              <a href="/projects/crow/screens" style={{ display: "block", textAlign: "center", padding: "2rem", border: "1px solid var(--rule)", borderRadius: 8, textDecoration: "none", color: "var(--black)", fontWeight: 600, fontSize: "var(--body)" }}>
+              <a href="/projects/crow/screens" style={{ display: "block", textAlign: "center", padding: "1rem 2rem", background: "var(--black)", color: "var(--white)", borderRadius: "99px", textDecoration: "none", fontWeight: 600, fontSize: "var(--small)" }}>
                 View all 20 screens →
               </a>
 
@@ -353,8 +353,8 @@ function Stat({ value, label }: { value: string; label: string }) {
 function CompCard({ src, label }: { src: string; label: string }) {
   return (
     <div>
-      <img src={src} alt={label} style={{ width: "100%", borderRadius: 8, border: "1px solid var(--rule)" }} />
-      <p style={{ fontSize: "var(--label)", color: "var(--mid)", marginTop: ".5rem", textAlign: "center" }}>{label}</p>
+      <p style={{ fontSize: "var(--small)", fontWeight: 600, color: "var(--black)", marginBottom: ".5rem", textAlign: "center" }}>{label}</p>
+      <img src={src} alt={label} style={{ width: "100%", borderRadius: 8 }} />
     </div>
   );
 }
