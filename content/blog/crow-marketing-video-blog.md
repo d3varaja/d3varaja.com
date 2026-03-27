@@ -142,7 +142,7 @@ Then we had to buy every single prop down to the smallest detail, even the plant
 
 <figure style="max-width:400px;">
   <img src="/blog/crow-marketing-video-blog-assets/shopping-day-props.jpeg" alt="Two engineers in a party store" />
-  <figcaption>The shopping team. They had a great time.</figcaption>
+  <figcaption>The shopping team.</figcaption>
 </figure>
 
 ---
@@ -176,7 +176,7 @@ Post-shoot, everyone on the team went through the full dubbing process, which wa
 
 <figure>
   <img src="/blog/crow-marketing-video-blog-assets/dubbing-day.jpeg" alt="In the recording booth" />
-  <figcaption>Narration recording. Script in one hand, headphones on, doing it until the ears said yes.</figcaption>
+  <figcaption>Narration recording.</figcaption>
 </figure>
 
 For the ad section, we cast Thanuka, who plays Samantha, because he had that hype energy in his voice that the ad needed. That bit needed someone who could actually sell the product, not just act around it.
@@ -207,7 +207,7 @@ And that's how I ended up solving the biggest crisis Project CROW ever had. lol
 
 <figure>
   <img src="/blog/crow-marketing-video-blog-assets/crow-team-4.jpeg" alt="Post-wrap dinner" />
-  <figcaption>Post-wrap dinner. Still smiling. That's the real measure of whether a project was worth it.</figcaption>
+  <figcaption>After all, these are the people behind the whole marketing campaign.</figcaption>
 </figure>
 
 <div style="max-width:560px;margin-inline:auto;margin-top:4rem;margin-bottom:2rem;">
