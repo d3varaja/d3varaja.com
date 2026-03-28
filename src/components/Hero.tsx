@@ -149,7 +149,7 @@ export default function Hero() {
                 color: "#000000",
               }}
             >
-              2+ years of experience designing thoughtful, scalable products
+              3+ years of experience designing thoughtful, scalable products
               that solve real user problems through design and development.
             </p>
 
@@ -350,7 +350,7 @@ export default function Hero() {
               color: "#000000",
             }}
           >
-            2+ years of experience designing thoughtful, scalable products
+            3+ years of experience designing thoughtful, scalable products
             that solve real user problems through design and development.
           </p>
 

@@ -17,14 +17,14 @@ export const metadata: Metadata = {
     template: "%s — Tharun Devaraja",
   },
   description:
-    "Design Engineer based in Sri Lanka with 2+ years designing thoughtful, scalable products that solve real user problems.",
+    "Design Engineer based in Sri Lanka with 3+ years designing thoughtful, scalable products that solve real user problems.",
   openGraph: {
     type: "website",
     url: "https://d3varaja.com",
     siteName: "Tharun Devaraja",
     title: "Tharun Devaraja — Design Engineer",
     description:
-      "Design Engineer based in Sri Lanka with 2+ years designing thoughtful, scalable products that solve real user problems.",
+      "Design Engineer based in Sri Lanka with 3+ years designing thoughtful, scalable products that solve real user problems.",
     locale: "en_US",
   },
   twitter: {
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     creator: "@d3varaja",
     title: "Tharun Devaraja — Design Engineer",
     description:
-      "Design Engineer based in Sri Lanka with 2+ years designing thoughtful, scalable products.",
+      "Design Engineer based in Sri Lanka with 3+ years designing thoughtful, scalable products.",
   },
   robots: {
     index: true,
