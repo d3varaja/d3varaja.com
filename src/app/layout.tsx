@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import ClientEffects from "@/components/ClientEffects";
 import BackButton from "@/components/BackButton";
+import AiCompanion from "@/components/AiCompanion";
 import "./globals.css";
 
 const inter = Inter({
@@ -51,6 +52,7 @@ export default function RootLayout({
         <ClientEffects />
         <BackButton />
         {children}
+        <AiCompanion />
       </body>
     </html>
   );
