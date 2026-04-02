@@ -5,6 +5,7 @@
   "compatibility_date": "2025-11-27",
   "compatibility_flags": ["nodejs_compat"],
   "main": ".open-next/worker.js",
+  "workers_dev": false,
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
