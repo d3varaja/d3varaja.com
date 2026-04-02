@@ -77,7 +77,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { env } = await getCloudflareContext<CloudflareEnv>();
+    const { env } = await getCloudflareContext({ async: true });
 
     // 1. Embed the query
     const embedResult = (await env.AI.run("@cf/baai/bge-base-en-v1.5", {
@@ -130,7 +130,8 @@ export async function POST(request: Request) {
         "transfer-encoding": "chunked",
       },
     });
-  } catch {
+  } catch (err) {
+    console.error("[/api/chat] error:", err);
     return Response.json({ error: "Something went wrong" }, { status: 500 });
   }
 }

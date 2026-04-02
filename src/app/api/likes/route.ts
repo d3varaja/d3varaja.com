@@ -1,7 +1,7 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 export async function GET(request: Request) {
-  const { env } = await getCloudflareContext<CloudflareEnv>();
+  const { env } = await getCloudflareContext({ async: true });
   const { searchParams } = new URL(request.url);
   const slug = searchParams.get("slug");
 
@@ -12,7 +12,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const { env } = await getCloudflareContext<CloudflareEnv>();
+  const { env } = await getCloudflareContext({ async: true });
   const { searchParams } = new URL(request.url);
   const slug = searchParams.get("slug");
 
