@@ -8,7 +8,7 @@ const postsDir = join(root, "content", "blog");
 // Parse frontmatter without gray-matter (keep script dependency-free)
 function parseFrontmatter(raw) {
   const match = raw.match(/^---\n([\s\S]*?)\n---/);
-  if (!match) return {};
+  if (!match) return { data: {}, content: raw };
   const data = {};
   for (const line of match[1].split("\n")) {
     const i = line.indexOf(":");
@@ -17,7 +17,8 @@ function parseFrontmatter(raw) {
     const val = line.slice(i + 1).trim().replace(/^["']|["']$/g, "");
     data[key] = val;
   }
-  return data;
+  const content = raw.slice(match[0].length).trim();
+  return { data, content };
 }
 
 const posts = readdirSync(postsDir)
@@ -25,13 +26,14 @@ const posts = readdirSync(postsDir)
   .map((f) => {
     const slug = f.replace(/\.md$/, "");
     const raw = readFileSync(join(postsDir, f), "utf-8");
-    const data = parseFrontmatter(raw);
+    const { data, content } = parseFrontmatter(raw);
     return {
       slug,
       title: data.title ?? "Untitled",
       date: data.date ?? "",
       readTime: data.readTime ?? "",
       description: data.description ?? "",
+      content,
     };
   })
   .sort((a, b) => (a.date > b.date ? -1 : 1));
