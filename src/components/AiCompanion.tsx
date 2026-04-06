@@ -13,9 +13,26 @@ const WELCOME: Message = {
   content: "Hey! I'm OLO ✨ I know everything about Tharun. Ask me anything!",
 };
 
+const SUGGESTIONS = [
+  "What projects has Tharun built?",
+  "Tell me about CROW",
+  "What's his experience?",
+  "What's he working on?",
+];
+
+const SESSION_KEY = "olo-messages";
+
 export default function AiCompanion() {
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([WELCOME]);
+  const [messages, setMessages] = useState<Message[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = sessionStorage.getItem(SESSION_KEY);
+        if (saved) return JSON.parse(saved) as Message[];
+      } catch {}
+    }
+    return [WELCOME];
+  });
   const [input, setInput] = useState("");
   const [streaming, setStreaming] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -30,14 +47,30 @@ export default function AiCompanion() {
     if (open) setTimeout(() => inputRef.current?.focus(), 60);
   }, [open]);
 
-  const send = useCallback(async () => {
-    const text = input.trim();
-    if (!text || streaming) return;
+  // Persist messages to sessionStorage
+  useEffect(() => {
+    if (messages.length > 1) {
+      try {
+        sessionStorage.setItem(SESSION_KEY, JSON.stringify(messages));
+      } catch {}
+    }
+  }, [messages]);
+
+  const send = useCallback(async (text?: string) => {
+    const content = (text ?? input).trim();
+    if (!content || streaming) return;
 
     setInput("");
+
+    // Build history to send: skip WELCOME, skip empty messages
+    const history = messages
+      .slice(1)
+      .filter((m) => m.content)
+      .concat({ role: "user" as const, content });
+
     setMessages((prev) => [
       ...prev,
-      { role: "user", content: text },
+      { role: "user", content },
       { role: "assistant", content: "" },
     ]);
     setStreaming(true);
@@ -49,7 +82,7 @@ export default function AiCompanion() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text }),
+        body: JSON.stringify({ messages: history }),
         signal: ctrl.signal,
       });
 
@@ -85,12 +118,15 @@ export default function AiCompanion() {
       setStreaming(false);
       abortRef.current = null;
     }
-  }, [input, streaming]);
+  }, [input, streaming, messages]);
 
   const toggle = () => {
     if (streaming) abortRef.current?.abort();
     setOpen((o) => !o);
   };
+
+  const remaining = MAX_INPUT - input.length;
+  const showCounter = input.length > 400;
 
   return (
     <div
@@ -105,12 +141,11 @@ export default function AiCompanion() {
         gap: 12,
       }}
     >
-      {/* Chat panel */}
       {open && (
         <div
           style={{
             width: 320,
-            height: 440,
+            height: 460,
             background: "#0d0d0d",
             border: "1px solid rgba(255,255,255,0.07)",
             borderRadius: 18,
@@ -133,31 +168,16 @@ export default function AiCompanion() {
           >
             <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
               <Sparkles size={13} style={{ color: "#a78bfa" }} />
-              <span
-                style={{ fontSize: 13, fontWeight: 600, color: "#fff", letterSpacing: "-0.01em" }}
-              >
+              <span style={{ fontSize: 13, fontWeight: 600, color: "#fff", letterSpacing: "-0.01em" }}>
                 OLO
               </span>
-              <span
-                style={{
-                  fontSize: 11,
-                  color: "rgba(255,255,255,0.28)",
-                  fontWeight: 400,
-                }}
-              >
+              <span style={{ fontSize: 11, color: "rgba(255,255,255,0.28)", fontWeight: 400 }}>
                 knows Tharun
               </span>
             </div>
             <button
               onClick={toggle}
-              style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                color: "rgba(255,255,255,0.3)",
-                display: "flex",
-                padding: 2,
-              }}
+              style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.3)", display: "flex", padding: 2 }}
             >
               <X size={14} />
             </button>
@@ -175,21 +195,12 @@ export default function AiCompanion() {
             }}
           >
             {messages.map((msg, i) => (
-              <div
-                key={i}
-                style={{
-                  display: "flex",
-                  justifyContent: msg.role === "user" ? "flex-end" : "flex-start",
-                }}
-              >
+              <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: msg.role === "user" ? "flex-end" : "flex-start" }}>
                 <div
                   style={{
                     maxWidth: "86%",
                     padding: "8px 12px",
-                    borderRadius:
-                      msg.role === "user"
-                        ? "14px 14px 3px 14px"
-                        : "14px 14px 14px 3px",
+                    borderRadius: msg.role === "user" ? "14px 14px 3px 14px" : "14px 14px 14px 3px",
                     fontSize: 13,
                     lineHeight: 1.55,
                     background: msg.role === "user" ? "#6d28d9" : "rgba(255,255,255,0.07)",
@@ -198,10 +209,34 @@ export default function AiCompanion() {
                     wordBreak: "break-word",
                   }}
                 >
-                  {msg.content || (streaming && i === messages.length - 1 ? (
-                    <TypingDots />
-                  ) : null)}
+                  {msg.content || (streaming && i === messages.length - 1 ? <TypingDots /> : null)}
                 </div>
+
+                {/* Suggested questions after welcome message */}
+                {i === 0 && messages.length === 1 && (
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 8, maxWidth: "100%" }}>
+                    {SUGGESTIONS.map((q) => (
+                      <button
+                        key={q}
+                        onClick={() => send(q)}
+                        disabled={streaming}
+                        style={{
+                          background: "rgba(109,40,217,0.12)",
+                          border: "1px solid rgba(109,40,217,0.3)",
+                          borderRadius: 8,
+                          padding: "5px 10px",
+                          fontSize: 11,
+                          color: "rgba(255,255,255,0.65)",
+                          cursor: "pointer",
+                          textAlign: "left",
+                          lineHeight: 1.4,
+                        }}
+                      >
+                        {q}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
             <div ref={bottomRef} />
@@ -213,55 +248,59 @@ export default function AiCompanion() {
               padding: "10px 12px 13px",
               borderTop: "1px solid rgba(255,255,255,0.07)",
               display: "flex",
-              gap: 8,
+              flexDirection: "column",
+              gap: 6,
               flexShrink: 0,
             }}
           >
-            <input
-              ref={inputRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send()}
-              placeholder="Ask about Tharun..."
-              disabled={streaming}
-              maxLength={500}
-              style={{
-                flex: 1,
-                background: "rgba(255,255,255,0.06)",
-                border: "1px solid rgba(255,255,255,0.07)",
-                borderRadius: 10,
-                padding: "8px 12px",
-                fontSize: 13,
-                color: "#fff",
-                outline: "none",
-                transition: "border-color 0.15s",
-              }}
-              onFocus={(e) =>
-                (e.currentTarget.style.borderColor = "rgba(109,40,217,0.6)")
-              }
-              onBlur={(e) =>
-                (e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)")
-              }
-            />
-            <button
-              onClick={send}
-              disabled={streaming || !input.trim()}
-              style={{
-                background: "#6d28d9",
-                border: "none",
-                borderRadius: 10,
-                padding: "8px 11px",
-                cursor: streaming || !input.trim() ? "not-allowed" : "pointer",
-                opacity: streaming || !input.trim() ? 0.35 : 1,
-                display: "flex",
-                alignItems: "center",
-                color: "#fff",
-                transition: "opacity 0.15s",
-                flexShrink: 0,
-              }}
-            >
-              <Send size={13} />
-            </button>
+            <div style={{ display: "flex", gap: 8 }}>
+              <input
+                ref={inputRef}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send()}
+                placeholder="Ask about Tharun..."
+                disabled={streaming}
+                maxLength={MAX_INPUT}
+                style={{
+                  flex: 1,
+                  background: "rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(255,255,255,0.07)",
+                  borderRadius: 10,
+                  padding: "8px 12px",
+                  fontSize: 13,
+                  color: "#fff",
+                  outline: "none",
+                  transition: "border-color 0.15s",
+                }}
+                onFocus={(e) => (e.currentTarget.style.borderColor = "rgba(109,40,217,0.6)")}
+                onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)")}
+              />
+              <button
+                onClick={() => send()}
+                disabled={streaming || !input.trim()}
+                style={{
+                  background: "#6d28d9",
+                  border: "none",
+                  borderRadius: 10,
+                  padding: "8px 11px",
+                  cursor: streaming || !input.trim() ? "not-allowed" : "pointer",
+                  opacity: streaming || !input.trim() ? 0.35 : 1,
+                  display: "flex",
+                  alignItems: "center",
+                  color: "#fff",
+                  transition: "opacity 0.15s",
+                  flexShrink: 0,
+                }}
+              >
+                <Send size={13} />
+              </button>
+            </div>
+            {showCounter && (
+              <span style={{ fontSize: 11, color: remaining < 20 ? "#ef4444" : "rgba(255,255,255,0.3)", textAlign: "right" }}>
+                {remaining}
+              </span>
+            )}
           </div>
         </div>
       )}
@@ -298,6 +337,8 @@ export default function AiCompanion() {
     </div>
   );
 }
+
+const MAX_INPUT = 500;
 
 function TypingDots() {
   return (
