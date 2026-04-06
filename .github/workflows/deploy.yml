@@ -16,17 +16,8 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Install dependencies
-        run: bun install
-
-      - name: Generate blog manifest
-        run: node scripts/gen-blog-manifest.mjs
-
-      - name: Build
-        run: bunx opennextjs-cloudflare build
-
       - name: Deploy
-        run: OPEN_NEXT_DEPLOY=true bunx wrangler deploy
+        run: bunx wrangler deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: 06e16fed37146bd345fbfb7f3b24623d

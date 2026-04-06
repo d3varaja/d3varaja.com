@@ -27,5 +27,8 @@
   },
   "vars": {
     "QDRANT_URL": "https://b18fa8af-bcc7-4f71-af37-73ec3f18f1a6.eu-central-1-0.aws.cloud.qdrant.io:6333"
+  },
+  "build": {
+    "command": "bun install && node scripts/gen-blog-manifest.mjs && bunx opennextjs-cloudflare build"
   }
 }
