@@ -18,16 +18,27 @@ export interface Post extends PostMeta {
 
 /** Return all posts sorted by date (newest first). */
 export function getAllPosts(): PostMeta[] {
-  if (!fs.existsSync(POSTS_DIR)) return [];
+  // Use pre-generated manifest (works in Cloudflare Workers where readdirSync fails)
+  const manifestPath = path.join(POSTS_DIR, "_manifest.json");
+  let slugs: string[];
 
-  return fs
-    .readdirSync(POSTS_DIR)
-    .filter((f) => f.endsWith(".md"))
-    .map((filename) => {
-      const slug = filename.replace(/\.md$/, "");
-      const raw = fs.readFileSync(path.join(POSTS_DIR, filename), "utf-8");
+  if (fs.existsSync(manifestPath)) {
+    slugs = JSON.parse(fs.readFileSync(manifestPath, "utf-8")) as string[];
+  } else {
+    // Fallback for local dev without manifest
+    if (!fs.existsSync(POSTS_DIR)) return [];
+    slugs = fs
+      .readdirSync(POSTS_DIR)
+      .filter((f) => f.endsWith(".md"))
+      .map((f) => f.replace(/\.md$/, ""));
+  }
+
+  return slugs
+    .map((slug) => {
+      const filePath = path.join(POSTS_DIR, `${slug}.md`);
+      if (!fs.existsSync(filePath)) return null;
+      const raw = fs.readFileSync(filePath, "utf-8");
       const { data } = matter(raw);
-
       return {
         slug,
         title: data.title ?? "Untitled",
@@ -36,7 +47,8 @@ export function getAllPosts(): PostMeta[] {
         description: data.description ?? "",
       };
     })
-    .sort((a, b) => (a.date > b.date ? -1 : 1));
+    .filter(Boolean)
+    .sort((a, b) => (a!.date > b!.date ? -1 : 1)) as PostMeta[];
 }
 
 /** Return a single post by slug (with markdown body). */
