@@ -1,15 +1,34 @@
 {
+  "$schema": "node_modules/wrangler/config-schema.json",
   "name": "d3varaja-com",
+  "account_id": "06e16fed37146bd345fbfb7f3b24623d",
   "compatibility_date": "2025-11-27",
-  "main": "worker/index.ts",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": ".open-next/worker.js",
+  "workers_dev": false,
   "assets": {
-    "directory": "./out",
+    "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "d3varaja-com"
+    }
+  ],
   "kv_namespaces": [
     {
       "binding": "LIKES",
       "id": "fbeffea2671e400c9cf33776b87d8e88"
     }
-  ]
+  ],
+  "ai": {
+    "binding": "AI"
+  },
+  "vars": {
+    "QDRANT_URL": "https://b18fa8af-bcc7-4f71-af37-73ec3f18f1a6.eu-central-1-0.aws.cloud.qdrant.io:6333"
+  },
+  "build": {
+    "command": "bun install && node scripts/gen-blog-manifest.mjs && bunx opennextjs-cloudflare build"
+  }
 }

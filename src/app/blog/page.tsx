@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { getAllPosts } from "@/lib/blog";
 import PillNav from "@/components/PillNav";
 
+export const dynamic = "force-static";
+
 export const metadata: Metadata = {
   title: "Blog",
   description:
