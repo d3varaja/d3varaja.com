@@ -10,6 +10,12 @@ import SegmentedFilter from "@/components/SegmentedFilter";
 
 type Category = "case-study" | "project" | "exploration";
 
+const CATEGORY_TAG: Record<Category, string> = {
+  "case-study": "Case Study",
+  project: "Project",
+  exploration: "Exploration",
+};
+
 interface Project extends ProjectListRowItem {
   blurb?: string;
   category: Category;
@@ -21,8 +27,8 @@ const PROJECTS: Project[] = [
   {
     n: "01",
     slug: "lions-plymouth",
-    title: "Lions Club Plymouth",
-    subtitle: "Community Platform Design",
+    title: "Designing for the members most websites forget",
+    subtitle: "Lions Club Plymouth",
     tags: ["Accessibility", "UX", "Web"],
     year: "2025",
     category: "case-study",
@@ -37,8 +43,8 @@ const PROJECTS: Project[] = [
   {
     n: "02",
     slug: "crow",
-    title: "Project CROW",
-    subtitle: "Unified Interaction Intelligence",
+    title: "Designing brand, UI, and a marketing film for a B2B AI product",
+    subtitle: "Project CROW",
     tags: ["Platform", "AI", "Frontend"],
     year: "2025–2026",
     category: "case-study",
@@ -97,6 +103,22 @@ const PROJECTS: Project[] = [
       alt: "CodeClub admin dashboard",
     },
     href: "/projects/code-club",
+  },
+  {
+    n: "06",
+    slug: "olo",
+    title: "The story of OLO",
+    subtitle: "An exploration in playful AI companions",
+    tags: ["AI", "Character", "Web"],
+    year: "2026",
+    category: "exploration",
+    accent: "#F59E0B",
+    accentBg: "rgba(245, 158, 11, 0.14)",
+    preview: {
+      src: "/olo/olo-animations/big-eye/olo-puppet.png",
+      alt: "OLO, the puppet AI companion",
+    },
+    href: "/projects/olo",
   },
 ];
 
@@ -228,6 +250,9 @@ export default function ProjectsListClient() {
                   item={p}
                   index={i}
                   onHoverChange={setHoveredSlug}
+                  categoryLabel={
+                    active === "all" ? CATEGORY_TAG[p.category] : undefined
+                  }
                 />
               ))}
             </ul>

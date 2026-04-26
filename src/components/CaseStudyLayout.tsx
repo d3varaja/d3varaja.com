@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Fragment,
   useEffect,
   useRef,
   useState,
@@ -33,6 +34,8 @@ interface CaseStudyLayoutProps {
   surface?: string;
   /** Full font-family stack applied to <main>. Falls back to the global --font (Inter). */
   fontFamily?: string;
+  /** Full font-family stack applied to display headlines (H1/H2/H3). Falls back to fontFamily, then to global --font. */
+  headlineFontFamily?: string;
 }
 
 export function CaseStudyLayout({
@@ -46,6 +49,7 @@ export function CaseStudyLayout({
   rule,
   surface,
   fontFamily,
+  headlineFontFamily,
 }: CaseStudyLayoutProps) {
   const themeVars: Record<string, string> = {};
   if (accent) themeVars["--cs-accent"] = accent;
@@ -57,6 +61,32 @@ export function CaseStudyLayout({
   if (rule) themeVars["--cs-rule"] = rule;
   if (surface) themeVars["--cs-surface"] = surface;
   if (fontFamily) themeVars["--cs-font"] = fontFamily;
+  if (headlineFontFamily) themeVars["--cs-headline-font"] = headlineFontFamily;
+
+  // Scroll-reveal: fade + translate visual blocks (.cs-reveal) into view once.
+  // Respects prefers-reduced-motion. Hero is exempt — it has its own fade-in animation.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const targets = document.querySelectorAll<HTMLElement>(".cs-reveal");
+    if (reduced) {
+      targets.forEach((el) => el.classList.add("is-visible"));
+      return;
+    }
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-visible");
+            obs.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+    );
+    targets.forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
 
   return (
     <>
@@ -69,6 +99,61 @@ export function CaseStudyLayout({
           body::before { display: none !important; }
         `}</style>
       )}
+      <style>{`
+        /* Scroll-reveal */
+        .cs-reveal {
+          opacity: 0;
+          transform: translateY(14px);
+          transition:
+            opacity .8s cubic-bezier(.16,1,.3,1),
+            transform .8s cubic-bezier(.16,1,.3,1);
+          will-change: opacity, transform;
+        }
+        .cs-reveal.is-visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .cs-reveal { opacity: 1; transform: none; transition: none; }
+        }
+
+        /* Hero pill link soft hover lift */
+        .cs-pill-link {
+          transition: transform .25s cubic-bezier(.16,1,.3,1), box-shadow .25s ease;
+          will-change: transform;
+        }
+        .cs-pill-link:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 24px -12px rgba(0,0,0,.45);
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .cs-pill-link, .cs-pill-link:hover { transform: none; }
+        }
+
+        /* Section serial number — auto-numbered via CSS counter on .wrap */
+        .cs-section-num::before {
+          counter-increment: cs-section;
+          content: counter(cs-section, decimal-leading-zero);
+          font-variant-numeric: tabular-nums;
+          font-feature-settings: "tnum";
+          font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+          font-size: 0.6875rem;
+          font-weight: 600;
+          letter-spacing: .14em;
+          color: var(--cs-text-muted, var(--mid));
+          opacity: .9;
+        }
+        .cs-section-rule {
+          flex: 0 0 28px;
+          height: 1px;
+          background: var(--cs-text-muted, var(--mid));
+          opacity: .35;
+        }
+        @media (max-width: 480px) {
+          .cs-section-num::before, .cs-section-rule { display: none; }
+          .cs-section-head { gap: 0 !important; }
+        }
+      `}</style>
       <main
         style={{
           minHeight: "100svh",
@@ -87,6 +172,7 @@ export function CaseStudyLayout({
             display: "flex",
             flexDirection: "column",
             gap: "clamp(3.5rem, 7vw, 6rem)",
+            counterReset: "cs-section",
           }}
         >
           {children}
@@ -167,11 +253,13 @@ export function CaseStudyHero({ title, meta, images, heroVideo, links, metaCard 
         style={{
           fontSize: "var(--display)",
           fontWeight: 800,
-          letterSpacing: "-.035em",
-          lineHeight: 1.05,
+          letterSpacing: "-.04em",
+          lineHeight: 1.02,
           maxWidth: "20ch",
           color: "var(--cs-headline, var(--cs-text, var(--black)))",
           margin: 0,
+          fontFamily: "var(--cs-headline-font, var(--cs-font, var(--font)))",
+          fontOpticalSizing: "auto",
         }}
       >
         {title}
@@ -192,6 +280,7 @@ export function CaseStudyHero({ title, meta, images, heroVideo, links, metaCard 
               href={l.href}
               target="_blank"
               rel="noopener noreferrer"
+              className="cs-pill-link"
               style={{
                 fontSize: "var(--small)",
                 fontWeight: 600,
@@ -203,13 +292,6 @@ export function CaseStudyHero({ title, meta, images, heroVideo, links, metaCard 
                 display: "inline-flex",
                 alignItems: "center",
                 gap: ".4rem",
-                transition: "opacity .15s ease",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLAnchorElement).style.opacity = "0.85";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLAnchorElement).style.opacity = "1";
               }}
             >
               {l.label} ↗
@@ -224,83 +306,171 @@ export function CaseStudyHero({ title, meta, images, heroVideo, links, metaCard 
         <HeroShowcase slides={images} />
       ) : null}
 
-      <dl
-        style={
-          metaCard
-            ? {
-                display: "grid",
-                gridTemplateColumns:
-                  "repeat(auto-fit, minmax(180px, 1fr))",
-                gap: "1.5rem 2rem",
-                padding: "1.75rem",
-                background:
-                  "var(--cs-accent-soft, var(--accent-soft, rgba(12,12,12,.03)))",
-                border: "1px solid var(--cs-rule, var(--rule))",
-                borderRadius: 12,
-                margin: 0,
+      {metaCard ? (
+        <dl
+          className="cs-meta-card"
+          style={{
+            display: "grid",
+            gridTemplateColumns: `repeat(${meta.length}, minmax(0, 1fr))`,
+            gridTemplateRows: "auto auto",
+            columnGap: "2.25rem",
+            rowGap: ".75rem",
+            padding: "1.75rem 2rem 1.85rem",
+            background:
+              "var(--cs-accent-soft, var(--accent-soft, rgba(12,12,12,.03)))",
+            border: "1px solid var(--cs-rule, var(--rule))",
+            borderRadius: 14,
+            margin: 0,
+            position: "relative",
+          }}
+        >
+          <style>{`
+            .cs-meta-card { --cs-meta-cols: ${meta.length}; }
+            .cs-meta-card::before {
+              content: "";
+              position: absolute;
+              top: -1px;
+              left: 1.85rem;
+              width: 36px;
+              height: 2px;
+              background: var(--cs-accent, var(--accent));
+              border-radius: 0 0 4px 4px;
+            }
+            @media (max-width: 900px) {
+              .cs-meta-card {
+                grid-template-columns: repeat(min(var(--cs-meta-cols), 3), minmax(0, 1fr)) !important;
               }
-            : {
+              .cs-meta-card dt, .cs-meta-card dd { grid-column: auto !important; grid-row: auto !important; }
+              .cs-meta-card .cs-meta-pair { display: contents; }
+            }
+            @media (max-width: 560px) {
+              .cs-meta-card {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              }
+            }
+            @media (max-width: 380px) {
+              .cs-meta-card {
+                grid-template-columns: 1fr !important;
+              }
+            }
+          `}</style>
+          {meta.map((m, i) => (
+            <Fragment key={m.label}>
+              <dt
+                style={{
+                  gridRow: 1,
+                  gridColumn: i + 1,
+                  fontSize: "var(--label)",
+                  fontWeight: 600,
+                  letterSpacing: ".14em",
+                  textTransform: "uppercase",
+                  color: "var(--cs-text-muted, var(--mid))",
+                  margin: 0,
+                  alignSelf: "end",
+                }}
+              >
+                {m.label}
+              </dt>
+              <dd
+                style={{
+                  gridRow: 2,
+                  gridColumn: i + 1,
+                  fontSize: "var(--small)",
+                  fontWeight: 600,
+                  color: "var(--cs-text, var(--black))",
+                  margin: 0,
+                  lineHeight: 1.5,
+                  fontVariantNumeric: "tabular-nums",
+                  minWidth: 0,
+                  hyphens: "auto",
+                  overflowWrap: "break-word",
+                }}
+              >
+                {m.href ? (
+                  <a
+                    href={m.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      color: "inherit",
+                      textDecoration: "underline",
+                      textUnderlineOffset: 3,
+                      textDecorationThickness: 1,
+                    }}
+                  >
+                    {m.value} ↗
+                  </a>
+                ) : (
+                  m.value
+                )}
+              </dd>
+            </Fragment>
+          ))}
+        </dl>
+      ) : (
+        <dl
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "1.25rem 2.25rem",
+            paddingTop: "1.25rem",
+            borderTop: "1px solid var(--cs-rule, var(--rule))",
+            margin: 0,
+          }}
+        >
+          {meta.map((m) => (
+            <div
+              key={m.label}
+              style={{
                 display: "flex",
-                flexWrap: "wrap",
-                gap: "1.25rem 2.25rem",
-                paddingTop: "1.25rem",
-                borderTop: "1px solid var(--cs-rule, var(--rule))",
-                margin: 0,
-              }
-        }
-      >
-        {meta.map((m) => (
-          <div
-            key={m.label}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: ".4rem",
-              gridColumn: metaCard && m.wide ? "span 2" : undefined,
-              minWidth: 0,
-            }}
-          >
-            <dt
-              style={{
-                fontSize: "var(--label)",
-                fontWeight: 500,
-                letterSpacing: ".14em",
-                textTransform: "uppercase",
-                color: "var(--cs-text-muted, var(--mid))",
+                flexDirection: "column",
+                gap: ".4rem",
+                minWidth: 0,
               }}
             >
-              {m.label}
-            </dt>
-            <dd
-              style={{
-                fontSize: "var(--small)",
-                fontWeight: 600,
-                color: "var(--cs-text, var(--black))",
-                margin: 0,
-                lineHeight: 1.45,
-              }}
-            >
-              {m.href ? (
-                <a
-                  href={m.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    color: "inherit",
-                    textDecoration: "underline",
-                    textUnderlineOffset: 3,
-                    textDecorationThickness: 1,
-                  }}
-                >
-                  {m.value} ↗
-                </a>
-              ) : (
-                m.value
-              )}
-            </dd>
-          </div>
-        ))}
-      </dl>
+              <dt
+                style={{
+                  fontSize: "var(--label)",
+                  fontWeight: 500,
+                  letterSpacing: ".14em",
+                  textTransform: "uppercase",
+                  color: "var(--cs-text-muted, var(--mid))",
+                }}
+              >
+                {m.label}
+              </dt>
+              <dd
+                style={{
+                  fontSize: "var(--small)",
+                  fontWeight: 600,
+                  color: "var(--cs-text, var(--black))",
+                  margin: 0,
+                  lineHeight: 1.45,
+                  fontVariantNumeric: "tabular-nums",
+                }}
+              >
+                {m.href ? (
+                  <a
+                    href={m.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      color: "inherit",
+                      textDecoration: "underline",
+                      textUnderlineOffset: 3,
+                      textDecorationThickness: 1,
+                    }}
+                  >
+                    {m.value} ↗
+                  </a>
+                ) : (
+                  m.value
+                )}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      )}
     </header>
   );
 }
@@ -699,7 +869,7 @@ export function VideoEmbed({
   aspectRatio = "16 / 9",
 }: VideoEmbedProps) {
   return (
-    <figure style={{ margin: 0, display: "flex", flexDirection: "column", gap: ".75rem" }}>
+    <figure className="cs-reveal" style={{ margin: 0, display: "flex", flexDirection: "column", gap: ".75rem" }}>
       {title && <FigureTitle align="start">{title}</FigureTitle>}
       <div
         style={{
@@ -994,6 +1164,7 @@ interface SectionProps {
 export function Section({ label, headline, children }: SectionProps) {
   return (
     <section
+      className="cs-reveal"
       style={{ display: "flex", flexDirection: "column", gap: "1.75rem" }}
     >
       <div
@@ -1003,27 +1174,40 @@ export function Section({ label, headline, children }: SectionProps) {
           gap: "1rem",
         }}
       >
-        <p
+        <div
+          className="cs-section-head"
           style={{
-            fontSize: "var(--label)",
-            fontWeight: 500,
-            letterSpacing: ".14em",
-            textTransform: "uppercase",
-            color: "var(--cs-accent, var(--accent))",
-            margin: 0,
+            display: "flex",
+            alignItems: "center",
+            gap: ".75rem",
           }}
         >
-          {label}
-        </p>
+          <span className="cs-section-num" aria-hidden />
+          <span className="cs-section-rule" aria-hidden />
+          <p
+            style={{
+              fontSize: "var(--label)",
+              fontWeight: 500,
+              letterSpacing: ".14em",
+              textTransform: "uppercase",
+              color: "var(--cs-accent, var(--accent))",
+              margin: 0,
+            }}
+          >
+            {label}
+          </p>
+        </div>
         <h2
           style={{
             fontSize: "clamp(1.625rem, 3.2vw, 2.375rem)",
             fontWeight: 700,
-            letterSpacing: "-.03em",
-            lineHeight: 1.15,
+            letterSpacing: "-.035em",
+            lineHeight: 1.12,
             color: "var(--cs-headline, var(--cs-text, var(--black)))",
             margin: 0,
             maxWidth: "22ch",
+            fontFamily: "var(--cs-headline-font, var(--cs-font, var(--font)))",
+            fontOpticalSizing: "auto",
           }}
         >
           {headline}
@@ -1139,6 +1323,7 @@ interface FigureProps {
 export function Figure({ src, alt, caption, title, size = "wide", tall }: FigureProps) {
   return (
     <figure
+      className="cs-reveal"
       style={{
         margin: 0,
         maxWidth: size === "narrow" ? 720 : "100%",
@@ -1184,7 +1369,7 @@ interface FigureRowProps {
 
 export function FigureRow({ images, caption, title, tall }: FigureRowProps) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: ".75rem" }}>
+    <div className="cs-reveal" style={{ display: "flex", flexDirection: "column", gap: ".75rem" }}>
       {title && <FigureTitle align="start">{title}</FigureTitle>}
       <div
         className="cs-figure-row"
@@ -1263,13 +1448,15 @@ export function Caption({ children }: { children: ReactNode }) {
     <figcaption
       style={{
         maxWidth: "64ch",
-        margin: 0,
-        paddingTop: ".85rem",
-        borderTop: "1px solid var(--cs-rule, var(--rule))",
-        fontSize: "0.9375rem",
-        fontWeight: 500,
+        margin: ".25rem 0 0",
+        padding: ".25rem 0 .25rem 1.1rem",
+        borderLeft: "2px solid var(--cs-accent, var(--accent))",
+        fontSize: "1rem",
+        fontStyle: "italic",
+        fontWeight: 400,
         lineHeight: 1.55,
-        color: "var(--cs-text, rgba(12,12,12,.78))",
+        letterSpacing: ".005em",
+        color: "var(--cs-text, rgba(12,12,12,.82))",
       }}
     >
       {children}
@@ -1305,7 +1492,7 @@ export function Gallery({
   title,
 }: GalleryProps) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+    <div className="cs-reveal" style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
       {title && <FigureTitle align="start">{title}</FigureTitle>}
       <div
         className="cs-gallery"
@@ -1328,10 +1515,17 @@ export function Gallery({
           }
           .cs-gallery img {
             transform-origin: center center;
+            transition:
+              transform .5s cubic-bezier(.16,1,.3,1),
+              box-shadow .5s ease,
+              outline-color .3s ease !important;
+            outline: 1px solid transparent;
+            outline-offset: 4px;
           }
-          .cs-gallery-fig img:hover {
-            transform: scale(1.06) !important;
-            box-shadow: 0 24px 60px -12px rgba(12,12,12,.28) !important;
+          .cs-gallery-fig:hover img {
+            transform: scale(1.04) translateY(-3px) !important;
+            box-shadow: 0 28px 60px -16px rgba(12,12,12,.34) !important;
+            outline-color: var(--cs-accent, var(--accent));
             z-index: 2;
             position: relative;
           }
@@ -1342,6 +1536,20 @@ export function Gallery({
             text-align: center;
             margin: 0;
             letter-spacing: .01em;
+            transition: transform .35s cubic-bezier(.16,1,.3,1), color .25s ease;
+          }
+          .cs-gallery-fig:hover .cs-gallery-cap {
+            transform: translateY(-2px);
+            color: var(--cs-text, var(--black));
+          }
+          @media (prefers-reduced-motion: reduce) {
+            .cs-gallery img,
+            .cs-gallery-fig:hover img,
+            .cs-gallery-cap,
+            .cs-gallery-fig:hover .cs-gallery-cap {
+              transform: none !important;
+              transition: none !important;
+            }
           }
         `}</style>
         {images.map((img, i) => (
@@ -1424,7 +1632,7 @@ interface ComponentGridProps {
 
 export function ComponentGrid({ items, title }: ComponentGridProps) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+    <div className="cs-reveal" style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
       {title && <FigureTitle align="start">{title}</FigureTitle>}
       <div className="cs-comp-grid">
         <style>{`
@@ -1511,10 +1719,12 @@ export function Reflection({ title, children }: ReflectionProps) {
         style={{
           fontSize: "clamp(1.0625rem, 1.8vw, 1.25rem)",
           fontWeight: 700,
-          letterSpacing: "-.02em",
-          lineHeight: 1.3,
+          letterSpacing: "-.025em",
+          lineHeight: 1.28,
           color: "var(--cs-headline, var(--cs-text, var(--black)))",
           margin: 0,
+          fontFamily: "var(--cs-headline-font, var(--cs-font, var(--font)))",
+          fontOpticalSizing: "auto",
         }}
       >
         {title}

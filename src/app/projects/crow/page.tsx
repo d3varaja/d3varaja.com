@@ -66,9 +66,7 @@ export default function CrowProject() {
           meta={[
             {
               label: "Client",
-              value:
-                "Two signed beta clients, Nadda Maana Productions (vtickets.lk) and Serendiv (serendivtravel.com)",
-              wide: true,
+              value: "Naada Maana Productions, Serendiv",
             },
             {
               label: "Role",
@@ -83,9 +81,7 @@ export default function CrowProject() {
             { label: "Year", value: "2025, 2026" },
             {
               label: "Tools",
-              value:
-                "Figma, FigJam, React, Next.js 15, Cloudflare, Sora, a notebook full of storyboards",
-              wide: true,
+              value: "Figma, FigJam, a notebook full of storyboards",
             },
           ]}
           images={[
@@ -233,6 +229,22 @@ export default function CrowProject() {
             people running long focused sessions. A light theme is planned for
             future audience expansion.
           </Paragraph>
+          <FigureRow
+            tall
+            images={[
+              {
+                src: `${BASE}/creative-direction/logo-sketch.png`,
+                alt: "The original CROW logo notebook sketch, a raven head drawn in pen with hatched shading",
+                label: "Notebook sketch",
+              },
+              {
+                src: `${BASE}/creative-direction/logo-final.png`,
+                alt: "The final CROW logo mark, a neon raven head with a red-to-purple gradient glow on a black background",
+                label: "Final logo mark",
+              },
+            ]}
+            caption="The raven head that became CROW's signature, from notebook to the final neon mark."
+          />
           <Figure
             src={`${BASE}/creative-direction/brand-identity-board.png`}
             alt="The CROW brand identity board: palette, typography, and core elements"
@@ -406,7 +418,7 @@ export default function CrowProject() {
         <Section label="Outcome" headline="Coursework to signed clients">
           <Paragraph>
             Two beta agreements signed for production rollout in April 2026.
-            Nadda Maana Productions for vtickets.lk, Serendiv for
+            Naada Maana Productions for vtickets.lk, Serendiv for
             serendivtravel.com, both brand-owned retail sites running CROW&apos;s
             SDK in dev, going live April 16th.
           </Paragraph>

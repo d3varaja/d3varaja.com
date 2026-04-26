@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 
 interface Props {
   src: string;
@@ -11,9 +12,14 @@ interface Props {
 export default function ImageLightbox({ src, alt, style }: Props) {
   const [open, setOpen] = useState(false);
   const [isPortrait, setIsPortrait] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
 
   const close = useCallback(() => setOpen(false), []);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -59,13 +65,13 @@ export default function ImageLightbox({ src, alt, style }: Props) {
         onClick={handleOpen}
       />
 
-      {open && (
+      {open && mounted && createPortal(
         <div
           onClick={close}
           style={{
             position: "fixed",
             inset: 0,
-            zIndex: 999,
+            zIndex: 100000,
             overflowY: isPortrait ? "hidden" : "auto",
             background: "rgba(0, 0, 0, 0.7)",
             backdropFilter: "blur(12px)",
@@ -104,7 +110,8 @@ export default function ImageLightbox({ src, alt, style }: Props) {
               margin: isPortrait ? undefined : "auto",
             }}
           />
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

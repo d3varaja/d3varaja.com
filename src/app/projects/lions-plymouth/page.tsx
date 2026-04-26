@@ -40,6 +40,7 @@ export default function LionsPlymouthProject() {
       >
         {/* ── Hero ────────────────────────────────────────── */}
         <CaseStudyHero
+          metaCard
           title="Designing for the members most websites forget"
           links={[
             { label: "Live Site", href: "https://lionsplymouth.org.uk/" },
