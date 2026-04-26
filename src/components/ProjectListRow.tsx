@@ -18,12 +18,15 @@ interface ProjectListRowProps {
   item: ProjectListRowItem;
   index: number;
   onHoverChange: (slug: string | null) => void;
+  /** Optional small uppercase chip rendered before the title (e.g. "Case Study", "Project"). */
+  categoryLabel?: string;
 }
 
 export default function ProjectListRow({
   item,
   index,
   onHoverChange,
+  categoryLabel,
 }: ProjectListRowProps) {
   const router = useRouter();
 
@@ -91,11 +94,19 @@ export default function ProjectListRow({
           color: var(--mid);
           font-weight: 500;
         }
-        .cs-lrow-tags {
-          font-size: var(--small);
+        .cs-lrow-tag {
+          font-size: 0.625rem;
+          font-weight: 600;
+          letter-spacing: .16em;
+          text-transform: uppercase;
           color: var(--mid);
-          letter-spacing: .01em;
+          font-variant-numeric: tabular-nums;
+          line-height: 1;
           white-space: nowrap;
+          text-align: right;
+        }
+        @media (max-width: 700px) {
+          .cs-lrow-tag { display: none; }
         }
         .cs-lrow-year {
           font-size: var(--label);
@@ -124,7 +135,7 @@ export default function ProjectListRow({
             gap: 1rem;
             padding: 1.1rem 0;
           }
-          .cs-lrow-tags, .cs-lrow-year { display: none; }
+          .cs-lrow-year, .cs-lrow-tag { display: none; }
         }
         @media (prefers-reduced-motion: reduce) {
           .cs-lrow { animation: none !important; }
@@ -144,7 +155,9 @@ export default function ProjectListRow({
           {item.title}{" "}
           <span className="cs-lrow-em">— {item.subtitle}</span>
         </span>
-        <span className="cs-lrow-tags">{item.tags.join(" · ")}</span>
+        <span className="cs-lrow-tag" aria-hidden>
+          {categoryLabel ?? ""}
+        </span>
         <span className="cs-lrow-year">{item.year}</span>
         <span className="cs-lrow-arr" aria-hidden>
           <svg

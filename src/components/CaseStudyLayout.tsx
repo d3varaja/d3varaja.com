@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Fragment,
   useEffect,
   useRef,
   useState,
@@ -19,38 +20,165 @@ interface CaseStudyLayoutProps {
   accent?: string;
   /** Optional rgba tint matching the accent (defaults to a soft alpha derived from accent if omitted). */
   accentSoft?: string;
+  /** Page background colour. When set, also forces the body background and hides the global paper-grain overlay. */
+  background?: string;
+  /** Primary body text colour. Falls back to --black. */
+  text?: string;
+  /** Headline (H1/H2/H3) colour. Falls back to text, then to --black. */
+  headlineText?: string;
+  /** Muted text colour for labels, captions, metadata. Falls back to --mid. */
+  textMuted?: string;
+  /** Border/divider colour. Falls back to --rule. */
+  rule?: string;
+  /** Surface colour for cards, figures, hero stage, carousel slides. Falls back to --white. */
+  surface?: string;
+  /** Full font-family stack applied to <main>. Falls back to the global --font (Inter). */
+  fontFamily?: string;
+  /** Full font-family stack applied to display headlines (H1/H2/H3). Falls back to fontFamily, then to global --font. */
+  headlineFontFamily?: string;
 }
 
 export function CaseStudyLayout({
   children,
   accent,
   accentSoft,
+  background,
+  text,
+  headlineText,
+  textMuted,
+  rule,
+  surface,
+  fontFamily,
+  headlineFontFamily,
 }: CaseStudyLayoutProps) {
   const themeVars: Record<string, string> = {};
   if (accent) themeVars["--cs-accent"] = accent;
   if (accentSoft) themeVars["--cs-accent-soft"] = accentSoft;
+  if (background) themeVars["--cs-bg"] = background;
+  if (text) themeVars["--cs-text"] = text;
+  if (headlineText) themeVars["--cs-headline"] = headlineText;
+  if (textMuted) themeVars["--cs-text-muted"] = textMuted;
+  if (rule) themeVars["--cs-rule"] = rule;
+  if (surface) themeVars["--cs-surface"] = surface;
+  if (fontFamily) themeVars["--cs-font"] = fontFamily;
+  if (headlineFontFamily) themeVars["--cs-headline-font"] = headlineFontFamily;
+
+  // Scroll-reveal: fade + translate visual blocks (.cs-reveal) into view once.
+  // Respects prefers-reduced-motion. Hero is exempt — it has its own fade-in animation.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const targets = document.querySelectorAll<HTMLElement>(".cs-reveal");
+    if (reduced) {
+      targets.forEach((el) => el.classList.add("is-visible"));
+      return;
+    }
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-visible");
+            obs.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+    );
+    targets.forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
 
   return (
-    <main
-      style={{
-        minHeight: "100svh",
-        paddingTop: "clamp(5rem, 10vw, 7rem)",
-        paddingBottom: "clamp(4rem, 8vw, 7rem)",
-        ...(themeVars as CSSProperties),
-      }}
-    >
-      <div
-        className="wrap"
+    <>
+      {background && (
+        <style>{`
+          body {
+            background: ${background} !important;
+            background-attachment: fixed !important;
+          }
+          body::before { display: none !important; }
+        `}</style>
+      )}
+      <style>{`
+        /* Scroll-reveal */
+        .cs-reveal {
+          opacity: 0;
+          transform: translateY(14px);
+          transition:
+            opacity .8s cubic-bezier(.16,1,.3,1),
+            transform .8s cubic-bezier(.16,1,.3,1);
+          will-change: opacity, transform;
+        }
+        .cs-reveal.is-visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .cs-reveal { opacity: 1; transform: none; transition: none; }
+        }
+
+        /* Hero pill link soft hover lift */
+        .cs-pill-link {
+          transition: transform .25s cubic-bezier(.16,1,.3,1), box-shadow .25s ease;
+          will-change: transform;
+        }
+        .cs-pill-link:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 24px -12px rgba(0,0,0,.45);
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .cs-pill-link, .cs-pill-link:hover { transform: none; }
+        }
+
+        /* Section serial number — auto-numbered via CSS counter on .wrap */
+        .cs-section-num::before {
+          counter-increment: cs-section;
+          content: counter(cs-section, decimal-leading-zero);
+          font-variant-numeric: tabular-nums;
+          font-feature-settings: "tnum";
+          font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+          font-size: 0.6875rem;
+          font-weight: 600;
+          letter-spacing: .14em;
+          color: var(--cs-text-muted, var(--mid));
+          opacity: .9;
+        }
+        .cs-section-rule {
+          flex: 0 0 28px;
+          height: 1px;
+          background: var(--cs-text-muted, var(--mid));
+          opacity: .35;
+        }
+        @media (max-width: 480px) {
+          .cs-section-num::before, .cs-section-rule { display: none; }
+          .cs-section-head { gap: 0 !important; }
+        }
+      `}</style>
+      <main
         style={{
-          maxWidth: 960,
-          display: "flex",
-          flexDirection: "column",
-          gap: "clamp(3.5rem, 7vw, 6rem)",
+          minHeight: "100svh",
+          paddingTop: "clamp(5rem, 10vw, 7rem)",
+          paddingBottom: "clamp(4rem, 8vw, 7rem)",
+          background: "var(--cs-bg, transparent)",
+          color: "var(--cs-text, var(--black))",
+          fontFamily: "var(--cs-font, var(--font))",
+          ...(themeVars as CSSProperties),
         }}
       >
-        {children}
-      </div>
-    </main>
+        <div
+          className="wrap"
+          style={{
+            maxWidth: 960,
+            display: "flex",
+            flexDirection: "column",
+            gap: "clamp(3.5rem, 7vw, 6rem)",
+            counterReset: "cs-section",
+          }}
+        >
+          {children}
+        </div>
+      </main>
+    </>
   );
 }
 
@@ -69,6 +197,8 @@ interface HeroMeta {
   label: string;
   value: string;
   href?: string;
+  /** When the hero uses metaCard layout, this entry spans 2 grid columns (good for long values). */
+  wide?: boolean;
 }
 
 interface HeroLink {
@@ -76,15 +206,28 @@ interface HeroLink {
   href: string;
 }
 
+interface HeroVideoSource {
+  src: string;
+  /** Optional poster image shown before/over the video. */
+  poster?: string;
+  /** Aspect ratio override; defaults to "1440 / 808" to match the image hero stage. */
+  aspectRatio?: string;
+}
+
 interface HeroProps {
   title: string;
   meta: HeroMeta[];
-  images: HeroImage[];
-  /** Optional black-pill links shown directly under the title (e.g. Live Site, Behance, GitHub) */
+  /** Image carousel hero. Mutually exclusive with `heroVideo`; if both are passed, video wins. */
+  images?: HeroImage[];
+  /** Auto-loop muted video hero (no controls). Mutually exclusive with `images`. */
+  heroVideo?: HeroVideoSource;
+  /** Optional pill links shown directly under the title (e.g. Live Site, Behance, GitHub) */
   links?: HeroLink[];
+  /** When true, render metadata inside a bordered card with a CSS grid layout instead of the default flex-wrap line. */
+  metaCard?: boolean;
 }
 
-export function CaseStudyHero({ title, meta, images, links }: HeroProps) {
+export function CaseStudyHero({ title, meta, images, heroVideo, links, metaCard }: HeroProps) {
   return (
     <header
       className="cs-hero-fade-in"
@@ -110,11 +253,13 @@ export function CaseStudyHero({ title, meta, images, links }: HeroProps) {
         style={{
           fontSize: "var(--display)",
           fontWeight: 800,
-          letterSpacing: "-.035em",
-          lineHeight: 1.05,
+          letterSpacing: "-.04em",
+          lineHeight: 1.02,
           maxWidth: "20ch",
-          color: "var(--black)",
+          color: "var(--cs-headline, var(--cs-text, var(--black)))",
           margin: 0,
+          fontFamily: "var(--cs-headline-font, var(--cs-font, var(--font)))",
+          fontOpticalSizing: "auto",
         }}
       >
         {title}
@@ -135,24 +280,18 @@ export function CaseStudyHero({ title, meta, images, links }: HeroProps) {
               href={l.href}
               target="_blank"
               rel="noopener noreferrer"
+              className="cs-pill-link"
               style={{
                 fontSize: "var(--small)",
                 fontWeight: 600,
-                color: "var(--white)",
-                background: "var(--black)",
+                color: "var(--cs-surface, var(--white))",
+                background: "var(--cs-text, var(--black))",
                 textDecoration: "none",
                 padding: ".5rem 1.25rem",
                 borderRadius: "99px",
                 display: "inline-flex",
                 alignItems: "center",
                 gap: ".4rem",
-                transition: "opacity .15s ease",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLAnchorElement).style.opacity = "0.85";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLAnchorElement).style.opacity = "1";
               }}
             >
               {l.label} ↗
@@ -161,64 +300,177 @@ export function CaseStudyHero({ title, meta, images, links }: HeroProps) {
         </div>
       )}
 
-      <HeroShowcase slides={images} />
+      {heroVideo ? (
+        <HeroVideo source={heroVideo} />
+      ) : images && images.length > 0 ? (
+        <HeroShowcase slides={images} />
+      ) : null}
 
-      <dl
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "1.25rem 2.25rem",
-          paddingTop: "1.25rem",
-          borderTop: "1px solid var(--rule)",
-          margin: 0,
-        }}
-      >
-        {meta.map((m) => (
-          <div
-            key={m.label}
-            style={{ display: "flex", flexDirection: "column", gap: ".4rem" }}
-          >
-            <dt
+      {metaCard ? (
+        <dl
+          className="cs-meta-card"
+          style={{
+            display: "grid",
+            gridTemplateColumns: `repeat(${meta.length}, minmax(0, 1fr))`,
+            gridTemplateRows: "auto auto",
+            columnGap: "2.25rem",
+            rowGap: ".75rem",
+            padding: "1.75rem 2rem 1.85rem",
+            background:
+              "var(--cs-accent-soft, var(--accent-soft, rgba(12,12,12,.03)))",
+            border: "1px solid var(--cs-rule, var(--rule))",
+            borderRadius: 14,
+            margin: 0,
+            position: "relative",
+          }}
+        >
+          <style>{`
+            .cs-meta-card { --cs-meta-cols: ${meta.length}; }
+            .cs-meta-card::before {
+              content: "";
+              position: absolute;
+              top: -1px;
+              left: 1.85rem;
+              width: 36px;
+              height: 2px;
+              background: var(--cs-accent, var(--accent));
+              border-radius: 0 0 4px 4px;
+            }
+            @media (max-width: 900px) {
+              .cs-meta-card {
+                grid-template-columns: repeat(min(var(--cs-meta-cols), 3), minmax(0, 1fr)) !important;
+              }
+              .cs-meta-card dt, .cs-meta-card dd { grid-column: auto !important; grid-row: auto !important; }
+              .cs-meta-card .cs-meta-pair { display: contents; }
+            }
+            @media (max-width: 560px) {
+              .cs-meta-card {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              }
+            }
+            @media (max-width: 380px) {
+              .cs-meta-card {
+                grid-template-columns: 1fr !important;
+              }
+            }
+          `}</style>
+          {meta.map((m, i) => (
+            <Fragment key={m.label}>
+              <dt
+                style={{
+                  gridRow: 1,
+                  gridColumn: i + 1,
+                  fontSize: "var(--label)",
+                  fontWeight: 600,
+                  letterSpacing: ".14em",
+                  textTransform: "uppercase",
+                  color: "var(--cs-text-muted, var(--mid))",
+                  margin: 0,
+                  alignSelf: "end",
+                }}
+              >
+                {m.label}
+              </dt>
+              <dd
+                style={{
+                  gridRow: 2,
+                  gridColumn: i + 1,
+                  fontSize: "var(--small)",
+                  fontWeight: 600,
+                  color: "var(--cs-text, var(--black))",
+                  margin: 0,
+                  lineHeight: 1.5,
+                  fontVariantNumeric: "tabular-nums",
+                  minWidth: 0,
+                  hyphens: "auto",
+                  overflowWrap: "break-word",
+                }}
+              >
+                {m.href ? (
+                  <a
+                    href={m.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      color: "inherit",
+                      textDecoration: "underline",
+                      textUnderlineOffset: 3,
+                      textDecorationThickness: 1,
+                    }}
+                  >
+                    {m.value} ↗
+                  </a>
+                ) : (
+                  m.value
+                )}
+              </dd>
+            </Fragment>
+          ))}
+        </dl>
+      ) : (
+        <dl
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "1.25rem 2.25rem",
+            paddingTop: "1.25rem",
+            borderTop: "1px solid var(--cs-rule, var(--rule))",
+            margin: 0,
+          }}
+        >
+          {meta.map((m) => (
+            <div
+              key={m.label}
               style={{
-                fontSize: "var(--label)",
-                fontWeight: 500,
-                letterSpacing: ".14em",
-                textTransform: "uppercase",
-                color: "var(--mid)",
+                display: "flex",
+                flexDirection: "column",
+                gap: ".4rem",
+                minWidth: 0,
               }}
             >
-              {m.label}
-            </dt>
-            <dd
-              style={{
-                fontSize: "var(--small)",
-                fontWeight: 600,
-                color: "var(--black)",
-                margin: 0,
-                lineHeight: 1.45,
-              }}
-            >
-              {m.href ? (
-                <a
-                  href={m.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    color: "inherit",
-                    textDecoration: "underline",
-                    textUnderlineOffset: 3,
-                    textDecorationThickness: 1,
-                  }}
-                >
-                  {m.value} ↗
-                </a>
-              ) : (
-                m.value
-              )}
-            </dd>
-          </div>
-        ))}
-      </dl>
+              <dt
+                style={{
+                  fontSize: "var(--label)",
+                  fontWeight: 500,
+                  letterSpacing: ".14em",
+                  textTransform: "uppercase",
+                  color: "var(--cs-text-muted, var(--mid))",
+                }}
+              >
+                {m.label}
+              </dt>
+              <dd
+                style={{
+                  fontSize: "var(--small)",
+                  fontWeight: 600,
+                  color: "var(--cs-text, var(--black))",
+                  margin: 0,
+                  lineHeight: 1.45,
+                  fontVariantNumeric: "tabular-nums",
+                }}
+              >
+                {m.href ? (
+                  <a
+                    href={m.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      color: "inherit",
+                      textDecoration: "underline",
+                      textUnderlineOffset: 3,
+                      textDecorationThickness: 1,
+                    }}
+                  >
+                    {m.value} ↗
+                  </a>
+                ) : (
+                  m.value
+                )}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      )}
     </header>
   );
 }
@@ -348,8 +600,8 @@ function HeroShowcase({ slides }: { slides: HeroImage[] }) {
         style={{
           position: "relative",
           borderRadius: 14,
-          border: "1px solid var(--rule)",
-          background: "var(--white)",
+          border: "1px solid var(--cs-rule, var(--rule))",
+          background: "var(--cs-surface, var(--white))",
           overflow: "hidden",
           width: "100%",
           aspectRatio: "1440 / 808",
@@ -437,10 +689,10 @@ function HeroShowcase({ slides }: { slides: HeroImage[] }) {
                 border:
                   i === active
                     ? "2px solid var(--cs-accent, var(--accent))"
-                    : "1px solid var(--rule)",
+                    : "1px solid var(--cs-rule, var(--rule))",
                 padding: 0,
                 overflow: "hidden",
-                background: "var(--white)",
+                background: "var(--cs-surface, var(--white))",
                 opacity: i === active ? 1 : 0.5,
                 cursor: "pointer",
               }}
@@ -469,12 +721,12 @@ function HeroShowcase({ slides }: { slides: HeroImage[] }) {
           justifyContent: "space-between",
           alignItems: "baseline",
           fontSize: "var(--small)",
-          color: "var(--mid)",
+          color: "var(--cs-text-muted, var(--mid))",
           fontVariantNumeric: "tabular-nums",
         }}
       >
         <span key={`num-${active}`} className="cs-counter-num">
-          <span style={{ color: "var(--black)", fontWeight: 700 }}>
+          <span style={{ color: "var(--cs-text, var(--black))", fontWeight: 700 }}>
             {String(active + 1).padStart(2, "0")}
           </span>
           <span style={{ opacity: 0.55 }}>
@@ -491,7 +743,7 @@ function HeroShowcase({ slides }: { slides: HeroImage[] }) {
               fontWeight: 500,
               letterSpacing: ".14em",
               textTransform: "uppercase",
-              color: "var(--mid)",
+              color: "var(--cs-text-muted, var(--mid))",
             }}
           >
             {current.label}
@@ -549,6 +801,120 @@ function HeroArrow({
         {isPrev ? <path d="M15 18l-6-6 6-6" /> : <path d="M9 18l6-6-6-6" />}
       </svg>
     </button>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────────────── */
+/* HeroVideo — auto-loop muted hero (no controls)                       */
+/* ──────────────────────────────────────────────────────────────────── */
+
+function HeroVideo({ source }: { source: HeroVideoSource }) {
+  return (
+    <div
+      style={{
+        position: "relative",
+        borderRadius: 14,
+        border: "1px solid var(--cs-rule, var(--rule))",
+        background: "var(--cs-surface, var(--white))",
+        overflow: "hidden",
+        width: "100%",
+        aspectRatio: source.aspectRatio ?? "1440 / 808",
+        boxShadow:
+          "0 30px 60px -24px rgba(12,12,12,.18), 0 12px 24px -16px rgba(12,12,12,.10)",
+      }}
+    >
+      <video
+        src={source.src}
+        poster={source.poster}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          display: "block",
+        }}
+      />
+    </div>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────────────── */
+/* VideoEmbed — full-width video with native controls                   */
+/* ──────────────────────────────────────────────────────────────────── */
+
+interface VideoEmbedProps {
+  /** Direct video file URL (mp4/webm). Mutually exclusive with `youtubeId`. */
+  src?: string;
+  /** YouTube video ID (e.g. "FJOhz6GuBeo"). When set, renders a YouTube iframe. */
+  youtubeId?: string;
+  poster?: string;
+  /** Optional title shown above the video as a FigureTitle. */
+  title?: string;
+  /** Optional caption shown below the video. */
+  caption?: string;
+  /** Aspect ratio (defaults to "16 / 9"). */
+  aspectRatio?: string;
+}
+
+export function VideoEmbed({
+  src,
+  youtubeId,
+  poster,
+  title,
+  caption,
+  aspectRatio = "16 / 9",
+}: VideoEmbedProps) {
+  return (
+    <figure className="cs-reveal" style={{ margin: 0, display: "flex", flexDirection: "column", gap: ".75rem" }}>
+      {title && <FigureTitle align="start">{title}</FigureTitle>}
+      <div
+        style={{
+          width: "100%",
+          aspectRatio,
+          borderRadius: 10,
+          border: "1px solid var(--cs-rule, var(--rule))",
+          background: "var(--cs-surface, var(--white))",
+          overflow: "hidden",
+        }}
+      >
+        {youtubeId ? (
+          <iframe
+            src={`https://www.youtube-nocookie.com/embed/${youtubeId}?rel=0&modestbranding=1`}
+            title={title ?? "Embedded video"}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            referrerPolicy="strict-origin-when-cross-origin"
+            style={{
+              width: "100%",
+              height: "100%",
+              border: "none",
+              display: "block",
+              background: "#000",
+            }}
+          />
+        ) : src ? (
+          <video
+            src={src}
+            poster={poster}
+            controls
+            preload="metadata"
+            playsInline
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "contain",
+              display: "block",
+              background: "#000",
+            }}
+          />
+        ) : null}
+      </div>
+      {caption && <Caption>{caption}</Caption>}
+    </figure>
   );
 }
 
@@ -658,8 +1024,8 @@ export function Carousel({
                         padding: "1.5rem",
                       }),
                   borderRadius: 12,
-                  border: "1px solid var(--rule)",
-                  background: "var(--white)",
+                  border: "1px solid var(--cs-rule, var(--rule))",
+                  background: "var(--cs-surface, var(--white))",
                   overflow: "hidden",
                 }}
               >
@@ -718,7 +1084,7 @@ export function Carousel({
                 background:
                   i === active
                     ? "var(--cs-accent, var(--accent))"
-                    : "rgba(12,12,12,.18)",
+                    : "var(--cs-rule, rgba(12,12,12,.18))",
                 padding: 0,
                 transition: "all .25s",
               }}
@@ -758,8 +1124,8 @@ function ArrowButton({
         height: 44,
         borderRadius: "50%",
         border: "none",
-        background: "var(--black)",
-        color: "var(--white)",
+        background: "var(--cs-text, var(--black))",
+        color: "var(--cs-surface, var(--white))",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -798,6 +1164,7 @@ interface SectionProps {
 export function Section({ label, headline, children }: SectionProps) {
   return (
     <section
+      className="cs-reveal"
       style={{ display: "flex", flexDirection: "column", gap: "1.75rem" }}
     >
       <div
@@ -807,27 +1174,40 @@ export function Section({ label, headline, children }: SectionProps) {
           gap: "1rem",
         }}
       >
-        <p
+        <div
+          className="cs-section-head"
           style={{
-            fontSize: "var(--label)",
-            fontWeight: 500,
-            letterSpacing: ".14em",
-            textTransform: "uppercase",
-            color: "var(--cs-accent, var(--accent))",
-            margin: 0,
+            display: "flex",
+            alignItems: "center",
+            gap: ".75rem",
           }}
         >
-          {label}
-        </p>
+          <span className="cs-section-num" aria-hidden />
+          <span className="cs-section-rule" aria-hidden />
+          <p
+            style={{
+              fontSize: "var(--label)",
+              fontWeight: 500,
+              letterSpacing: ".14em",
+              textTransform: "uppercase",
+              color: "var(--cs-accent, var(--accent))",
+              margin: 0,
+            }}
+          >
+            {label}
+          </p>
+        </div>
         <h2
           style={{
             fontSize: "clamp(1.625rem, 3.2vw, 2.375rem)",
             fontWeight: 700,
-            letterSpacing: "-.03em",
-            lineHeight: 1.15,
-            color: "var(--black)",
+            letterSpacing: "-.035em",
+            lineHeight: 1.12,
+            color: "var(--cs-headline, var(--cs-text, var(--black)))",
             margin: 0,
             maxWidth: "22ch",
+            fontFamily: "var(--cs-headline-font, var(--cs-font, var(--font)))",
+            fontOpticalSizing: "auto",
           }}
         >
           {headline}
@@ -845,7 +1225,7 @@ export function Paragraph({ children }: { children: ReactNode }) {
       style={{
         fontSize: "var(--body)",
         lineHeight: 1.7,
-        color: "var(--black)",
+        color: "var(--cs-text, var(--black))",
         maxWidth: "62ch",
         margin: 0,
       }}
@@ -855,7 +1235,16 @@ export function Paragraph({ children }: { children: ReactNode }) {
   );
 }
 
-export function HMW({ children }: { children: ReactNode }) {
+interface HMWProps {
+  children: ReactNode;
+  /** When true, the quote uses the page accent colour for both border and text — used for italicised pull quotes (CROW). */
+  accentText?: boolean;
+}
+
+export function HMW({ children, accentText }: HMWProps) {
+  const colour = accentText
+    ? "var(--cs-accent, var(--accent))"
+    : "var(--cs-text, var(--black))";
   return (
     <p
       style={{
@@ -863,8 +1252,8 @@ export function HMW({ children }: { children: ReactNode }) {
         fontStyle: "italic",
         fontWeight: 400,
         lineHeight: 1.55,
-        color: "var(--black)",
-        borderLeft: "3px solid var(--black)",
+        color: colour,
+        borderLeft: `3px solid ${colour}`,
         paddingLeft: "1.25rem",
         maxWidth: "52ch",
         margin: 0,
@@ -896,7 +1285,7 @@ export function SubBlock({ title, children }: SubBlockProps) {
           fontWeight: 600,
           letterSpacing: ".1em",
           textTransform: "uppercase",
-          color: "var(--mid)",
+          color: "var(--cs-text-muted, var(--mid))",
           margin: 0,
         }}
       >
@@ -906,7 +1295,7 @@ export function SubBlock({ title, children }: SubBlockProps) {
         style={{
           fontSize: "var(--body)",
           lineHeight: 1.65,
-          color: "var(--black)",
+          color: "var(--cs-text, var(--black))",
           margin: 0,
         }}
       >
@@ -934,6 +1323,7 @@ interface FigureProps {
 export function Figure({ src, alt, caption, title, size = "wide", tall }: FigureProps) {
   return (
     <figure
+      className="cs-reveal"
       style={{
         margin: 0,
         maxWidth: size === "narrow" ? 720 : "100%",
@@ -953,7 +1343,7 @@ export function Figure({ src, alt, caption, title, size = "wide", tall }: Figure
           height: "auto",
           maxHeight: tall ? 600 : undefined,
           borderRadius: 10,
-          border: "1px solid var(--rule)",
+          border: "1px solid var(--cs-rule, var(--rule))",
           display: "block",
         }}
       />
@@ -963,7 +1353,13 @@ export function Figure({ src, alt, caption, title, size = "wide", tall }: Figure
 }
 
 interface FigureRowProps {
-  images: { src: string; alt: string; caption?: string }[];
+  images: {
+    src: string;
+    alt: string;
+    caption?: string;
+    /** Short uppercase label rendered above this individual image (e.g. "BEFORE", "WITH CROW", "ROUND 1"). */
+    label?: string;
+  }[];
   caption?: string;
   /** Clear name for the artifact — e.g. "User Personas", "Donating via WhatsApp" */
   title?: string;
@@ -973,7 +1369,7 @@ interface FigureRowProps {
 
 export function FigureRow({ images, caption, title, tall }: FigureRowProps) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: ".75rem" }}>
+    <div className="cs-reveal" style={{ display: "flex", flexDirection: "column", gap: ".75rem" }}>
       {title && <FigureTitle align="start">{title}</FigureTitle>}
       <div
         className="cs-figure-row"
@@ -1000,6 +1396,7 @@ export function FigureRow({ images, caption, title, tall }: FigureRowProps) {
               alignItems: tall ? "center" : "stretch",
             }}
           >
+            {img.label && <FigureTitle align="start">{img.label}</FigureTitle>}
             <ImageLightbox
               src={img.src}
               alt={img.alt}
@@ -1009,7 +1406,7 @@ export function FigureRow({ images, caption, title, tall }: FigureRowProps) {
                 height: "auto",
                 maxHeight: tall ? 540 : undefined,
                 borderRadius: 10,
-                border: "1px solid var(--rule)",
+                border: "1px solid var(--cs-rule, var(--rule))",
                 display: "block",
               }}
             />
@@ -1036,7 +1433,7 @@ function FigureTitle({
         fontWeight: 800,
         letterSpacing: ".14em",
         textTransform: "uppercase",
-        color: "var(--accent-purple)",
+        color: "var(--cs-accent, var(--accent-purple))",
         margin: 0,
         textAlign: align === "center" ? "center" : "left",
       }}
@@ -1050,43 +1447,19 @@ export function Caption({ children }: { children: ReactNode }) {
   return (
     <figcaption
       style={{
-        display: "grid",
-        gridTemplateColumns: "auto 1fr",
-        columnGap: "1.25rem",
-        rowGap: ".5rem",
-        alignItems: "start",
         maxWidth: "64ch",
-        margin: 0,
-        paddingTop: ".85rem",
-        borderTop: "1px solid var(--rule)",
+        margin: ".25rem 0 0",
+        padding: ".25rem 0 .25rem 1.1rem",
+        borderLeft: "2px solid var(--cs-accent, var(--accent))",
+        fontSize: "1rem",
+        fontStyle: "italic",
+        fontWeight: 400,
+        lineHeight: 1.55,
+        letterSpacing: ".005em",
+        color: "var(--cs-text, rgba(12,12,12,.82))",
       }}
     >
-      <span
-        aria-hidden
-        style={{
-          fontSize: "0.6875rem",
-          fontWeight: 700,
-          letterSpacing: ".22em",
-          textTransform: "uppercase",
-          color: "var(--cs-accent, var(--accent))",
-          fontFamily:
-            "ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace",
-          paddingTop: ".18rem",
-          whiteSpace: "nowrap",
-        }}
-      >
-        FIG ―
-      </span>
-      <span
-        style={{
-          fontSize: "0.9375rem",
-          fontWeight: 500,
-          lineHeight: 1.55,
-          color: "rgba(12,12,12,.78)",
-        }}
-      >
-        {children}
-      </span>
+      {children}
     </figcaption>
   );
 }
@@ -1119,7 +1492,7 @@ export function Gallery({
   title,
 }: GalleryProps) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+    <div className="cs-reveal" style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
       {title && <FigureTitle align="start">{title}</FigureTitle>}
       <div
         className="cs-gallery"
@@ -1142,20 +1515,41 @@ export function Gallery({
           }
           .cs-gallery img {
             transform-origin: center center;
+            transition:
+              transform .5s cubic-bezier(.16,1,.3,1),
+              box-shadow .5s ease,
+              outline-color .3s ease !important;
+            outline: 1px solid transparent;
+            outline-offset: 4px;
           }
-          .cs-gallery-fig img:hover {
-            transform: scale(1.06) !important;
-            box-shadow: 0 24px 60px -12px rgba(12,12,12,.28) !important;
+          .cs-gallery-fig:hover img {
+            transform: scale(1.04) translateY(-3px) !important;
+            box-shadow: 0 28px 60px -16px rgba(12,12,12,.34) !important;
+            outline-color: var(--cs-accent, var(--accent));
             z-index: 2;
             position: relative;
           }
           .cs-gallery-cap {
             font-size: var(--small);
             font-weight: 500;
-            color: var(--mid);
+            color: var(--cs-text-muted, var(--mid));
             text-align: center;
             margin: 0;
             letter-spacing: .01em;
+            transition: transform .35s cubic-bezier(.16,1,.3,1), color .25s ease;
+          }
+          .cs-gallery-fig:hover .cs-gallery-cap {
+            transform: translateY(-2px);
+            color: var(--cs-text, var(--black));
+          }
+          @media (prefers-reduced-motion: reduce) {
+            .cs-gallery img,
+            .cs-gallery-fig:hover img,
+            .cs-gallery-cap,
+            .cs-gallery-fig:hover .cs-gallery-cap {
+              transform: none !important;
+              transition: none !important;
+            }
           }
         `}</style>
         {images.map((img, i) => (
@@ -1167,7 +1561,7 @@ export function Gallery({
                 width: "100%",
                 height: "auto",
                 borderRadius: 10,
-                border: "1px solid var(--rule)",
+                border: "1px solid var(--cs-rule, var(--rule))",
                 display: "block",
               }}
             />
@@ -1210,8 +1604,8 @@ export function PillLink({ href, children, external }: PillLinkProps) {
         gap: ".4rem",
         fontSize: "var(--small)",
         fontWeight: 600,
-        color: "var(--white)",
-        background: "var(--black)",
+        color: "var(--cs-surface, var(--white))",
+        background: "var(--cs-text, var(--black))",
         textDecoration: "none",
         padding: ".5rem 1.25rem",
         borderRadius: "99px",
@@ -1238,7 +1632,7 @@ interface ComponentGridProps {
 
 export function ComponentGrid({ items, title }: ComponentGridProps) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+    <div className="cs-reveal" style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
       {title && <FigureTitle align="start">{title}</FigureTitle>}
       <div className="cs-comp-grid">
         <style>{`
@@ -1256,9 +1650,9 @@ export function ComponentGrid({ items, title }: ComponentGridProps) {
             justify-content: center;
             gap: 1rem;
             padding: 1.5rem 1rem 1.25rem;
-            border: 1px solid var(--rule);
+            border: 1px solid var(--cs-rule, var(--rule));
             border-radius: 10px;
-            background: var(--white);
+            background: var(--cs-surface, var(--white));
             min-height: 140px;
             transition: transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s ease, border-color .25s ease;
           }
@@ -1279,7 +1673,7 @@ export function ComponentGrid({ items, title }: ComponentGridProps) {
             font-weight: 600;
             letter-spacing: .12em;
             text-transform: uppercase;
-            color: var(--mid);
+            color: var(--cs-text-muted, var(--mid));
             text-align: center;
             margin: 0;
           }
@@ -1325,10 +1719,12 @@ export function Reflection({ title, children }: ReflectionProps) {
         style={{
           fontSize: "clamp(1.0625rem, 1.8vw, 1.25rem)",
           fontWeight: 700,
-          letterSpacing: "-.02em",
-          lineHeight: 1.3,
-          color: "var(--black)",
+          letterSpacing: "-.025em",
+          lineHeight: 1.28,
+          color: "var(--cs-headline, var(--cs-text, var(--black)))",
           margin: 0,
+          fontFamily: "var(--cs-headline-font, var(--cs-font, var(--font)))",
+          fontOpticalSizing: "auto",
         }}
       >
         {title}
@@ -1337,7 +1733,7 @@ export function Reflection({ title, children }: ReflectionProps) {
         style={{
           fontSize: "var(--body)",
           lineHeight: 1.7,
-          color: "var(--black)",
+          color: "var(--cs-text, var(--black))",
           margin: 0,
         }}
       >
