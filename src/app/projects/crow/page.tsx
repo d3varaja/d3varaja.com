@@ -1,7 +1,19 @@
 import type { Metadata } from "next";
-import PillNav from "@/components/PillNav";
-import ImageLightbox from "@/components/ImageLightbox";
 import { Sora } from "next/font/google";
+import PillNav from "@/components/PillNav";
+import {
+  CaseStudyLayout,
+  CaseStudyHero,
+  Section,
+  Paragraph,
+  HMW,
+  SubBlock,
+  Figure,
+  FigureRow,
+  Gallery,
+  Reflection,
+  VideoEmbed,
+} from "@/components/CaseStudyLayout";
 
 const sora = Sora({
   subsets: ["latin"],
@@ -10,360 +22,480 @@ const sora = Sora({
 });
 
 export const metadata: Metadata = {
-  title: "Project CROW",
+  title: "CROW",
   description:
-    "Unified interaction intelligence platform — designed and built 30+ screens with natural-language query, multi-agent analysis, and AI vision extraction.",
+    "Designing brand, UI, frontend, and a marketing film for CROW, a B2B AI platform for retail. Two signed beta clients in production from April 16, 2026.",
   openGraph: {
-    title: "Project CROW — Tharun Devaraja",
+    title: "CROW — Tharun Devaraja",
     description:
-      "Unified interaction intelligence platform with natural-language query, multi-agent analysis, and AI vision extraction.",
+      "Designing brand, UI, frontend, and a marketing film for a B2B AI retail platform. Built by Team B3, six engineers.",
   },
 };
 
-const STACK = [
-  "Figma", "React", "Next.js 15", "Node.js", "Cloudflare D1",
-  "Cloudflare Queues", "Resend", "Playwright", "RAG", "LLM orchestration",
-];
-
-const LINKS = [
-  { label: "Live Site", href: "https://crowai.dev/" },
-  { label: "Figma", href: "https://www.figma.com/design/ivrc5MYJvZv8zTatZXWjU9/CROW---Unified-Customer-Interaction-Intelligence-Platform?node-id=0-1&p=f" },
-  { label: "GitHub", href: "https://github.com/CROW-B3" },
-  { label: "Docs", href: "https://docs.crow.bbyb.dev" },
-];
-
-const COLORS = [
-  { name: "Core Purple", hex: "#6B3FA0" },
-  { name: "Background Deep", hex: "#0D0617" },
-  { name: "Accent Lavender", hex: "#A78BDA" },
-];
-
-
-const SCREENS = [
-  { src: "/projects/crow/Dashboard - Overview.png", label: "Dashboard Overview" },
-  { src: "/projects/crow/Dashboard - Ask CROW.png", label: "Ask CROW" },
-  { src: "/projects/crow/Connect Sources.png", label: "Connect Sources" },
-  { src: "/projects/crow/Dashboard Analysis Interactions.png", label: "Interaction Analysis" },
-  { src: "/projects/crow/CROW - Select Plan.png", label: "Plan Selection" },
-  { src: "/projects/crow/Dashboard Analytics Patterns.png", label: "Analytics Patterns" },
-];
-
-const IMG: React.CSSProperties = { width: "100%", borderRadius: 8, border: "1px solid var(--rule)" };
+const BASE = "/projects/crow";
 
 export default function CrowProject() {
   return (
     <>
-      <style>{`
-        body {
-          background:
-            radial-gradient(1400px 700px at 50% -180px, rgba(107,63,160,.16), transparent 70%),
-            radial-gradient(1000px 600px at 100% 900px, rgba(167,139,218,.10), transparent 70%),
-            var(--white) !important;
-          background-attachment: fixed !important;
-        }
-      `}</style>
       <PillNav />
 
-      <main
-        style={{
-          minHeight: "100svh",
-          paddingTop: "clamp(5rem, 10vw, 7rem)",
-          paddingBottom: "clamp(4rem, 8vw, 7rem)",
-        }}
+      <CaseStudyLayout
+        accent="#7C3AED"
+        accentSoft="rgba(124, 58, 237, 0.14)"
+        background="radial-gradient(900px 450px at 50% -120px, #362362, transparent 65%), radial-gradient(700px 500px at 100% 70vh, rgba(54,35,98,.45), transparent 70%), #04040A"
+        text="#E8E4F0"
+        headlineText="#FFFFFF"
+        textMuted="#856FBB"
+        rule="rgba(232, 228, 240, 0.12)"
+        surface="#04040A"
+        fontFamily={sora.style.fontFamily}
       >
-        <div className="wrap" style={{ maxWidth: 720 }}>
+        {/* ── Hero ────────────────────────────────────────── */}
+        <CaseStudyHero
+          title="Designing brand, UI, and a marketing film for a B2B AI product"
+          links={[
+            { label: "Live Site", href: "https://crowai.dev/" },
+            { label: "Docs", href: "https://docs.crow.bbyb.dev/" },
+            { label: "GitHub", href: "https://github.com/CROW-B3" },
+            {
+              label: "Figma",
+              href: "https://www.figma.com/design/ivrc5MYJvZv8zTatZXWjU9/CROW---Unified-Customer-Interaction-Intelligence-Platform?node-id=0-1&p=f",
+            },
+          ]}
+          metaCard
+          meta={[
+            {
+              label: "Client",
+              value:
+                "Two signed beta clients, Nadda Maana Productions (vtickets.lk) and Serendiv (serendivtravel.com)",
+              wide: true,
+            },
+            {
+              label: "Role",
+              value: "Design Lead, Frontend, Brand and Creative Direction",
+              wide: true,
+            },
+            {
+              label: "Team",
+              value: "Team B3, six engineers, second-year SDGP coursework",
+              wide: true,
+            },
+            { label: "Year", value: "2025, 2026" },
+            {
+              label: "Tools",
+              value:
+                "Figma, FigJam, React, Next.js 15, Cloudflare, Sora, a notebook full of storyboards",
+              wide: true,
+            },
+          ]}
+          images={[
+            {
+              src: `${BASE}/hero/01-landing.png`,
+              alt: "CROW landing page hero, dark theme with the CROW wordmark and Ask CROW search bar",
+              label: "Landing",
+            },
+            {
+              src: `${BASE}/hero/02-dashboard.png`,
+              alt: "CROW dashboard overview, key metrics and recent interactions across Web, CCTV, and Social",
+              label: "Dashboard",
+            },
+            {
+              src: `${BASE}/hero/03-ask-crow.png`,
+              alt: "Ask CROW workspace, the CROW Engine session view with prior chat history in the sidebar",
+              label: "Ask CROW",
+            },
+          ]}
+        />
 
-          {/* Header */}
-          <header style={{ marginBottom: "clamp(2rem, 4vw, 3rem)" }}>
-            <p
-              style={{
-                fontSize: "var(--label)",
-                fontWeight: 500,
-                letterSpacing: ".12em",
-                textTransform: "uppercase",
-                color: "var(--mid)",
-                marginBottom: ".75rem",
-              }}
-            >
-              Sep 2025 — Mar 2026 · UX Design · Frontend Development
-            </p>
-            <h1
-              style={{
-                fontSize: "var(--h1)",
-                fontWeight: 800,
-                letterSpacing: "-.035em",
-                lineHeight: 1.1,
-                marginBottom: "1rem",
-              }}
-            >
-              CROW — Unified Interaction Intelligence Platform
-            </h1>
-            <p style={{ fontSize: "var(--h2)", fontWeight: 300, lineHeight: 1.55, color: "var(--mid)", maxWidth: "42ch" }}>
-              A platform that lets teams query complex customer interaction data using natural language — instead of rigid dashboards.
-            </p>
+        {/* ── Introduction ────────────────────────────────── */}
+        <Section label="Introduction" headline="Project Overview">
+          <Paragraph>
+            CROW, Cognitive Reasoning Observation Watcher, is a unified customer
+            interaction intelligence platform for brand-owned retail. It fuses
+            three sources (Web, CCTV, Social) into one feed so analysts and
+            product teams can ask plain-language questions across every channel.
+          </Paragraph>
+          <Paragraph>
+            Built by Team B3, a six-person engineering team, against 200+ teams
+            in the SDGP showcase. I led design and frontend, and shaped the
+            brand identity and marketing campaign that introduced the product.
+          </Paragraph>
+          <SubBlock title="Timeline">8 months, alongside coursework</SubBlock>
+          <SubBlock title="Outcome">
+            2 signed beta clients, in production from April 16, 2026
+          </SubBlock>
+        </Section>
 
-            {/* Links */}
-            <div style={{ display: "flex", gap: ".75rem", marginTop: "1.25rem", flexWrap: "wrap" }}>
-              {LINKS.map((l) => (
-                <a
-                  key={l.label}
-                  href={l.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    fontSize: "var(--small)",
-                    fontWeight: 600,
-                    color: "var(--white)",
-                    background: "var(--black)",
-                    textDecoration: "none",
-                    padding: ".5rem 1.25rem",
-                    borderRadius: "99px",
-                  }}
-                >
-                  {l.label} ↗
-                </a>
-              ))}
-            </div>
-          </header>
+        {/* ── Problem ─────────────────────────────────────── */}
+        <Section
+          label="Problem"
+          headline="Most enterprise software is dead by default"
+        >
+          <Paragraph>
+            CROW couldn&apos;t be. The category, B2B AI, retail analytics, CCTV
+            intelligence, has a gravitational pull toward soulless. Cold
+            dashboards, stock photo websites, demos with corporate music.
+          </Paragraph>
+          <Paragraph>
+            The product was genuinely advanced. The design problem was making
+            people care about it.
+          </Paragraph>
+          <FigureRow
+            images={[
+              {
+                src: `${BASE}/problem/workflow-comparison-before.png`,
+                alt: "Before CROW: the analyst's workflow stitched across multiple tools and a data team",
+                label: "Without CROW",
+              },
+              {
+                src: `${BASE}/problem/workflow-comparison-after.png`,
+                alt: "With CROW: a single feed and a single plain-language query",
+                label: "With CROW",
+              },
+            ]}
+            caption="From four tools and a data team, to one feed and one query."
+          />
+          <Paragraph>
+            The retail analyst&apos;s most common task, understanding why a
+            metric moved, currently requires correlating data from multiple
+            tools and waiting on a data team. CROW fuses Web, CCTV, and Social
+            signals into one feed so the analyst can ask the question directly
+            and see correlated evidence without manual stitching.
+          </Paragraph>
+        </Section>
 
-          {/* Stack pills */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: ".5rem", marginBottom: "clamp(2.5rem, 5vw, 3.5rem)" }}>
-            {STACK.map((s) => (
-              <span
-                key={s}
-                style={{
-                  fontSize: "var(--label)",
-                  fontWeight: 500,
-                  letterSpacing: ".02em",
-                  padding: ".35rem .75rem",
-                  border: "1px solid var(--rule)",
-                  borderRadius: "99px",
-                  color: "var(--mid)",
-                }}
-              >
-                {s}
-              </span>
-            ))}
-          </div>
+        {/* ── Research ────────────────────────────────────── */}
+        <Section
+          label="Research"
+          headline="What makes enterprise software feel alive"
+        >
+          <Paragraph>
+            Three sources informed the direction. ISO 9241-11 and Nielsen
+            Norman Group on cognitive load and progressive disclosure. SAP
+            Fiori on role-based design. IBM Carbon and W3C on form patterns
+            and contrast.
+          </Paragraph>
+          <Paragraph>
+            The recurring principle: enterprise UX isn&apos;t about looking
+            good. It&apos;s about reducing friction without reducing
+            information.
+          </Paragraph>
+          <HMW accentText>
+            {`Effectiveness, efficiency, satisfaction. None of those words are "gorgeous." None of them are "clean aesthetic."`}
+          </HMW>
+        </Section>
 
-          {/* Hero — smaller landing page preview */}
-          <div style={{ maxWidth: 520, margin: "0 auto clamp(2.5rem, 5vw, 3.5rem)" }}>
-            <img
-              src="/projects/crow/Landing Page.png"
-              alt="CROW landing page"
-              style={{ width: "100%", maxHeight: 340, objectFit: "cover", objectPosition: "top", borderRadius: 8, border: "1px solid var(--rule)" }}
-            />
-          </div>
+        {/* ── Insights ────────────────────────────────────── */}
+        <Section
+          label="Insights"
+          headline="Two users, two different reasons to be there"
+        >
+          <Paragraph>
+            Sarah asks the questions. Dave makes the integration possible.
+            Every major design decision in CROW serves one of them: the
+            conversational query interface for Sarah, the CLI agent and dark
+            theme for Dave, the confidence scoring on every signal for both.
+          </Paragraph>
+          <FigureRow
+            images={[
+              {
+                src: `${BASE}/insights/persona-sarah.png`,
+                alt: "Sarah, the retail analyst persona who asks the questions",
+                label: "Sarah, the analyst",
+              },
+              {
+                src: `${BASE}/insights/persona-dave.png`,
+                alt: "Dave, the engineer persona who makes the integration possible",
+                label: "Dave, the engineer",
+              },
+            ]}
+            caption="Two proto-personas representing CROW's primary user (the analyst who asks the questions) and the secondary user (the engineer who integrates the platform). Built from observed retail-team workflows and developer integration patterns. Not based on direct user interviews."
+          />
+        </Section>
 
-          {/* Story */}
-          <article className="prose">
-            <h2>The Problem</h2>
-            <p>
-              Customer interaction data is messy. It lives across channels — emails, chats, calls, tickets — and extracting meaning from it usually means jumping between dashboards, writing queries, or waiting on analysts. Most teams don't have a fast way to ask a simple question and get a real answer.
-            </p>
-            <p>
-              CROW was built to fix that. The goal was a single platform where anyone on the team could type a question in plain language and get actionable insights, without needing to know SQL or navigate five different tools.
-            </p>
+        {/* ── Creative Direction ──────────────────────────── */}
+        <Section
+          label="Creative Direction"
+          headline="The brand does the work before the UI loads"
+        >
+          <Paragraph>
+            CROW, Cognitive Reasoning Observation Watcher. Named after the bird
+            because of how ravens see, remember, and connect signals across
+            time and space. The same job the platform does for retail data.
+          </Paragraph>
+          <Paragraph>
+            The palette: Core Purple (#7C3AED), Background Deep (#0D0617),
+            Accent Lavender (#856FBB). The typeface: Sora, futuristic,
+            technical, readable at every scale.
+          </Paragraph>
+          <Paragraph>
+            Dark mode by default. Most CROW users are developers and operations
+            people running long focused sessions. A light theme is planned for
+            future audience expansion.
+          </Paragraph>
+          <Figure
+            src={`${BASE}/creative-direction/brand-identity-board.png`}
+            alt="The CROW brand identity board: palette, typography, and core elements"
+            caption="The CROW design system, palette, typography, and core elements."
+          />
+          <Figure
+            src={`${BASE}/creative-direction/core-components.png`}
+            alt="The CROW core component set: action buttons, billing toggle, search bar, content cards, stat cards, configuration cards"
+            caption="Core components, action buttons, billing toggle, the Ask CROW search bar, content cards, stat cards, feature configuration cards."
+          />
+        </Section>
 
-            <h2>What I Did</h2>
-            <p>
-              I solely owned the design and frontend for the entire product. Starting from research and wireframing in Figma, I designed 30+ screens covering the full user journey — from onboarding and query input to results visualisation, conversation replay, and admin management.
-            </p>
-            <p>
-              Then I built it. The frontend runs on React and Next.js 15, connected to a backend powered by Cloudflare D1 for persistence and Cloudflare Queues for async processing. I also built the core intelligence layer: multi-agent analysis that breaks down queries into subtasks, an AI vision extraction pipeline for processing visual content, and vector search for semantic retrieval across interaction histories.
-            </p>
+        {/* ── Process ─────────────────────────────────────── */}
+        <Section label="Process" headline="Designing for invisible work">
+          <Paragraph>
+            The hardest UX problem in CROW is what happens between the user
+            typing a question and seeing an answer. Every stage in between is
+            a design decision: what to show, what to hide, when to wait, when
+            to surface partial results.
+          </Paragraph>
+          <Figure
+            src={`${BASE}/process/query-flow-diagram.png`}
+            alt="Diagram of the five hidden stages between a user's question and CROW's answer"
+            caption="The five hidden stages between a user's question and CROW's answer."
+          />
+          <HMW accentText>
+            A query goes through five hidden stages before the user sees an
+            answer. Each stage was a UX decision, not just an engineering one.
+          </HMW>
+          <Paragraph>
+            The Ask CROW interface itself went through three rounds before it
+            stopped feeling like a chatbot wrapper.
+          </Paragraph>
+          <FigureRow
+            images={[
+              {
+                src: `${BASE}/process/ask-crow-before.png`,
+                alt: "Round 1 of Ask CROW: a standalone chatbot with its own login, logo, and conversational area",
+                label: "Round 1, standalone chatbot",
+              },
+              {
+                src: `${BASE}/process/ask-crow-after.png`,
+                alt: "Final version of Ask CROW: one workspace inside the CROW dashboard, alongside Overview, Analysis, and Team",
+                label: "Final, workspace in dashboard",
+              },
+            ]}
+            caption="Round 1 (left) treated Ask CROW as a standalone chatbot. The final version (right) restructures it as one workspace inside the CROW dashboard."
+          />
+          <HMW accentText>
+            Ask CROW didn&apos;t become better-looking, it became part of the
+            product.
+          </HMW>
+          <Paragraph>
+            Round one positioned Ask CROW as a standalone chatbot, its own
+            login, its own logo, its own conversational area. The final version
+            restructures it as one workspace inside the CROW dashboard, sitting
+            alongside Overview, Analysis, and Team. The shift wasn&apos;t
+            visual. It was a decision about whether Ask CROW was the product,
+            or a feature within the product.
+          </Paragraph>
+        </Section>
 
-            <h2>Connecting the Sources</h2>
-            <p>
-              The platform's value depends on the breadth of data it can ingest. I designed and built the source connection flow — a guided setup where users can link web analytics, CCTV feeds, and social media channels into a single unified pipeline.
-            </p>
+        {/* ── Marketing ───────────────────────────────────── */}
+        <Section
+          label="Marketing"
+          headline="When the product can't explain itself, build a story instead"
+        >
+          <Paragraph>
+            200+ teams in the SDGP showcase. A standard demo video would have
+            disappeared in the lineup. The team needed something that made
+            people feel something about a product that, on paper, sounds like
+            enterprise software.
+          </Paragraph>
+          <Paragraph>
+            I wrote the script across three iterations, storyboarded every
+            scene in a notebook, planned shots over two days at O2 Cafe, and
+            directed an 11-hour shoot for a five-minute film. Three weeks from
+            script to finished cut. Engineers acted, voiced, and dubbed, with
+            a narrator on top to carry the emotional weight.
+          </Paragraph>
+          <FigureRow
+            images={[
+              {
+                src: `${BASE}/marketing/storyboard-sketch.jpeg`,
+                alt: "Notebook storyboard sketches for the marketing film",
+                label: "Notebook sketch",
+              },
+              {
+                src: `${BASE}/marketing/storyboard-frame.png`,
+                alt: "The actual scene from the marketing film, matching the notebook storyboard",
+                label: "Scene from the film",
+              },
+            ]}
+            caption="Notebook sketch (left) vs the actual scene from the film (right)."
+          />
+          <VideoEmbed
+            youtubeId="FJOhz6GuBeo"
+            caption="The five-minute marketing film. Three weeks from script to finished cut. Engineers acted, voiced, and dubbed."
+          />
+          <Paragraph>
+            The product earned a soul because every layer was designed to give
+            it one. Research, brand, UI, film.
+          </Paragraph>
+        </Section>
 
-            <h2>Notifications at Scale</h2>
-            <p>
-              Reliable communication was critical — users needed to be notified about query completions, anomaly alerts, and team activity. I implemented a queue-based async notification service using Cloudflare Queues with Resend API on the delivery side. This decoupled notification dispatch from the main request path and ensured emails were delivered reliably even under load.
-            </p>
-          </article>
+        {/* ── Architecture ────────────────────────────────── */}
+        <Section
+          label="Architecture"
+          headline="Twenty screens organised around three jobs"
+        >
+          <Paragraph>
+            Get connected, ask questions, manage the platform. The information
+            architecture stays shallow on purpose so analysts and engineers
+            each land where they need to be.
+          </Paragraph>
+          <Figure
+            src={`${BASE}/architecture/sitemap.png`}
+            alt="The CROW sitemap: 20 screens organised around four user goals"
+            caption="20 screens organised around four user goals: get connected, ask questions, run analysis, manage the platform."
+          />
+          <HMW accentText>
+            The Connect Sources flow gates the dashboard. Without at least one
+            source connected, CROW has nothing to analyse.
+          </HMW>
+        </Section>
 
-          {/* ── Design System ── */}
-          <div style={{ marginTop: "clamp(2.5rem, 5vw, 3.5rem)" }}>
-            <div className="sec-head">
-              <h2>Design System</h2>
-            </div>
+        {/* ── Solution ────────────────────────────────────── */}
+        <Section label="Solution" headline="What shipped">
+          <Gallery
+            images={[
+              {
+                src: `${BASE}/screens/dashboard-overview.png`,
+                alt: "Dashboard Overview screen with key metrics and recent queries",
+              },
+              {
+                src: `${BASE}/screens/ask-crow.png`,
+                alt: "Ask CROW workspace inside the dashboard, sitting alongside Overview, Analysis, and Team",
+              },
+              {
+                src: `${BASE}/screens/connect-sources.png`,
+                alt: "Connect Sources overview with available integrations",
+              },
+              {
+                src: `${BASE}/screens/connect-cctv.png`,
+                alt: "Connect CCTV source configuration",
+              },
+              {
+                src: `${BASE}/screens/patterns.png`,
+                alt: "Analytics Patterns view showing trends across signals",
+              },
+              {
+                src: `${BASE}/screens/interactions.png`,
+                alt: "Interactions analysis view with sentiment and source data",
+              },
+              {
+                src: `${BASE}/screens/plan-selection.png`,
+                alt: "Plan selection screen with modular per-source pricing",
+              },
+              {
+                src: `${BASE}/screens/team.png`,
+                alt: "Team management screen with member roles and permissions",
+              },
+            ]}
+            caption="The platform shipped in dark mode with the CROW palette and Sora typeface throughout. Confidence scoring on every signal, source-specific entry points, role-based default views, modular per-source pricing."
+            viewAllHref="/projects/crow/screens"
+            viewAllLabel="View all 20 screens →"
+          />
+        </Section>
 
-            <div style={{ paddingTop: "2rem", paddingBottom: "2.5rem" }}>
-              {/* Typography */}
-              <p style={{ fontSize: "var(--label)", fontWeight: 500, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--mid)", marginBottom: "1rem" }}>
-                Typography
-              </p>
-              <p className={sora.className} style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 700, letterSpacing: "-.03em", lineHeight: 1.1 }}>
-                Sora
-              </p>
-              <div className={sora.className} style={{ display: "flex", gap: "1.5rem", marginTop: ".75rem", marginBottom: "2rem" }}>
-                <span style={{ fontSize: "var(--body)", fontWeight: 700 }}>Bold</span>
-                <span style={{ fontSize: "var(--body)", fontWeight: 500 }}>Medium</span>
-                <span style={{ fontSize: "var(--body)", fontWeight: 400 }}>Regular</span>
-              </div>
+        {/* ── Outcome ─────────────────────────────────────── */}
+        <Section label="Outcome" headline="Coursework to signed clients">
+          <Paragraph>
+            Two beta agreements signed for production rollout in April 2026.
+            Nadda Maana Productions for vtickets.lk, Serendiv for
+            serendivtravel.com, both brand-owned retail sites running CROW&apos;s
+            SDK in dev, going live April 16th.
+          </Paragraph>
+          <Paragraph>
+            The platform is deployed, the documentation is public at
+            docs.crow.bbyb.dev, and the natural-language query layer became
+            the primary way the team accesses customer interaction data. The
+            marketing campaign reached people. The product earned the
+            attention it asked for.
+          </Paragraph>
+        </Section>
 
-              {/* Color Palette */}
-              <p style={{ fontSize: "var(--label)", fontWeight: 500, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--mid)", marginBottom: "1rem" }}>
-                Color Palette
-              </p>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem", marginBottom: "2rem" }}>
-                {COLORS.map((c) => (
-                  <div key={c.name}>
-                    <div style={{ aspectRatio: "4/3", borderRadius: 8, background: c.hex }} />
-                    <p style={{ fontSize: "var(--small)", fontWeight: 600, marginTop: ".5rem" }}>{c.name}</p>
-                    <p style={{ fontSize: "var(--label)", color: "var(--mid)", fontFamily: "monospace" }}>{c.hex}</p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Core Components */}
-              <p style={{ fontSize: "var(--label)", fontWeight: 500, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--mid)", marginBottom: "1rem" }}>
-                Core Components
-              </p>
-              {/* Row 1: Action Button | Billing Toggle */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem", marginBottom: "1.5rem" }}>
-                <CompCard src="/projects/crow/components/Button.svg" label="Action Button" />
-                <CompCard src="/projects/crow/components/Frame 49.svg" label="Billing Toggle" />
-              </div>
-
-              {/* Row 2: Ask CROW Search Bar (full width) */}
-              <div style={{ marginBottom: "1.5rem" }}>
-                <CompCard src="/projects/crow/components/Frame 1.svg" label="Ask CROW Search Bar" />
-              </div>
-
-              {/* Row 3: Component Card | Overview Stat Cards */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem", marginBottom: "1.5rem" }}>
-                <CompCard src="/projects/crow/components/Overlay+Border+Shadow+OverlayBlur.svg" label="Component Card" />
-                <CompCard src="/projects/crow/components/Frame 10123356.svg" label="Overview Stat Cards" />
-              </div>
-
-              {/* Row 4: Feature Configuration Card (full width) */}
-              <div>
-                <CompCard src="/projects/crow/components/Overlay+Border.svg" label="Feature Configuration Card" />
-              </div>
-            </div>
-          </div>
-
-          {/* ── Interfaces ── */}
-          <div>
-            <div className="sec-head">
-              <h2>Interfaces</h2>
-            </div>
-
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", paddingTop: "2rem", paddingBottom: "2.5rem" }}>
-              {SCREENS.map((s) => (
-                <div key={s.label}>
-                  <ImageLightbox src={s.src} alt={s.label} style={IMG} />
-                  <p style={{ fontSize: "var(--label)", color: "var(--mid)", marginTop: ".5rem", textAlign: "center" }}>{s.label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* ── Technical Architecture ── */}
-          <div>
-            <div className="sec-head">
-              <h2>Technical Architecture</h2>
-            </div>
-
-            <article className="prose" style={{ paddingTop: "2rem" }}>
-              <h3>Frontend — React & Next.js 15</h3>
-              <p>
-                Solely built the full frontend across 30+ screens. Next.js 15 App Router with React for the component layer. Server components for initial data loading, client components for interactive dashboards and real-time query interfaces.
-              </p>
-
-              <h3>Intelligence Layer — RAG & LLM Orchestration</h3>
-              <p>
-                Built multi-agent analysis that decomposes complex queries into subtasks. AI vision extraction pipeline processes visual content from CCTV and web sources. Vector search enables semantic retrieval across interaction histories.
-              </p>
-
-              <h3>Infrastructure — Cloudflare Stack</h3>
-              <p>
-                Cloudflare D1 for serverless SQL persistence. Cloudflare Queues for async job processing. Queue-based notification service with Resend API for reliable email delivery at scale.
-              </p>
-
-              <h3>Testing — Playwright E2E</h3>
-              <p>
-                288-test Playwright end-to-end suite covering critical paths. Public documentation at <a href="https://docs.crow.bbyb.dev" target="_blank" rel="noopener noreferrer">docs.crow.bbyb.dev</a> covering setup, architecture, and API reference.
-              </p>
-
-              <hr />
-
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(3, 1fr)",
-                  gap: "1.5rem",
-                  textAlign: "center",
-                  padding: "1.5rem 0",
-                }}
-              >
-                <Stat value="30+" label="Screens designed & built" />
-                <Stat value="288" label="E2E tests shipped" />
-                <Stat value="In production" label="Used internally" />
-              </div>
-
-              <hr />
-
-              <a href="/projects/crow/screens" style={{ display: "block", textAlign: "center", padding: "1rem 2rem", background: "var(--black)", color: "var(--white)", borderRadius: "99px", textDecoration: "none", fontWeight: 600, fontSize: "var(--small)" }}>
-                View all 20 screens →
-              </a>
-
-              <h2>Outcome</h2>
-              <p>
-                CROW is used internally in production. It replaced a fragmented workflow of spreadsheets and manual reporting with a conversational interface that any team member can use. The natural-language query layer became the primary way the team accesses customer interaction data.
-              </p>
-            </article>
-          </div>
-
-        </div>
-      </main>
+        {/* ── Reflection ──────────────────────────────────── */}
+        <Section label="Reflection" headline="Takeaways">
+          <Reflection title="Brand isn't decoration on technical work.">
+            It&apos;s how the work gets seen for the first time. Every hour
+            spent on the raven, the purple, Sora, and the film paid off the
+            moment a stranger had to decide whether to care about CROW.
+          </Reflection>
+          <Reflection title="AI products have a UX problem most people don't name.">
+            The user types one question and waits while invisible work happens.
+            Designing for that wait, what to show, when to confirm, how to
+            build trust, is the actual job.
+          </Reflection>
+          <Reflection title="Owning every layer teaches you what each layer is for.">
+            Research, brand, UI, frontend, marketing: they reinforce each
+            other when one person holds the whole picture.
+          </Reflection>
+        </Section>
+      </CaseStudyLayout>
 
       {/* Next project */}
-      <nav style={{ borderTop: "1px solid var(--rule)", paddingBlock: "2.5rem" }}>
-        <div className="wrap" style={{ maxWidth: 720 }}>
-          <p style={{ fontSize: "var(--label)", color: "var(--mid)", letterSpacing: ".08em", textTransform: "uppercase", fontWeight: 500, marginBottom: ".5rem" }}>
+      <nav
+        style={{
+          borderTop: "1px solid rgba(232, 228, 240, 0.12)",
+          paddingBlock: "2.5rem",
+          background: "#04040A",
+        }}
+      >
+        <div className="wrap" style={{ maxWidth: 960 }}>
+          <p
+            style={{
+              fontSize: "var(--label)",
+              color: "#856FBB",
+              letterSpacing: ".08em",
+              textTransform: "uppercase",
+              fontWeight: 500,
+              marginBottom: ".5rem",
+            }}
+          >
             Next project
           </p>
           <a
             href="/projects/med-essence"
-            style={{ fontSize: "var(--h2)", fontWeight: 600, letterSpacing: "-.02em", color: "var(--black)", textDecoration: "none" }}
+            style={{
+              fontSize: "var(--h2)",
+              fontWeight: 600,
+              letterSpacing: "-.02em",
+              color: "#FFFFFF",
+              textDecoration: "none",
+            }}
           >
-            Med-Essence — Offline-First Healthcare App →
+            Med-Essence, Offline-First Healthcare App →
           </a>
         </div>
       </nav>
 
-      <footer style={{ borderTop: "1px solid var(--rule)", paddingBlock: "1.75rem" }}>
+      <footer
+        style={{
+          borderTop: "1px solid rgba(232, 228, 240, 0.12)",
+          paddingBlock: "1.75rem",
+          background: "#04040A",
+        }}
+      >
         <div
           className="wrap"
-          style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "1rem",
+          }}
         >
-          <p style={{ fontSize: "var(--small)", color: "var(--mid)" }}>Tharun Devaraja</p>
+          <p style={{ fontSize: "var(--small)", color: "#856FBB" }}>
+            Tharun Devaraja
+          </p>
         </div>
       </footer>
     </>
-  );
-}
-
-function Stat({ value, label }: { value: string; label: string }) {
-  return (
-    <div>
-      <p style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 700, letterSpacing: "-.03em", lineHeight: 1.1 }}>
-        {value}
-      </p>
-      <p style={{ fontSize: "var(--label)", color: "var(--mid)", marginTop: ".25rem" }}>{label}</p>
-    </div>
-  );
-}
-
-function CompCard({ src, label }: { src: string; label: string }) {
-  return (
-    <div>
-      <p style={{ fontSize: "var(--small)", fontWeight: 600, color: "var(--black)", marginBottom: ".5rem", textAlign: "center" }}>{label}</p>
-      <img src={src} alt={label} style={{ width: "100%", borderRadius: 8 }} />
-    </div>
   );
 }
