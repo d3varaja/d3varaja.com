@@ -33,6 +33,13 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 .dev.vars
+scripts/seed-qdrant.ts
+
+# OpenNext build output
+.open-next
+
+# Wrangler local state
+.wrangler
 
 # vercel
 .vercel

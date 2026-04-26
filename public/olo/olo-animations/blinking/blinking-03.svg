@@ -1,0 +1,11 @@
+<svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="28" cy="28" r="28" fill="#E6E7EB" style="mix-blend-mode:luminosity"/>
+<circle cx="28" cy="28" r="28" fill="#E6E7EB" fill-opacity="0.68"/>
+<circle cx="28" cy="28" r="24.5" fill="#E6E7EB" style="mix-blend-mode:luminosity"/>
+<circle cx="28" cy="28" r="24.5" fill="#EEEEEE"/>
+<circle cx="28" cy="28" r="24.5" stroke="#2C2C2E" stroke-width="3"/>
+<circle cx="28" cy="28" r="24.5" stroke="black" stroke-width="3"/>
+<path d="M25.8834 19.9628L23.7833 35.4456L31.5249 35.104" stroke="black" stroke-width="3" stroke-linecap="round"/>
+<path d="M17.7695 19.7305C18.3894 19.7305 19.2695 20.4006 19.2695 21.7305C19.2695 23.0603 18.3894 23.7305 17.7695 23.7305C17.1497 23.7305 16.2695 23.0603 16.2695 21.7305C16.2695 20.4006 17.1497 19.7305 17.7695 19.7305Z" fill="black" stroke="black" stroke-width="3"/>
+<path d="M36.0801 19.1914C36.6999 19.1914 37.5801 19.8616 37.5801 21.1914C37.5801 22.5212 36.6999 23.1914 36.0801 23.1914C35.4603 23.1914 34.5801 22.5212 34.5801 21.1914C34.5801 19.8616 35.4603 19.1914 36.0801 19.1914Z" fill="black" stroke="black" stroke-width="3"/>
+</svg>
