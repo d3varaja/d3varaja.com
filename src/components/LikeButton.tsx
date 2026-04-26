@@ -52,8 +52,8 @@ export default function LikeButton({ slug }: { slug: string }) {
     setCount(data.count);
   }
 
-  const heartFill = liked ? (flashing ? "#ff2d55" : "#fff") : "none";
-  const heartColor = liked ? (flashing ? "#ff2d55" : "#fff") : "#fff";
+  const heartFill = liked ? (flashing ? "var(--accent)" : "#fff") : "none";
+  const heartColor = liked ? (flashing ? "var(--accent)" : "#fff") : "#fff";
 
   const label = liked
     ? `made ${count} ${count === 1 ? "person" : "people"} feel something`
