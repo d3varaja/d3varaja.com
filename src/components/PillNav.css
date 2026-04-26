@@ -157,7 +157,7 @@
   transform: translateX(-50%);
   width: 12px;
   height: 12px;
-  background: var(--base, #000);
+  background: var(--accent);
   border-radius: 50px;
   z-index: 4;
 }

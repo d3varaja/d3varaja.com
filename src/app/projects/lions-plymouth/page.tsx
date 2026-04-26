@@ -1,305 +1,345 @@
 import type { Metadata } from "next";
 import PillNav from "@/components/PillNav";
-import ImageLightbox from "@/components/ImageLightbox";
-import { Roboto } from "next/font/google";
-
-const roboto = Roboto({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  display: "swap",
-});
+import {
+  CaseStudyLayout,
+  CaseStudyHero,
+  Section,
+  Paragraph,
+  HMW,
+  SubBlock,
+  Figure,
+  FigureRow,
+  Carousel,
+  Gallery,
+  ComponentGrid,
+  PillLink,
+  Reflection,
+} from "@/components/CaseStudyLayout";
 
 export const metadata: Metadata = {
   title: "Lions Club Plymouth",
   description:
-    "Accessibility-focused community platform design for Lions Club Plymouth — 17 screens built for an elderly user base with WCAG compliance.",
+    "Designing for the members most websites forget — an accessibility-first community platform for Lions Club Plymouth, built around an elderly user base.",
   openGraph: {
     title: "Lions Club Plymouth — Tharun Devaraja",
     description:
-      "Accessibility-focused community platform design for an elderly user base. Shipped and live.",
+      "Designing for the members most websites forget — an accessibility-first community platform. Shipped and live.",
   },
 };
 
-const STACK = [
-  "Figma", "Web Design", "Accessibility", "WCAG",
-];
-
-const LINKS = [
-  { label: "Live Site", href: "https://lionsplymouth.org.uk/" },
-  { label: "Behance", href: "https://www.behance.net/gallery/246190855/Lions-Club-Plymouth-Community-Platform-Design" },
-];
-
-const COLORS = [
-  { name: "Core Blue", hex: "#054583", light: false },
-  { name: "Accent Gold", hex: "#C6A610", light: false },
-  { name: "Secondary Blue", hex: "#375995", light: false },
-];
-
-const COMP_IMAGES = [
-  { src: "/projects/lions-plymouth/components/Group 10123381.svg", label: "Action Button" },
-  { src: "/projects/lions-plymouth/components/Frame 10123345.svg", label: "Campaign Progress" },
-  { src: "/projects/lions-plymouth/components/Group 10123382.svg", label: "Content Card" },
-  { src: "/projects/lions-plymouth/components/Pagination Small.svg", label: "Page Navigation" },
-  { src: "/projects/lions-plymouth/components/Frame 10123207.svg", label: "Testimonial Card" },
-  { src: "/projects/lions-plymouth/components/Input.svg", label: "Form Input" },
-];
-
-const INTERFACES = [
-  { src: "/projects/lions-plymouth/Home Page.png", label: "Home" },
-  { src: "/projects/lions-plymouth/Events.png", label: "Events" },
-  { src: "/projects/lions-plymouth/Donate.png", label: "Donate" },
-  { src: "/projects/lions-plymouth/About Us.png", label: "About Us" },
-  { src: "/projects/lions-plymouth/Shop Now Page.png", label: "Shop" },
-  { src: "/projects/lions-plymouth/Gallery.png", label: "Gallery" },
-];
+const BASE = "/projects/lions-plymouth";
 
 export default function LionsPlymouthProject() {
   return (
     <>
       <PillNav />
 
-      <main
-        style={{
-          minHeight: "100svh",
-          paddingTop: "clamp(5rem, 10vw, 7rem)",
-          paddingBottom: "clamp(4rem, 8vw, 7rem)",
-        }}
+      <CaseStudyLayout
+        accent="#054583"
+        accentSoft="rgba(5, 69, 131, 0.08)"
       >
-        <div className="wrap" style={{ maxWidth: 720 }}>
+        {/* ── Hero ────────────────────────────────────────── */}
+        <CaseStudyHero
+          title="Designing for the members most websites forget"
+          links={[
+            { label: "Live Site", href: "https://lionsplymouth.org.uk/" },
+            {
+              label: "Behance",
+              href: "https://www.behance.net/gallery/246190855/Lions-Club-Plymouth-Community-Platform-Design",
+            },
+          ]}
+          meta={[
+            { label: "Role", value: "Design Engineer / UX Designer" },
+            { label: "Client", value: "Lions Club Plymouth (via Team B3)" },
+            { label: "Year", value: "2025" },
+            { label: "Tools", value: "Figma, FigJam, Pen & Paper" },
+          ]}
+          images={[
+            { src: `${BASE}/hero/01-hero.png`, alt: "Lions Club Plymouth homepage hero composition", label: "Homepage" },
+            { src: `${BASE}/hero/02-donate.png`, alt: "Donate page with cause selection", label: "Donate" },
+            { src: `${BASE}/hero/03-donate-individual.png`, alt: "Donate — individual cause page", label: "Cause" },
+            { src: `${BASE}/hero/04-mission.png`, alt: "Mission page", label: "Mission" },
+          ]}
+        />
 
-          {/* Header */}
-          <header style={{ marginBottom: "clamp(2rem, 4vw, 3rem)" }}>
-            <p
-              style={{
-                fontSize: "var(--label)",
-                fontWeight: 500,
-                letterSpacing: ".12em",
-                textTransform: "uppercase",
-                color: "var(--mid)",
-                marginBottom: ".75rem",
-              }}
-            >
-              Jul — Sep 2025 · UX Design · Client Project
-            </p>
-            <h1
-              style={{
-                fontSize: "var(--h1)",
-                fontWeight: 800,
-                letterSpacing: "-.035em",
-                lineHeight: 1.1,
-                marginBottom: "1rem",
-              }}
-            >
-              Lions Club Plymouth — Community Platform Design
-            </h1>
-            <p style={{ fontSize: "var(--h2)", fontWeight: 300, lineHeight: 1.55, color: "var(--mid)", maxWidth: "42ch" }}>
-              Accessibility-focused UX for an elderly community — clear, readable, and built to serve every user.
-            </p>
+        {/* ── Introduction ────────────────────────────────── */}
+        <Section label="Introduction" headline="Project Overview">
+          <Paragraph>
+            Lions Club Plymouth is part of Lions Clubs International — a global
+            volunteer network running community charity projects, raising funds
+            for healthcare, education, youth, and environmental causes. The
+            Plymouth branch is a senior club, meaning the members themselves
+            are mostly elderly.
+          </Paragraph>
+          <Paragraph>
+            The contract came to me through Team B3, who&apos;d won the build. I came
+            in on the design side. The brief was a full responsive website with
+            a working prototype, but with one constraint that shaped the entire
+            project: it had to follow the Lions Clubs International brand
+            guidelines exactly.
+          </Paragraph>
+          <SubBlock title="Timeline">
+            2 months · solo design role · B3 handled client conversations
+          </SubBlock>
+          <SubBlock title="Background">
+            Before this project, the club&apos;s entire digital presence was a
+            Facebook page and a WhatsApp number for donations.
+          </SubBlock>
+        </Section>
 
-            {/* Links */}
-            <div style={{ display: "flex", gap: ".75rem", marginTop: "1.25rem", flexWrap: "wrap" }}>
-              {LINKS.map((l) => (
-                <a
-                  key={l.label}
-                  href={l.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    fontSize: "var(--small)",
-                    fontWeight: 600,
-                    color: "var(--white)",
-                    background: "var(--black)",
-                    textDecoration: "none",
-                    padding: ".5rem 1.25rem",
-                    borderRadius: "99px",
-                  }}
-                >
-                  {l.label} ↗
-                </a>
-              ))}
-            </div>
-          </header>
+        {/* ── Problem ─────────────────────────────────────── */}
+        <Section
+          label="Problem"
+          headline="Designing for members who were being left behind"
+        >
+          <Paragraph>
+            Lions Plymouth had no website. Their digital presence was a Facebook
+            page with low-quality images, and donations happened by messaging a
+            WhatsApp number. For a club whose whole point is fundraising and
+            community service, that&apos;s a system that limits how much good they
+            can actually do.
+          </Paragraph>
+          <HMW>
+            How might we build a website that an elderly volunteer can use
+            confidently the first time, without calling anyone to ask how it
+            works?
+          </HMW>
+          <Figure
+            title="Facebook Page"
+            src={`${BASE}/problem/facebook-page.png`}
+            alt="The Lions Plymouth Facebook page — the club's only digital presence before the project"
+            caption="The entire digital presence before the project — a Facebook page with event posts and a WhatsApp number for anything more."
+          />
+          <FigureRow
+            title="Donating via WhatsApp"
+            tall
+            images={[
+              {
+                src: `${BASE}/problem/whatsapp-chat-1.png`,
+                alt: "Reconstructed WhatsApp chat — donor asks how to give, club replies with sort code, account, and reference",
+              },
+              {
+                src: `${BASE}/problem/whatsapp-chat-2.png`,
+                alt: "Reconstructed WhatsApp chat — donor sends transaction screenshot, club replies they will post a thank-you letter",
+              },
+            ]}
+            caption="Reconstructed from the donation pattern that existed before the website. Every donation depended on a club volunteer being available to reply, the donor copying bank details correctly, and a thank-you letter arriving by post."
+          />
+        </Section>
 
-          {/* Stack pills */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: ".5rem", marginBottom: "clamp(2.5rem, 5vw, 3.5rem)" }}>
-            {STACK.map((s) => (
-              <span
-                key={s}
-                style={{
-                  fontSize: "var(--label)",
-                  fontWeight: 500,
-                  letterSpacing: ".02em",
-                  padding: ".35rem .75rem",
-                  border: "1px solid var(--rule)",
-                  borderRadius: "99px",
-                  color: "var(--mid)",
-                }}
-              >
-                {s}
-              </span>
-            ))}
-          </div>
+        {/* ── Research ────────────────────────────────────── */}
+        <Section
+          label="Research"
+          headline="Three sources, one shared problem"
+        >
+          <Paragraph>
+            I never spoke to the club directly — B3 owned that relationship.
+            So the research came from three places: the Lions Clubs
+            International brand guidelines, a review of existing Lions club
+            websites, and the W3C&apos;s Web Accessibility for Older Users
+            document. Four iteration rounds with B3 then tightened everything.
+          </Paragraph>
+          <Figure
+            title="Brand Palette"
+            src={`${BASE}/research/brand-guidelines-palette.png`}
+            alt="The Lions Clubs International brand guidelines colour palette — primary blue, yellow, purple plus a secondary palette of greys and accents"
+            caption="The Lions International brand palette — Pantone 287 blue, Pantone 7406 yellow, Pantone 2612 purple, plus a secondary palette. Every colour decision in the project was locked to this page."
+          />
+          <Figure
+            title="Affinity Diagram"
+            src={`${BASE}/research/affinity-map.png`}
+            alt="Affinity diagram clustering insights from brand guidelines, accessibility research, reference sites, and B3 feedback rounds"
+            caption="Insights grouped from brand guidelines, accessibility research, reference sites, and four feedback rounds via Team B3."
+          />
+        </Section>
 
-          {/* Story */}
-          <article className="prose">
+        {/* ── Insights ────────────────────────────────────── */}
+        <Section
+          label="Insights"
+          headline="Older users care if the thing works"
+        >
+          <Paragraph>
+            The biggest takeaway from the W3C research: elderly users don&apos;t
+            care about elegant interactions. They care about whether the task
+            gets done. One moment of confusion and they&apos;re gone.
+          </Paragraph>
+          <Paragraph>
+            This shaped two principles for the project. Every action needs to
+            confirm itself — clear success states, visible loading, no
+            ambiguity about what just happened. Donation is the product — the
+            donate button is the most-protected element in the system, visible
+            on every page, with a dedicated path for every cause.
+          </Paragraph>
+          <Carousel
+            title="User Personas"
+            fit="contain"
+            maxHeight={640}
+            slides={[
+              {
+                src: `${BASE}/research/persona-margaret.png`,
+                alt: "Margaret Whitfield, the elderly Lions Club member",
+              },
+              {
+                src: `${BASE}/research/persona-david.png`,
+                alt: "David Hargreaves, the local donor",
+              },
+            ]}
+            caption="Two proto-personas built from accessibility research and observed audience patterns. Not based on direct user interviews."
+          />
+        </Section>
 
-            <h2>The Problem</h2>
-            <p>
-              Lions Club Plymouth needed a website that actually worked for its members — most of whom are elderly. The existing digital presence wasn't cutting it. Navigation was confusing, text was too small, and critical information about events, projects, and donations was buried. For a community organisation that relies on member engagement, inaccessibility meant invisibility.
-            </p>
-            <p>
-              The brief was clear: design a platform that any member could use comfortably, regardless of their technical confidence or physical ability. That meant rethinking the entire experience from an accessibility-first perspective.
-            </p>
+        {/* ── Process ─────────────────────────────────────── */}
+        <Section
+          label="Process"
+          headline="The donation flow was the project"
+        >
+          <Paragraph>
+            Before the website, every donation depended on a member being
+            available on WhatsApp. The donor had to copy bank details, send a
+            screenshot to prove payment, and wait for a thank-you letter in
+            the post. That was the system.
+          </Paragraph>
+          <Paragraph>
+            The new flow had to do all of that automatically — and let donors
+            give to a specific cause, not just the club generically.
+          </Paragraph>
+          <Figure
+            title="Donation Flow — Before"
+            src={`${BASE}/process/donation-flow-before.png`}
+            alt="WhatsApp-based donation user flow — the original manual process"
+            caption="9 steps. Multiple wait points. Depends on a volunteer."
+          />
+          <Figure
+            title="Donation Flow — After"
+            src={`${BASE}/process/donation-flow-after.png`}
+            alt="Website donation user flow — the new self-serve process"
+            caption="7 steps. Self-serve. Instant confirmation."
+          />
+          <Figure
+            title="Shipped Donation Page"
+            src={`${BASE}/process/donate-page-shipped.png`}
+            alt="The shipped donation page with cause-specific entry, amount selection, and SumUp payment"
+            caption="The shipped donation flow. Cause-specific entry, amount selection, secure payment via SumUp, automatic email receipt."
+          />
+        </Section>
 
-            <h2>Designing for Accessibility</h2>
-            <p>
-              Every design decision was filtered through one question: can an elderly user navigate this without frustration? That meant generous touch targets, high-contrast text, readable type scales, and a flat information architecture with no more than two clicks to reach any page.
-            </p>
+        {/* ── Architecture ────────────────────────────────── */}
+        <Section label="Architecture" headline="Shallow on purpose">
+          <Paragraph>
+            For elderly users, IA is accessibility. Fewer levels, more
+            predictable navigation, no hidden pages. Every action page is
+            reachable in two clicks from the homepage. Every donation path
+            leads to a specific cause, not a generic donate-to-the-club flow.
+          </Paragraph>
+          <Figure
+            title="Sitemap"
+            src={`${BASE}/architecture/sitemap.png`}
+            alt="Sitemap of the Lions Club Plymouth website — 17 screens organised around four user goals"
+            caption="17 screens, organised around four things members need to do — find an event, donate to a cause, browse the work, or get in touch."
+          />
+        </Section>
 
-            <p>
-              I kept the navigation predictable — a consistent top bar with clearly labelled sections. Pages follow a uniform layout rhythm so users build spatial memory quickly. Colour is used to support meaning, never as the sole indicator. The entire design targets WCAG compliance for contrast, readability, and navigability.
-            </p>
+        {/* ── Solution ────────────────────────────────────── */}
+        <Section label="Solution" headline="What shipped">
+          <ComponentGrid
+            title="Core Components"
+            items={[
+              { src: `${BASE}/components/Group 10123381.svg`, label: "Action Button" },
+              { src: `${BASE}/components/Frame 10123345.svg`, label: "Campaign Progress" },
+              { src: `${BASE}/components/Group 10123382.svg`, label: "Content Card" },
+              { src: `${BASE}/components/Group 10123383.svg`, label: "Banner Card" },
+              { src: `${BASE}/components/Frame 10123207.svg`, label: "Testimonial Card" },
+              { src: `${BASE}/components/Pagination Small.svg`, label: "Page Navigation" },
+              { src: `${BASE}/components/Input.svg`, label: "Form Input" },
+            ]}
+          />
+          <Gallery
+            title="Core Screens"
+            images={[
+              { src: `${BASE}/screens/Events.png`, alt: "Events page", label: "Events" },
+              { src: `${BASE}/screens/Projects.png`, alt: "Projects page", label: "Projects" },
+              { src: `${BASE}/screens/Donate.png`, alt: "Donate page", label: "Donate" },
+              { src: `${BASE}/screens/Donate Individual page.png`, alt: "Donate — individual cause page", label: "Donate — Cause Detail" },
+              { src: `${BASE}/screens/Mission Page.png`, alt: "Mission page", label: "Mission" },
+              { src: `${BASE}/screens/Shop Now Page.png`, alt: "Shop Now page", label: "Shop" },
+            ]}
+            caption="The site shipped with the Lions Clubs International palette and Roboto typeface, larger type sizing for older readers, and the donate CTA visible in the header on every page."
+            viewAllHref="/projects/lions-plymouth/screens"
+            viewAllLabel="View all screens →"
+          />
+        </Section>
 
-            <h2>Key Pages</h2>
-            <p>
-              The platform covers everything the club needs: a welcoming homepage with upcoming events and calls to action, an events section with individual event pages showing status and details, a projects area tracking ongoing and completed community initiatives, a missions page, a donation flow with individual cause pages, a shop for club merchandise, and a gallery to showcase the community's work.
-            </p>
-
-            <p>
-              Each page was designed to stand on its own while maintaining a cohesive system. The donation flow, for example, had to be simple enough that someone unfamiliar with online payments could complete it confidently. The shop needed to feel familiar — cart, checkout, nothing unexpected.
-            </p>
-
-          </article>
-
-          {/* ── Design System ── */}
-          <div style={{ marginTop: "clamp(2.5rem, 5vw, 3.5rem)" }}>
-            <div className="sec-head">
-              <h2>Design System</h2>
-            </div>
-
-            <div style={{ paddingTop: "2rem", paddingBottom: "2.5rem" }}>
-              {/* Typography */}
-              <p style={{ fontSize: "var(--label)", fontWeight: 500, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--mid)", marginBottom: "1rem" }}>
-                Typography
-              </p>
-              <p className={roboto.className} style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 700, letterSpacing: "-.03em", lineHeight: 1.1 }}>
-                Roboto
-              </p>
-              <div className={roboto.className} style={{ display: "flex", gap: "1.5rem", marginTop: ".75rem", marginBottom: "2rem" }}>
-                <span style={{ fontSize: "var(--body)", fontWeight: 700 }}>Bold</span>
-                <span style={{ fontSize: "var(--body)", fontWeight: 500 }}>Medium</span>
-                <span style={{ fontSize: "var(--body)", fontWeight: 400 }}>Regular</span>
-              </div>
-
-              {/* Color Palette */}
-              <p style={{ fontSize: "var(--label)", fontWeight: 500, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--mid)", marginBottom: "1rem" }}>
-                Color Palette
-              </p>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem" }}>
-                {COLORS.map((c) => (
-                  <div key={c.name}>
-                    <div style={{ aspectRatio: "4/3", borderRadius: 8, background: c.hex, border: c.light ? "1px solid var(--rule)" : "none" }} />
-                    <p style={{ fontSize: "var(--small)", fontWeight: 600, marginTop: ".5rem" }}>{c.name}</p>
-                    <p style={{ fontSize: "var(--label)", color: "var(--mid)", fontFamily: "monospace" }}>{c.hex}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* ── Core Components ── */}
+        {/* ── Outcome ─────────────────────────────────────── */}
+        <Section
+          label="Outcome"
+          headline="Live and serving the community"
+        >
+          <Paragraph>
+            A 17-screen accessibility-first website covering events, donations,
+            projects, shop, gallery, and club information. Replaced a Facebook
+            page and a WhatsApp donation flow.
+          </Paragraph>
+          <Paragraph>
+            The platform is now live at lionsplymouth.org.uk and the club can
+            run donation campaigns, publish events, and showcase work without
+            depending on any one member to handle requests manually.
+          </Paragraph>
           <div>
-            <div className="sec-head">
-              <h2>Core Components</h2>
-            </div>
-
-            <div style={{ paddingTop: "2rem", paddingBottom: "2.5rem" }}>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "1.5rem" }}>
-                {COMP_IMAGES.map((c) => (
-                  <div key={c.label}>
-                    <p style={{ fontSize: "var(--small)", fontWeight: 600, color: "var(--black)", marginBottom: ".5rem", textAlign: "center" }}>{c.label}</p>
-                    <img src={c.src} alt={c.label} style={{ width: "100%", borderRadius: 8 }} />
-                  </div>
-                ))}
-              </div>
-            </div>
+            <PillLink href="https://lionsplymouth.org.uk/">
+              Visit lionsplymouth.org.uk ↗
+            </PillLink>
           </div>
+        </Section>
 
-          {/* ── Interfaces ── */}
-          <div>
-            <div className="sec-head">
-              <h2>Interfaces</h2>
-            </div>
-
-            <div style={{ paddingTop: "2rem", paddingBottom: "2.5rem" }}>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(2, 1fr)",
-                  gap: "1rem",
-                }}
-              >
-                {INTERFACES.map((item) => (
-                  <div key={item.label}>
-                    <ImageLightbox
-                      src={item.src}
-                      alt={`${item.label} page`}
-                      style={{ width: "100%", borderRadius: 8, border: "1px solid var(--rule)" }}
-                    />
-                    <p style={{ fontSize: "var(--label)", color: "var(--mid)", marginTop: ".5rem", textAlign: "center" }}>
-                      {item.label}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Stats + Outcome (inside prose for consistent styling) */}
-          <article className="prose">
-
-            <hr />
-
-            {/* Stats */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
-                gap: "1.5rem",
-                textAlign: "center",
-                padding: "1.5rem 0",
-              }}
-            >
-              <Stat value="17" label="Screens designed" />
-              <Stat value="WCAG" label="Compliant" />
-              <Stat value="Shipped" label="& live" />
-            </div>
-
-            <hr />
-
-            <a href="/projects/lions-plymouth/screens" style={{ display: "block", textAlign: "center", padding: "1rem 2rem", background: "var(--black)", color: "var(--white)", borderRadius: "99px", textDecoration: "none", fontWeight: 600, fontSize: "var(--small)" }}>
-              View all screens →
-            </a>
-
-            <h2>Outcome</h2>
-            <p>
-              The platform shipped and went live. Lions Club Plymouth now has a digital home that reflects its values — inclusive, welcoming, and usable by everyone. Members can find events, donate to causes, browse the shop, and stay connected with the community, all through an interface designed with their needs at the centre.
-            </p>
-
-          </article>
-
-        </div>
-      </main>
+        {/* ── Reflections ─────────────────────────────────── */}
+        <Section
+          label="Reflections"
+          headline="Takeaways from the project"
+        >
+          <Reflection title="Designing for hesitation is its own discipline.">
+            Most UX work assumes users will figure things out. For elderly
+            users, that assumption breaks. Every unclear label, every buried
+            action, every extra step costs you.
+          </Reflection>
+          <Reflection title="Constraints make decisions faster.">
+            The Lions International brand guidelines removed every conversation
+            about colour and type. That left more time for the parts of the
+            design that actually affected users — the donation flow, the IA,
+            the feedback states.
+          </Reflection>
+          <Reflection title="Working through a middleman has a cost.">
+            B3 owned the client relationship, which meant I never spoke to a
+            single Lions member directly. If the project continued, I&apos;d push
+            for direct user testing — even one or two sessions with actual
+            elderly members would sharpen the next iteration significantly.
+          </Reflection>
+        </Section>
+      </CaseStudyLayout>
 
       {/* Next project */}
       <nav style={{ borderTop: "1px solid var(--rule)", paddingBlock: "2.5rem" }}>
-        <div className="wrap" style={{ maxWidth: 720 }}>
-          <p style={{ fontSize: "var(--label)", color: "var(--mid)", letterSpacing: ".08em", textTransform: "uppercase", fontWeight: 500, marginBottom: ".5rem" }}>
+        <div className="wrap" style={{ maxWidth: 960 }}>
+          <p
+            style={{
+              fontSize: "var(--label)",
+              color: "var(--mid)",
+              letterSpacing: ".08em",
+              textTransform: "uppercase",
+              fontWeight: 500,
+              marginBottom: ".5rem",
+            }}
+          >
             Next project
           </p>
           <a
             href="/projects/code-club"
-            style={{ fontSize: "var(--h2)", fontWeight: 600, letterSpacing: "-.02em", color: "var(--black)", textDecoration: "none" }}
+            style={{
+              fontSize: "var(--h2)",
+              fontWeight: 600,
+              letterSpacing: "-.02em",
+              color: "var(--black)",
+              textDecoration: "none",
+            }}
           >
             CodeClub — Admin Portal for StemUp Sri Lanka →
           </a>
@@ -309,22 +349,19 @@ export default function LionsPlymouthProject() {
       <footer style={{ borderTop: "1px solid var(--rule)", paddingBlock: "1.75rem" }}>
         <div
           className="wrap"
-          style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "1rem",
+          }}
         >
-          <p style={{ fontSize: "var(--small)", color: "var(--mid)" }}>Tharun Devaraja</p>
+          <p style={{ fontSize: "var(--small)", color: "var(--mid)" }}>
+            Tharun Devaraja
+          </p>
         </div>
       </footer>
     </>
-  );
-}
-
-function Stat({ value, label }: { value: string; label: string }) {
-  return (
-    <div>
-      <p style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 700, letterSpacing: "-.03em", lineHeight: 1.1 }}>
-        {value}
-      </p>
-      <p style={{ fontSize: "var(--label)", color: "var(--mid)", marginTop: ".25rem" }}>{label}</p>
-    </div>
   );
 }

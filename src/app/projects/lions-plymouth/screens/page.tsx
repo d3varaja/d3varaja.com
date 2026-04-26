@@ -24,7 +24,7 @@ const GRID: React.CSSProperties = {
   gap: "1rem",
 };
 
-const BASE = "/projects/lions-plymouth";
+const BASE = "/projects/lions-plymouth/screens";
 
 export default function LionsPlymouthScreens() {
   return (

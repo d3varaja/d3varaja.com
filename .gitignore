@@ -48,3 +48,7 @@ scripts/seed-qdrant.ts
 *.tsbuildinfo
 next-env.d.ts
 /.pnpm-store
+
+# cloudflare workers / open-next
+.open-next/
+.wrangler/

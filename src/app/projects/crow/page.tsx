@@ -53,6 +53,15 @@ const IMG: React.CSSProperties = { width: "100%", borderRadius: 8, border: "1px 
 export default function CrowProject() {
   return (
     <>
+      <style>{`
+        body {
+          background:
+            radial-gradient(1400px 700px at 50% -180px, rgba(107,63,160,.16), transparent 70%),
+            radial-gradient(1000px 600px at 100% 900px, rgba(167,139,218,.10), transparent 70%),
+            var(--white) !important;
+          background-attachment: fixed !important;
+        }
+      `}</style>
       <PillNav />
 
       <main
