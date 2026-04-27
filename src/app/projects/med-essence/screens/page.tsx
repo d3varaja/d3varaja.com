@@ -1,30 +1,159 @@
 import type { Metadata } from "next";
+import { Sora } from "next/font/google";
 import PillNav from "@/components/PillNav";
+import ImageLightbox from "@/components/ImageLightbox";
+
+const sora = Sora({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
-  title: "Med-Essence — All Screens",
+  title: "Med-Essence, All Screens",
   description:
-    "Gallery of all designed screens for Med-Essence — an offline-first healthcare app. Covers onboarding, home, health reports, wellness, mental health, and pregnancy tracking flows.",
+    "All 57 screens designed for Med-Essence, the offline-first healthcare app. Onboarding, home, AI Health Report, Medicine Scheduler, Nutrition Tracker, Pregnancy Tracking week by week, Mental Health Library, Mood Tracker, Q&A with Staff, X-Ray Comparison, and Schedule.",
   openGraph: {
-    title: "Med-Essence — All Screens",
+    title: "Med-Essence, All Screens",
     description:
-      "Gallery of all designed screens for Med-Essence — onboarding, home, health reports, wellness, mental health, and pregnancy tracking flows.",
+      "All 57 screens for Med-Essence, organised across onboarding, core features, pregnancy tracking, and supporting flows.",
   },
 };
 
+const BASE = "/projects/med-essence/screens";
+
+interface Screen {
+  src: string;
+  alt: string;
+  caption: string;
+}
+
+const ONBOARDING: Screen[] = [
+  { src: `${BASE}/splash.png`, alt: "Splash screen with Med-Essence logo", caption: "Splash" },
+  { src: `${BASE}/welcome.png`, alt: "Welcome screen with Create Account intro", caption: "Welcome" },
+  { src: `${BASE}/app-installed.png`, alt: "Phone home screen showing the Med-Essence app installed", caption: "App Installed" },
+  { src: `${BASE}/get-started.png`, alt: "Get Started screen with Create Account or Sign In", caption: "Get Started" },
+  { src: `${BASE}/signup-options.png`, alt: "Sign up options with Google, Facebook, Email, A step closer to a better Earth", caption: "Sign Up Options" },
+  { src: `${BASE}/signup-form.png`, alt: "Sign up form with terms checkbox", caption: "Sign Up Form" },
+  { src: `${BASE}/signup-error.png`, alt: "Sign up form with terms not accepted, error state", caption: "Sign Up, Error State" },
+];
+
+const CORE: Screen[] = [
+  { src: `${BASE}/home.png`, alt: "Home dashboard with feature cards", caption: "Home, dashboard with feature cards" },
+];
+
+const AI_REPORT: Screen[] = [
+  { src: `${BASE}/ai-report.png`, alt: "AI Health Report screen with digitalised report and on-device suggestions", caption: "AI Health Report, suggestions panel" },
+  { src: `${BASE}/ai-report-tabs.png`, alt: "AI Health Report with Suggest and Consult tabs and continuation buttons", caption: "AI Health Report, Suggest and Consult tabs" },
+];
+
+const SCHEDULER: Screen[] = [
+  { src: `${BASE}/medicine-scheduler.png`, alt: "Medicine Scheduler with calendar, time picker, and reminders", caption: "Medicine Scheduler" },
+];
+
+const NUTRITION: Screen[] = [
+  { src: `${BASE}/nutrition-tracker.png`, alt: "Nutrition Tracker with ingredient inventory and recipe suggestions", caption: "Nutrition Tracker" },
+];
+
+const PREGNANCY_SETUP: Screen[] = [
+  { src: `${BASE}/pregnancy-setup.png`, alt: "Pregnancy setup with baby gender and age input", caption: "Setup" },
+  { src: `${BASE}/pregnancy-setup-blank.png`, alt: "Pregnancy setup with blank fields", caption: "Setup, Blank State" },
+  { src: `${BASE}/pregnancy-setup-error.png`, alt: "Pregnancy setup with missing details error", caption: "Setup, Error State" },
+];
+
+const PREGNANCY_WEEKS: Screen[] = Array.from({ length: 34 }, (_, i) => {
+  const num = String(i).padStart(2, "0");
+  return {
+    src: `${BASE}/pregnancy-week-${num}.png`,
+    alt: `Pregnancy tracking week-by-week view, sequence ${i}`,
+    caption: `Pregnancy Tracker ${num}`,
+  };
+});
+
+const MENTAL_HEALTH: Screen[] = [
+  { src: `${BASE}/mental-health-books.png`, alt: "Mental Health Library, Books tab with reading recommendations", caption: "Mental Health Library, Books" },
+  { src: `${BASE}/mental-health-audio.png`, alt: "Mental Health Library, Audio tab with audiobooks", caption: "Mental Health Library, Audio" },
+];
+
+const MOOD: Screen[] = [
+  { src: `${BASE}/mood-tracker-player.png`, alt: "Mood Tracker, music player with currently playing track", caption: "Mood Tracker, Player" },
+  { src: `${BASE}/mood-tracker-recommendations.png`, alt: "Mood Tracker, music recommendations grouped by mood", caption: "Mood Tracker, Recommendations" },
+];
+
+const QA: Screen[] = [
+  { src: `${BASE}/qa-staff.png`, alt: "Q&A with Staff, chat list with healthcare contacts", caption: "Q&A with Staff" },
+];
+
+const XRAY: Screen[] = [
+  { src: `${BASE}/xray-comparison.png`, alt: "X-Ray Comparison screen", caption: "X-Ray Comparison" },
+];
+
+const SCHEDULE: Screen[] = [
+  { src: `${BASE}/schedule-overview.png`, alt: "Schedule with to-do list, shopping list, and important cards", caption: "Schedule, Overview" },
+  { src: `${BASE}/schedule-note.png`, alt: "Schedule note view with rich text editor", caption: "Schedule, Note Detail" },
+];
+
 const IMG_STYLE: React.CSSProperties = {
   width: "100%",
-  borderRadius: 12,
+  borderRadius: 4,
   border: "1px solid var(--rule)",
+  display: "block",
 };
 
-const GRID: React.CSSProperties = {
+const GRID_2: React.CSSProperties = {
+  display: "grid",
+  gridTemplateColumns: "repeat(2, 1fr)",
+  gap: "1.25rem 1rem",
+};
+
+const GRID_3: React.CSSProperties = {
   display: "grid",
   gridTemplateColumns: "repeat(3, 1fr)",
   gap: "1rem",
 };
 
-const BASE = "/projects/med-essence";
+function ScreenCard({ s }: { s: Screen }) {
+  return (
+    <figure style={{ margin: 0 }}>
+      <ImageLightbox src={s.src} alt={s.alt} style={IMG_STYLE} />
+      <figcaption
+        style={{
+          fontSize: "var(--label)",
+          color: "var(--mid)",
+          marginTop: ".5rem",
+          textAlign: "center",
+          letterSpacing: ".02em",
+          lineHeight: 1.4,
+        }}
+      >
+        {s.caption}
+      </figcaption>
+    </figure>
+  );
+}
+
+function SectionBlock({
+  label,
+  count,
+  children,
+}: {
+  label: string;
+  count: number;
+  children: React.ReactNode;
+}) {
+  return (
+    <div style={{ marginBottom: "clamp(2.5rem, 5vw, 3.5rem)" }}>
+      <div
+        className="sec-head"
+        style={{ paddingTop: 0, marginBottom: "1.5rem" }}
+      >
+        <h2>{label}</h2>
+        <span>({String(count).padStart(2, "0")})</span>
+      </div>
+      {children}
+    </div>
+  );
+}
 
 export default function MedEssenceScreens() {
   return (
@@ -32,14 +161,19 @@ export default function MedEssenceScreens() {
       <PillNav />
 
       <main
-        style={{
-          minHeight: "100svh",
-          paddingTop: "clamp(5rem, 10vw, 7rem)",
-          paddingBottom: "clamp(4rem, 8vw, 7rem)",
-        }}
+        className={sora.className}
+        style={
+          {
+            minHeight: "100svh",
+            paddingTop: "clamp(5rem, 10vw, 7rem)",
+            paddingBottom: "clamp(4rem, 8vw, 7rem)",
+            ["--accent" as string]: "#FF6B6B",
+            ["--accent-soft" as string]: "rgba(255, 107, 107, 0.10)",
+            ["--black" as string]: "#1A1A2E",
+          } as React.CSSProperties
+        }
       >
-        <div className="wrap" style={{ maxWidth: 900 }}>
-
+        <div className="wrap" style={{ maxWidth: 720 }}>
           {/* Header */}
           <header style={{ marginBottom: "clamp(2.5rem, 5vw, 3.5rem)" }}>
             <p
@@ -60,92 +194,159 @@ export default function MedEssenceScreens() {
                 fontWeight: 800,
                 letterSpacing: "-.035em",
                 lineHeight: 1.1,
+                color: "var(--black)",
               }}
             >
               All Screens
             </h1>
+            <p
+              style={{
+                fontSize: "1rem",
+                color: "var(--mid)",
+                lineHeight: 1.55,
+                marginTop: "1rem",
+                maxWidth: "52ch",
+              }}
+            >
+              57 screens covering onboarding, the home dashboard, AI report
+              digitalisation, medicine scheduling, nutrition tracking,
+              pregnancy week-by-week guidance, mental health library, mood
+              tracker, Q&amp;A with healthcare staff, X-ray comparison, and
+              the schedule view.
+            </p>
           </header>
 
-          {/* ── Onboarding ── */}
-          <div className="sec-head" style={{ paddingTop: 0 }}>
-            <h2>Onboarding</h2>
-          </div>
-          <div style={{ ...GRID, paddingTop: "2rem", paddingBottom: "clamp(2.5rem, 5vw, 3.5rem)" }}>
-            <img src={`${BASE}/Startup - 16.png`} alt="Onboarding startup screen 1" style={IMG_STYLE} />
-            <img src={`${BASE}/Startup - 17.png`} alt="Onboarding startup screen 2" style={IMG_STYLE} />
-            <img src={`${BASE}/Startup - 18.png`} alt="Onboarding startup screen 3" style={IMG_STYLE} />
-            <img src={`${BASE}/Welcome Screen4.png`} alt="Welcome screen" style={IMG_STYLE} />
-            <img src={`${BASE}/Welcome Screen4-1.png`} alt="Welcome screen — step 2" style={IMG_STYLE} />
-            <img src={`${BASE}/Welcome Screen4-2.png`} alt="Welcome screen — step 3" style={IMG_STYLE} />
-          </div>
+          <SectionBlock label="Onboarding" count={ONBOARDING.length}>
+            <div style={GRID_2}>
+              {ONBOARDING.map((s) => (
+                <ScreenCard key={s.src} s={s} />
+              ))}
+            </div>
+          </SectionBlock>
 
-          {/* ── Home ── */}
-          <div className="sec-head" style={{ paddingTop: 0 }}>
-            <h2>Home</h2>
-          </div>
-          <div style={{ ...GRID, paddingTop: "2rem", paddingBottom: "clamp(2.5rem, 5vw, 3.5rem)" }}>
-            <img src={`${BASE}/Home screen.png`} alt="Home screen — main view" style={IMG_STYLE} />
-            <img src={`${BASE}/Home screen-1.png`} alt="Home screen — alternate state" style={IMG_STYLE} />
-          </div>
+          <SectionBlock label="Home" count={CORE.length}>
+            <div style={GRID_2}>
+              {CORE.map((s) => (
+                <ScreenCard key={s.src} s={s} />
+              ))}
+            </div>
+          </SectionBlock>
 
-          {/* ── Health Reports & AI ── */}
-          <div className="sec-head" style={{ paddingTop: 0 }}>
-            <h2>Health Reports &amp; AI</h2>
-          </div>
-          <div style={{ ...GRID, paddingTop: "2rem", paddingBottom: "clamp(2.5rem, 5vw, 3.5rem)" }}>
-            <img src={`${BASE}/Report.png`} alt="Health report overview" style={IMG_STYLE} />
-            <img src={`${BASE}/Report-1.png`} alt="Health report detail" style={IMG_STYLE} />
-            <img src={`${BASE}/x-ray.png`} alt="AI X-ray analysis" style={IMG_STYLE} />
-            <img src={`${BASE}/x-ray-1.png`} alt="AI X-ray analysis — results" style={IMG_STYLE} />
-          </div>
+          <SectionBlock label="AI Health Report" count={AI_REPORT.length}>
+            <div style={GRID_2}>
+              {AI_REPORT.map((s) => (
+                <ScreenCard key={s.src} s={s} />
+              ))}
+            </div>
+          </SectionBlock>
 
-          {/* ── Health & Wellness ── */}
-          <div className="sec-head" style={{ paddingTop: 0 }}>
-            <h2>Health &amp; Wellness</h2>
-          </div>
-          <div style={{ ...GRID, paddingTop: "2rem", paddingBottom: "clamp(2.5rem, 5vw, 3.5rem)" }}>
-            <img src={`${BASE}/M.Scheduler.png`} alt="Medication scheduler" style={IMG_STYLE} />
-            <img src={`${BASE}/Vitamin.png`} alt="Vitamin tracker" style={IMG_STYLE} />
-            <img src={`${BASE}/Vitamin-1.png`} alt="Vitamin tracker — detail" style={IMG_STYLE} />
-            <img src={`${BASE}/mood tracker.png`} alt="Mood tracker — main view" style={IMG_STYLE} />
-            <img src={`${BASE}/mood tracker-1.png`} alt="Mood tracker — logging" style={IMG_STYLE} />
-            <img src={`${BASE}/mood tracker-2.png`} alt="Mood tracker — history" style={IMG_STYLE} />
-            <img src={`${BASE}/Q&A Staff.png`} alt="Q&A staff — main view" style={IMG_STYLE} />
-            <img src={`${BASE}/Q&A Staff-1.png`} alt="Q&A staff — question detail" style={IMG_STYLE} />
-            <img src={`${BASE}/Q&A Staff-2.png`} alt="Q&A staff — response" style={IMG_STYLE} />
-            <img src={`${BASE}/Meditation Card.png`} alt="Meditation card" style={IMG_STYLE} />
-          </div>
+          <SectionBlock label="Medicine Scheduler" count={SCHEDULER.length}>
+            <div style={GRID_2}>
+              {SCHEDULER.map((s) => (
+                <ScreenCard key={s.src} s={s} />
+              ))}
+            </div>
+          </SectionBlock>
 
-          {/* ── Mental Health ── */}
-          <div className="sec-head" style={{ paddingTop: 0 }}>
-            <h2>Mental Health</h2>
-          </div>
-          <div style={{ ...GRID, paddingTop: "2rem", paddingBottom: "clamp(2.5rem, 5vw, 3.5rem)" }}>
-            <img src={`${BASE}/Mental Health-Home.png`} alt="Mental health — home" style={IMG_STYLE} />
-            <img src={`${BASE}/Mental Health-Home-1.png`} alt="Mental health — resources" style={IMG_STYLE} />
-            <img src={`${BASE}/Mental Health-Home-2.png`} alt="Mental health — tracking" style={IMG_STYLE} />
-          </div>
+          <SectionBlock label="Nutrition Tracker" count={NUTRITION.length}>
+            <div style={GRID_2}>
+              {NUTRITION.map((s) => (
+                <ScreenCard key={s.src} s={s} />
+              ))}
+            </div>
+          </SectionBlock>
 
-          {/* ── Pregnancy Tracking ── */}
-          <div className="sec-head" style={{ paddingTop: 0 }}>
-            <h2>Pregnancy Tracking</h2>
-          </div>
-          <div style={{ ...GRID, paddingTop: "2rem", paddingBottom: "clamp(2.5rem, 5vw, 3.5rem)" }}>
-            <img src={`${BASE}/Multi SignIn.png`} alt="Pregnancy tracking — screen 1" style={IMG_STYLE} />
-            <img src={`${BASE}/Multi SignIn-5.png`} alt="Pregnancy tracking — screen 6" style={IMG_STYLE} />
-            <img src={`${BASE}/Multi SignIn-10.png`} alt="Pregnancy tracking — screen 11" style={IMG_STYLE} />
-            <img src={`${BASE}/Multi SignIn-20.png`} alt="Pregnancy tracking — screen 21" style={IMG_STYLE} />
-            <img src={`${BASE}/Multi SignIn-30.png`} alt="Pregnancy tracking — screen 31" style={IMG_STYLE} />
-            <img src={`${BASE}/Multi SignIn-40.png`} alt="Pregnancy tracking — screen 41" style={IMG_STYLE} />
-            <img src={`${BASE}/Multi SignIn-50.png`} alt="Pregnancy tracking — screen 51" style={IMG_STYLE} />
-            <img src={`${BASE}/Multi SignIn-60.png`} alt="Pregnancy tracking — screen 61" style={IMG_STYLE} />
-            <img src={`${BASE}/Multi SignIn-68.png`} alt="Pregnancy tracking — screen 69" style={IMG_STYLE} />
-          </div>
+          <SectionBlock
+            label="Pregnancy Tracking, Setup"
+            count={PREGNANCY_SETUP.length}
+          >
+            <div style={GRID_2}>
+              {PREGNANCY_SETUP.map((s) => (
+                <ScreenCard key={s.src} s={s} />
+              ))}
+            </div>
+          </SectionBlock>
 
+          <SectionBlock
+            label="Pregnancy Tracking, Week by Week"
+            count={PREGNANCY_WEEKS.length}
+          >
+            <div style={GRID_3}>
+              {PREGNANCY_WEEKS.map((s) => (
+                <ScreenCard key={s.src} s={s} />
+              ))}
+            </div>
+          </SectionBlock>
+
+          <SectionBlock
+            label="Mental Health Library"
+            count={MENTAL_HEALTH.length}
+          >
+            <div style={GRID_2}>
+              {MENTAL_HEALTH.map((s) => (
+                <ScreenCard key={s.src} s={s} />
+              ))}
+            </div>
+          </SectionBlock>
+
+          <SectionBlock label="Mood Tracker" count={MOOD.length}>
+            <div style={GRID_2}>
+              {MOOD.map((s) => (
+                <ScreenCard key={s.src} s={s} />
+              ))}
+            </div>
+          </SectionBlock>
+
+          <SectionBlock label="Q&A with Staff" count={QA.length}>
+            <div style={GRID_2}>
+              {QA.map((s) => (
+                <ScreenCard key={s.src} s={s} />
+              ))}
+            </div>
+          </SectionBlock>
+
+          <SectionBlock label="X-Ray Comparison" count={XRAY.length}>
+            <div style={GRID_2}>
+              {XRAY.map((s) => (
+                <ScreenCard key={s.src} s={s} />
+              ))}
+            </div>
+          </SectionBlock>
+
+          <SectionBlock label="Schedule" count={SCHEDULE.length}>
+            <div style={GRID_2}>
+              {SCHEDULE.map((s) => (
+                <ScreenCard key={s.src} s={s} />
+              ))}
+            </div>
+          </SectionBlock>
+
+          {/* Back link */}
+          <div style={{ paddingTop: "1rem" }}>
+            <a
+              href="/projects/med-essence"
+              style={{
+                fontSize: "var(--small)",
+                fontWeight: 600,
+                color: "var(--white)",
+                background: "var(--black)",
+                textDecoration: "none",
+                padding: ".5rem 1.25rem",
+                borderRadius: "99px",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: ".4rem",
+              }}
+            >
+              ← Back to project
+            </a>
+          </div>
         </div>
       </main>
 
-      <footer style={{ borderTop: "1px solid var(--rule)", paddingBlock: "1.75rem" }}>
+      <footer
+        style={{ borderTop: "1px solid var(--rule)", paddingBlock: "1.75rem" }}
+      >
         <div
           className="wrap"
           style={{

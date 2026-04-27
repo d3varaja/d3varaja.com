@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import ProjectsListClient from "./ProjectsListClient";
 
 export const metadata: Metadata = {
-  title: "Projects",
+  title: "Work",
   description:
     "Selected work by Tharun Devaraja — case studies, shipped products, and the small things in between.",
   openGraph: {
-    title: "Projects — Tharun Devaraja",
+    title: "Work — Tharun Devaraja",
     description:
       "Case studies, shipped products, and the small things in between.",
   },
