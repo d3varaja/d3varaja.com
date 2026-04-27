@@ -67,13 +67,45 @@ const PROJECTS: Project[] = [
     accent: "#FF6B6B",
     accentBg: "rgba(255, 107, 107, 0.14)",
     preview: {
-      src: "/projects/med-essence/Home screen.png",
-      alt: "Med-Essence home screen",
+      src: "/projects/med-essence/hero/Preview.png",
+      alt: "Med-Essence personal healthcare management app marketing image",
     },
     href: "/projects/med-essence",
   },
   {
     n: "04",
+    slug: "olo",
+    title: "The story of OLO",
+    subtitle: "An exploration in playful AI companion",
+    tags: ["AI", "Character", "Web"],
+    year: "2026",
+    category: "exploration",
+    accent: "#F59E0B",
+    accentBg: "rgba(245, 158, 11, 0.14)",
+    preview: {
+      src: "/projects/olo/Preview.png",
+      alt: "OLO, an exploration in playful AI companion",
+    },
+    href: "/projects/olo",
+  },
+  {
+    n: "05",
+    slug: "code-club",
+    title: "CodeClub",
+    subtitle: "Admin Portal for StemUp Sri Lanka",
+    tags: ["Education", "Admin", "UX"],
+    year: "2025",
+    category: "project",
+    accent: "#41B553",
+    accentBg: "rgba(65, 181, 83, 0.14)",
+    preview: {
+      src: "/projects/code-club/Preview.png",
+      alt: "CodeClub admin dashboard",
+    },
+    href: "/projects/code-club",
+  },
+  {
+    n: "06",
     slug: "orator",
     title: "Orator",
     subtitle: "Accessibility-First Reading Companion",
@@ -87,38 +119,6 @@ const PROJECTS: Project[] = [
       alt: "Orator app screenshot",
     },
     href: "/projects/orator",
-  },
-  {
-    n: "05",
-    slug: "code-club",
-    title: "CodeClub",
-    subtitle: "Admin Portal for StemUp Sri Lanka",
-    tags: ["Education", "Admin", "UX"],
-    year: "2025",
-    category: "project",
-    accent: "#41B553",
-    accentBg: "rgba(65, 181, 83, 0.14)",
-    preview: {
-      src: "/projects/code-club/Code Clubs - Code Clubs Dashboard.png",
-      alt: "CodeClub admin dashboard",
-    },
-    href: "/projects/code-club",
-  },
-  {
-    n: "06",
-    slug: "olo",
-    title: "The story of OLO",
-    subtitle: "An exploration in playful AI companions",
-    tags: ["AI", "Character", "Web"],
-    year: "2026",
-    category: "exploration",
-    accent: "#F59E0B",
-    accentBg: "rgba(245, 158, 11, 0.14)",
-    preview: {
-      src: "/olo/olo-animations/big-eye/olo-puppet.png",
-      alt: "OLO, the puppet AI companion",
-    },
-    href: "/projects/olo",
   },
 ];
 
@@ -212,7 +212,7 @@ export default function ProjectsListClient() {
                 color: "var(--black)",
               }}
             >
-              Projects
+              Work
             </h1>
             <p
               style={{

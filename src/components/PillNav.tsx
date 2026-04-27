@@ -42,7 +42,7 @@ interface PillNavProps {
 
 const DEFAULT_ITEMS: NavItem[] = [
   { label: "About",    href: "/about" },
-  { label: "Projects", href: "/projects" },
+  { label: "Work", href: "/projects" },
   { label: "Blog",     href: "/blog" },
 ];
 

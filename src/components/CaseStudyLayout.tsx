@@ -251,10 +251,10 @@ export function CaseStudyHero({ title, meta, images, heroVideo, links, metaCard 
       `}</style>
       <h1
         style={{
-          fontSize: "var(--display)",
+          fontSize: "var(--h1)",
           fontWeight: 800,
-          letterSpacing: "-.04em",
-          lineHeight: 1.02,
+          letterSpacing: "-.035em",
+          lineHeight: 1.1,
           maxWidth: "20ch",
           color: "var(--cs-headline, var(--cs-text, var(--black)))",
           margin: 0,

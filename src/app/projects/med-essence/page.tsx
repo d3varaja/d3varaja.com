@@ -1,27 +1,32 @@
 import type { Metadata } from "next";
+import { Sora } from "next/font/google";
 import PillNav from "@/components/PillNav";
 import ImageLightbox from "@/components/ImageLightbox";
-import { Poppins } from "next/font/google";
 
-const poppins = Poppins({
+const sora = Sora({
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "Med-Essence",
   description:
-    "Offline-first healthcare app targeting underserved communities — AI/ML-powered counterfeit medicine detection and pregnancy risk assessment.",
+    "Offline-first healthcare app designed for low-connectivity communities. Two on-device AI models, a counterfeit medicine scanner and a pregnancy risk assessment, run on budget Android phones without sending data anywhere.",
   openGraph: {
-    title: "Med-Essence — Tharun Devaraja",
+    title: "Med-Essence, Offline-First Healthcare App",
     description:
-      "Offline-first healthcare app with on-device AI for counterfeit medicine detection and pregnancy risk assessment.",
+      "AI-powered health diagnostics that work entirely on-device. Built for communities where reliable internet is not a given.",
   },
 };
 
-const STACK = [
-  "Figma", "Kotlin", "Android", "TensorFlow Lite", "Offline-first architecture",
+const BASE = "/projects/med-essence";
+
+const META = [
+  { label: "Client", value: "CodeSprint X Competition" },
+  { label: "Role", value: "UX Designer, Design Engineer" },
+  { label: "Year", value: "2025" },
+  { label: "Tools", value: "Figma, FigJam, Kotlin, TensorFlow Lite" },
 ];
 
 const LINKS = [
@@ -29,19 +34,59 @@ const LINKS = [
   { label: "GitHub", href: "https://github.com/Med-Essense" },
 ];
 
-const COLORS = [
-  { name: "Coral Pink", hex: "#FF6B6B", light: false },
-  { name: "Soft White", hex: "#FEFEFE", light: true },
-  { name: "Deep Navy", hex: "#1A1A2E", light: false },
-];
+const STACK = ["Figma", "FigJam", "Kotlin", "TensorFlow Lite", "Offline-first"];
 
 const SCREENS = [
-  { src: "/projects/med-essence/Home screen.png", alt: "Med-Essence home screen with feature cards and service overview", label: "Home" },
-  { src: "/projects/med-essence/Report.png", alt: "AI-powered health report with medical history and smart suggestions", label: "AI Health Report" },
-  { src: "/projects/med-essence/M.Scheduler.png", alt: "Medicine scheduler with calendar and time selection", label: "Medicine Scheduler" },
-  { src: "/projects/med-essence/Vitamin.png", alt: "Nutrition tracker with ingredient inventory and recipe suggestions", label: "Nutrition Tracker" },
-  { src: "/projects/med-essence/Multi SignIn-20.png", alt: "Pregnancy tracking with fetal development and nutrition guidance", label: "Pregnancy Tracking" },
-  { src: "/projects/med-essence/Startup - 18.png", alt: "Med-Essence onboarding — A step closer to a better Earth", label: "Onboarding" },
+  {
+    src: `${BASE}/screens/home.png`,
+    alt: "Home dashboard with feature cards for the five core services",
+    caption: "Home, dashboard with feature cards for the five core services.",
+  },
+  {
+    src: `${BASE}/screens/ai-report.png`,
+    alt: "AI Health Report with on-device suggestions based on uploaded medical reports",
+    caption:
+      "AI Health Report, with on-device suggestions based on uploaded medical reports.",
+  },
+  {
+    src: `${BASE}/screens/medicine-scheduler.png`,
+    alt: "Medicine Scheduler with calendar and time selection designed for elderly users",
+    caption:
+      "Medicine Scheduler, calendar and time selection designed for elderly users.",
+  },
+  {
+    src: `${BASE}/screens/nutrition-tracker.png`,
+    alt: "Nutrition Tracker with recipe suggestions based on available household ingredients",
+    caption:
+      "Nutrition Tracker, recipe suggestions based on available household ingredients.",
+  },
+  {
+    src: `${BASE}/screens/pregnancy-week-07.png`,
+    alt: "Pregnancy Tracking week-by-week with fetal development info and risk indicators",
+    caption:
+      "Pregnancy Tracking, week-by-week guidance with fetal development info and risk indicators.",
+  },
+  {
+    src: `${BASE}/screens/signup-options.png`,
+    alt: "Onboarding screen, A step closer to a better Earth, the entry experience for first-time users",
+    caption:
+      "Onboarding, “A step closer to a better Earth”, the entry experience for first-time users.",
+  },
+];
+
+const TAKEAWAYS = [
+  {
+    title: "Offline-first is a design language, not a feature.",
+    body: "Every loading state, every confirmation, every error has to assume the user has zero bars. The constraint shapes the entire UI.",
+  },
+  {
+    title: "Warmth is a design decision.",
+    body: "The coral palette and Sora typeface aren't aesthetic choices. They're a position against the clinical, Western look of most health tech.",
+  },
+  {
+    title: "Process artifacts are credibility.",
+    body: "Personas, journeys, affinity maps, sitemaps, they're not just deliverables. They're proof that design work happened before the screens did.",
+  },
 ];
 
 export default function MedEssenceProject() {
@@ -50,15 +95,22 @@ export default function MedEssenceProject() {
       <PillNav />
 
       <main
-        style={{
-          minHeight: "100svh",
-          paddingTop: "clamp(5rem, 10vw, 7rem)",
-          paddingBottom: "clamp(4rem, 8vw, 7rem)",
-        }}
+        className={sora.className}
+        style={
+          {
+            minHeight: "100svh",
+            paddingTop: "clamp(5rem, 10vw, 7rem)",
+            paddingBottom: "clamp(4rem, 8vw, 7rem)",
+            // Scoped accent + body text override for this page only.
+            // .sec-head h2 picks up var(--accent), so coral propagates to all section labels.
+            ["--accent" as string]: "#FF6B6B",
+            ["--accent-soft" as string]: "rgba(255, 107, 107, 0.10)",
+            ["--black" as string]: "#1A1A2E",
+          } as React.CSSProperties
+        }
       >
         <div className="wrap" style={{ maxWidth: 720 }}>
-
-          {/* Header */}
+          {/* ── Header ──────────────────────────────────────── */}
           <header style={{ marginBottom: "clamp(2rem, 4vw, 3rem)" }}>
             <p
               style={{
@@ -70,7 +122,7 @@ export default function MedEssenceProject() {
                 marginBottom: ".75rem",
               }}
             >
-              Jun — Sep 2025 · UX Design · AI/ML Development
+              2025 · Coursework Project · UX Design
             </p>
             <h1
               style={{
@@ -78,17 +130,34 @@ export default function MedEssenceProject() {
                 fontWeight: 800,
                 letterSpacing: "-.035em",
                 lineHeight: 1.1,
+                color: "var(--black)",
                 marginBottom: "1rem",
               }}
             >
-              Med-Essence — Offline-First Healthcare App
+              Med-Essence, Offline-First Healthcare App
             </h1>
-            <p style={{ fontSize: "var(--h2)", fontWeight: 300, lineHeight: 1.55, color: "var(--mid)", maxWidth: "42ch" }}>
-              AI-powered health diagnostics that work entirely on-device — designed for communities where internet isn't a given.
+            <p
+              style={{
+                fontSize: "var(--h2)",
+                fontWeight: 300,
+                lineHeight: 1.55,
+                color: "var(--mid)",
+                maxWidth: "44ch",
+              }}
+            >
+              AI-powered health diagnostics that work entirely on-device,
+              designed for communities where reliable internet is not a given.
             </p>
 
             {/* Links */}
-            <div style={{ display: "flex", gap: ".75rem", marginTop: "1.25rem", flexWrap: "wrap" }}>
+            <div
+              style={{
+                display: "flex",
+                gap: ".75rem",
+                marginTop: "1.25rem",
+                flexWrap: "wrap",
+              }}
+            >
               {LINKS.map((l) => (
                 <a
                   key={l.label}
@@ -112,7 +181,14 @@ export default function MedEssenceProject() {
           </header>
 
           {/* Stack pills */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: ".5rem", marginBottom: "clamp(2.5rem, 5vw, 3.5rem)" }}>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: ".5rem",
+              marginBottom: "clamp(2rem, 4vw, 3rem)",
+            }}
+          >
             {STACK.map((s) => (
               <span
                 key={s}
@@ -131,201 +207,455 @@ export default function MedEssenceProject() {
             ))}
           </div>
 
-          {/* Story */}
-          <article className="prose">
-
-            <h2>The Problem</h2>
-            <p>
-              In many underserved communities, the combination of unreliable internet and counterfeit medicines creates a silent healthcare crisis. People can't verify what they're taking. Health workers can't screen patients without cloud-based tools that simply don't work where they operate.
-            </p>
-            <p>
-              Most health tech assumes constant connectivity. Med-Essence was designed from the opposite end — what if every critical feature worked without a single byte of data?
-            </p>
-
-            <h2>Designing for Constraints</h2>
-            <p>
-              I solely led the UX design, working from research into how healthcare workers in low-connectivity areas actually operate. The interface had to be intuitive for users with limited technical literacy — no onboarding walls, no complex navigation trees. Every screen was designed to get out of the way and let the tool do its job.
-            </p>
-            <p>
-              The design process ran through Figma, starting from user flows and low-fidelity wireframes, then moving to high-fidelity prototypes that I tested against real usage scenarios in offline environments.
-            </p>
-
-            <h2>On-Device AI</h2>
-            <p>
-              The core of Med-Essence is two TensorFlow Lite models running entirely on the Android device. The first analyses images to detect counterfeit medicines — a user points their camera at a tablet or packaging, and the model flags potential counterfeits in real time. The second performs pregnancy risk assessments based on input health metrics.
-            </p>
-            <p>
-              Both models were optimised for mobile inference using TFLite's quantisation, keeping the app lightweight enough to run on budget Android devices common in the target communities. No server round-trips, no loading spinners, no failed requests.
-            </p>
-
-            <h2>Beyond Diagnostics</h2>
-            <p>
-              The app goes beyond detection. It includes a medicine scheduler for managing dosages, a nutrition tracker that suggests recipes based on available ingredients, and specialised pregnancy tracking with week-by-week guidance — all working offline.
-            </p>
-
-            <h2>Building It</h2>
-            <p>
-              The Android app was built in Kotlin with a fully offline-first architecture. Data persistence, model inference, and result storage all happen locally. When connectivity becomes available, the app can sync — but it never depends on it. This wasn't a progressive enhancement; offline was the default.
-            </p>
-
-          </article>
-
-          {/* ── Design System ── */}
-          <div style={{ marginTop: "clamp(2.5rem, 5vw, 3.5rem)" }}>
-            <div className="sec-head">
-              <h2>Design System</h2>
-            </div>
-
-            <div style={{ paddingTop: "2rem", paddingBottom: "2.5rem" }}>
-              {/* Typography */}
-              <p style={{ fontSize: "var(--label)", fontWeight: 500, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--mid)", marginBottom: "1rem" }}>
-                Typography
-              </p>
-              <p className={poppins.className} style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 700, letterSpacing: "-.03em", lineHeight: 1.1 }}>
-                Poppins
-              </p>
-              <div className={poppins.className} style={{ display: "flex", gap: "1.5rem", marginTop: ".75rem", marginBottom: "2rem" }}>
-                <span style={{ fontSize: "var(--body)", fontWeight: 700 }}>Bold</span>
-                <span style={{ fontSize: "var(--body)", fontWeight: 500 }}>Medium</span>
-                <span style={{ fontSize: "var(--body)", fontWeight: 400 }}>Regular</span>
+          {/* Metadata strip */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns:
+                "repeat(auto-fit, minmax(160px, 1fr))",
+              gap: "1.25rem 2rem",
+              padding: "1.25rem 0",
+              borderTop: "1px solid var(--rule)",
+              borderBottom: "1px solid var(--rule)",
+              marginBottom: "clamp(2.5rem, 5vw, 3.5rem)",
+            }}
+          >
+            {META.map((m) => (
+              <div key={m.label}>
+                <p
+                  style={{
+                    fontSize: "var(--label)",
+                    fontWeight: 600,
+                    letterSpacing: ".14em",
+                    textTransform: "uppercase",
+                    color: "var(--mid)",
+                    margin: "0 0 .35rem",
+                  }}
+                >
+                  {m.label}
+                </p>
+                <p
+                  style={{
+                    fontSize: "var(--small)",
+                    fontWeight: 500,
+                    color: "var(--black)",
+                    margin: 0,
+                    lineHeight: 1.5,
+                  }}
+                >
+                  {m.value}
+                </p>
               </div>
-
-              {/* Color Palette */}
-              <p style={{ fontSize: "var(--label)", fontWeight: 500, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--mid)", marginBottom: "1rem" }}>
-                Color Palette
-              </p>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem", marginBottom: "2rem" }}>
-                {COLORS.map((c) => (
-                  <div key={c.name}>
-                    <div style={{ aspectRatio: "4/3", borderRadius: 8, background: c.hex, border: c.light ? "1px solid var(--rule)" : "none" }} />
-                    <p style={{ fontSize: "var(--small)", fontWeight: 600, marginTop: ".5rem" }}>{c.name}</p>
-                    <p style={{ fontSize: "var(--label)", color: "var(--mid)", fontFamily: "monospace" }}>{c.hex}</p>
-                  </div>
-                ))}
-              </div>
-
-              <p style={{ fontSize: "var(--small)", color: "var(--mid)", lineHeight: 1.6 }}>
-                The app uses a warm, approachable color palette designed to feel non-clinical and welcoming for underserved communities.
-              </p>
-            </div>
+            ))}
           </div>
 
-          {/* ── Interfaces ── */}
-          <div>
-            <div className="sec-head">
-              <h2>Interfaces</h2>
-            </div>
-
-            <div style={{ paddingTop: "2rem", paddingBottom: "2.5rem" }}>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(3, 1fr)",
-                  gap: "1rem",
-                  maxWidth: 580,
-                  margin: "0 auto",
-                }}
-              >
-                {SCREENS.map((s) => (
-                  <div key={s.label}>
-                    <ImageLightbox src={s.src} alt={s.alt} style={{ width: "100%", borderRadius: 12, border: "1px solid var(--rule)" }} />
-                    <p style={{ fontSize: "var(--label)", color: "var(--mid)", marginTop: ".5rem", textAlign: "center" }}>{s.label}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
+          {/* ── Hero ────────────────────────────────────────── */}
+          <div
+            style={{
+              maxWidth: 640,
+              margin: "0 auto clamp(3rem, 6vw, 4.5rem)",
+            }}
+          >
+            <ImageLightbox
+              src={`${BASE}/hero/Preview.png`}
+              alt="Med-Essence marketing image, Personal Healthcare Management App with home screen preview"
+              style={{
+                width: "100%",
+                height: "auto",
+                borderRadius: 14,
+                border: "1px solid var(--rule)",
+                display: "block",
+              }}
+            />
           </div>
 
-          {/* ── Technical Architecture ── */}
-          <div>
-            <div className="sec-head">
-              <h2>Technical Architecture</h2>
+          {/* ── Overview ────────────────────────────────────── */}
+          <Section label="Overview" headline="Project Overview">
+            <Paragraph>
+              AI-powered health diagnostics that work entirely on-device.
+              Designed for communities where reliable internet, formal
+              healthcare, and verified medicine supply chains aren&apos;t a
+              given.
+            </Paragraph>
+            <Paragraph>
+              The product is built around two on-device AI models, a
+              counterfeit medicine scanner and a pregnancy risk assessment
+              tool. Both run on budget Android phones without sending data
+              anywhere. Offline isn&apos;t a fallback in Med-Essence.
+              It&apos;s the default.
+            </Paragraph>
+          </Section>
+
+          {/* ── Discovery ───────────────────────────────────── */}
+          <Section label="Discovery" headline="Where the product came from">
+            <Paragraph>
+              Two early-stage exercises shaped the direction. The roadmap
+              identification mapped the audience, common problems, and
+              possible solutions. The four-quadrant mind map weighed
+              challenges, impact, business model, and real-world cases.
+            </Paragraph>
+            <Figure
+              src={`${BASE}/process/roadmap-mind-map.png`}
+              alt="Roadmap identification mind map, narrowing 14 candidate features down to 9 selected solutions"
+              caption="From 14 candidate features to 9 selected solutions, narrowed by audience and real problems."
+            />
+            <Figure
+              src={`${BASE}/process/four-quadrant-mind-map.png`}
+              alt="Four-quadrant mind map weighing challenges, impact, business model, and real-world use cases"
+              caption="The project considered against challenges, impact, business model, and real-world use cases."
+            />
+          </Section>
+
+          {/* ── Research ────────────────────────────────────── */}
+          <Section label="Research" headline="Designed for one specific user">
+            <Paragraph>
+              Med-Essence&apos;s primary user is a community health worker
+              operating beyond reliable infrastructure. The persona below
+              was built from desk research on rural healthcare patterns,
+              Sri Lankan MOH operational reports, and observed health
+              worker behaviour in low-connectivity regions.
+            </Paragraph>
+            <Figure
+              src={`${BASE}/process/persona-aruna.png`}
+              alt="Persona, Aruna Perera, community health midwife in rural Anuradhapura, Sri Lanka"
+              caption="Aruna Perera, community health midwife in rural Anuradhapura, Sri Lanka. The primary user shaping the product's design decisions."
+            />
+            <Figure
+              src={`${BASE}/process/empathy-map.png`}
+              alt="Empathy map for Aruna, mapping what she says, thinks, does, and feels during a typical day"
+              caption="Empathy map for Aruna, mapping what she says, thinks, does, and feels during a typical day in the field."
+            />
+          </Section>
+
+          {/* ── Synthesis ───────────────────────────────────── */}
+          <Section label="Synthesis" headline="What the research told the design">
+            <Figure
+              src={`${BASE}/process/affinity-diagram.png`}
+              alt="Affinity diagram synthesising research insights into five themes"
+              caption="Synthesised insights from secondary research on rural healthcare, counterfeit medicine reports, and offline-first design patterns. Grouped into five themes that shaped the product direction."
+            />
+            <Figure
+              src={`${BASE}/process/user-journey-map.png`}
+              alt="User journey map for Aruna verifying a suspicious medicine during a home visit"
+              caption="Journey map for Aruna verifying a suspicious medicine during a home visit. Shows where existing tools fail her and where Med-Essence enters the flow."
+            />
+          </Section>
+
+          {/* ── Design System ───────────────────────────────── */}
+          <Section label="Design System" headline="Warm, not clinical">
+            <Paragraph>
+              The colour palette deliberately rejects medical blue. Coral
+              pink (#FF6B6B), Soft White (#FFEEFF), and Deep Navy (#1A1A2E)
+              signal warmth and approachability, health tech that
+              doesn&apos;t look like Western health tech.
+            </Paragraph>
+            <Paragraph>
+              Sora as the typeface for its readability at small sizes on
+              budget Android devices.
+            </Paragraph>
+            <Figure
+              src={`${BASE}/process/design-system.png`}
+              alt="The Med-Essence design system, palette, typography, and treatment language"
+              caption="The Med-Essence design system, palette, typography, and treatment language."
+            />
+          </Section>
+
+          {/* ── Architecture ────────────────────────────────── */}
+          <Section label="Architecture" headline="Information architecture">
+            <Figure
+              src={`${BASE}/process/sitemap.png`}
+              alt="Sitemap, every feature one tap away from Home"
+              caption="From Home, every feature is one tap away. Onboarding gates first-time use. Each main section has one or two sub-screens for context-specific tasks."
+            />
+          </Section>
+
+          {/* ── Solution ────────────────────────────────────── */}
+          <Section label="Solution" headline="Key screens">
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gap: "1.5rem 1.25rem",
+                margin: "1.5rem 0",
+              }}
+            >
+              {SCREENS.map((s) => (
+                <figure key={s.src} style={{ margin: 0 }}>
+                  <ImageLightbox
+                    src={s.src}
+                    alt={s.alt}
+                    style={{
+                      width: "100%",
+                      borderRadius: 10,
+                      border: "1px solid var(--rule)",
+                      display: "block",
+                    }}
+                  />
+                  <figcaption
+                    style={{
+                      fontSize: "var(--small)",
+                      color: "var(--mid)",
+                      textAlign: "center",
+                      marginTop: ".75rem",
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    {s.caption}
+                  </figcaption>
+                </figure>
+              ))}
             </div>
-
-            <article className="prose" style={{ paddingTop: "2rem" }}>
-              <h3>Android App — Kotlin</h3>
-              <p>
-                Built the native Android application in Kotlin with offline-first architecture. All data persistence, model inference, and result storage happen locally on-device.
-              </p>
-
-              <h3>On-Device ML — TensorFlow Lite</h3>
-              <p>
-                Two TFLite models run entirely on-device. Counterfeit medicine detection through image analysis and pregnancy risk assessment from health metrics. Models optimised with quantisation for budget Android devices.
-              </p>
-
-              <h3>Offline-First Architecture</h3>
-              <p>
-                The app never depends on connectivity. Data syncs when available but all critical features — AI inference, scheduling, tracking — function without internet. This was the default, not a fallback.
-              </p>
-
-              <hr />
-
-              {/* Stats */}
-              <div
+            <div style={{ marginTop: "1.5rem" }}>
+              <a
+                href={`${BASE}/screens`}
                 style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(3, 1fr)",
-                  gap: "1.5rem",
-                  textAlign: "center",
-                  padding: "1.5rem 0",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: ".4rem",
+                  fontSize: "var(--small)",
+                  fontWeight: 600,
+                  color: "var(--white)",
+                  background: "var(--black)",
+                  textDecoration: "none",
+                  padding: ".7rem 1.5rem",
+                  borderRadius: "99px",
                 }}
               >
-                <Stat value="2" label="On-device ML models" />
-                <Stat value="100%" label="Offline capable" />
-                <Stat value="0" label="Server dependencies" />
-              </div>
-
-              <hr />
-
-              <a href="/projects/med-essence/screens" style={{ display: "block", textAlign: "center", padding: "1rem 2rem", background: "var(--black)", color: "var(--white)", borderRadius: "99px", textDecoration: "none", fontWeight: 600, fontSize: "var(--small)" }}>
                 View all screens →
               </a>
+            </div>
+          </Section>
 
-              <h2>Outcome</h2>
-              <p>
-                Med-Essence is a working Android app that puts real diagnostic capability into the hands of healthcare workers who operate beyond reliable infrastructure. It proves that meaningful AI-powered health tools don't require cloud connectivity — they just require thoughtful design and engineering.
-              </p>
+          {/* ── Technical ───────────────────────────────────── */}
+          <Section label="Technical" headline="Built to run anywhere">
+            <Paragraph>
+              Native Android in Kotlin with a fully offline-first
+              architecture. Two TensorFlow Lite models run on-device, one
+              for counterfeit medicine detection through image analysis,
+              one for pregnancy risk assessment from health metrics. Models
+              optimised with TFLite quantisation to fit on budget Android
+              devices.
+            </Paragraph>
+            <Paragraph>
+              Data persistence, model inference, and result storage all
+              happen locally. When connectivity becomes available, the app
+              syncs. It never depends on it.
+            </Paragraph>
+          </Section>
 
-            </article>
-          </div>
+          {/* ── Outcome ─────────────────────────────────────── */}
+          <Section label="Outcome" headline="What this project shows">
+            <Paragraph>
+              Med-Essence is a working Android app with a complete UX design
+              system, six high-fidelity screens, and on-device AI models.
+              It is built for deployment in low-connectivity communities.
+              The architecture proves that meaningful AI-powered health
+              tools don&apos;t require cloud connectivity, they require
+              deliberate constraint design.
+            </Paragraph>
+          </Section>
 
+          {/* ── Reflection ──────────────────────────────────── */}
+          <Section label="Reflection" headline="Takeaways">
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "1.5rem",
+                marginTop: "1rem",
+              }}
+            >
+              {TAKEAWAYS.map((t) => (
+                <div
+                  key={t.title}
+                  style={{
+                    borderLeft: "2px solid var(--accent)",
+                    paddingLeft: "1rem",
+                  }}
+                >
+                  <h3
+                    style={{
+                      fontSize: "clamp(1.0625rem, 1.8vw, 1.25rem)",
+                      fontWeight: 700,
+                      letterSpacing: "-.02em",
+                      lineHeight: 1.3,
+                      color: "var(--black)",
+                      margin: "0 0 .5rem",
+                    }}
+                  >
+                    {t.title}
+                  </h3>
+                  <p
+                    style={{
+                      fontSize: "var(--body)",
+                      lineHeight: 1.7,
+                      color: "var(--black)",
+                      margin: 0,
+                    }}
+                  >
+                    {t.body}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </Section>
         </div>
       </main>
 
       {/* Next project */}
-      <nav style={{ borderTop: "1px solid var(--rule)", paddingBlock: "2.5rem" }}>
+      <nav
+        style={{
+          borderTop: "1px solid var(--rule)",
+          paddingBlock: "2.5rem",
+        }}
+      >
         <div className="wrap" style={{ maxWidth: 720 }}>
-          <p style={{ fontSize: "var(--label)", color: "var(--mid)", letterSpacing: ".08em", textTransform: "uppercase", fontWeight: 500, marginBottom: ".5rem" }}>
+          <p
+            style={{
+              fontSize: "var(--label)",
+              color: "var(--mid)",
+              letterSpacing: ".08em",
+              textTransform: "uppercase",
+              fontWeight: 500,
+              marginBottom: ".5rem",
+            }}
+          >
             Next project
           </p>
           <a
             href="/projects/orator"
-            style={{ fontSize: "var(--h2)", fontWeight: 600, letterSpacing: "-.02em", color: "var(--black)", textDecoration: "none" }}
+            style={{
+              fontSize: "var(--h2)",
+              fontWeight: 600,
+              letterSpacing: "-.02em",
+              color: "var(--black)",
+              textDecoration: "none",
+            }}
           >
-            Orator — Accessibility-First Reading Companion →
+            Orator, Accessibility-First Reading Companion →
           </a>
         </div>
       </nav>
 
-      <footer style={{ borderTop: "1px solid var(--rule)", paddingBlock: "1.75rem" }}>
+      <footer
+        style={{ borderTop: "1px solid var(--rule)", paddingBlock: "1.75rem" }}
+      >
         <div
           className="wrap"
-          style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "1rem",
+          }}
         >
-          <p style={{ fontSize: "var(--small)", color: "var(--mid)" }}>Tharun Devaraja</p>
+          <p style={{ fontSize: "var(--small)", color: "var(--mid)" }}>
+            Tharun Devaraja
+          </p>
         </div>
       </footer>
     </>
   );
 }
 
-function Stat({ value, label }: { value: string; label: string }) {
+/* ──────────────────────────────────────────────────────────────────── */
+/* Local section + figure helpers (Med-Essence specific styling)        */
+/* ──────────────────────────────────────────────────────────────────── */
+
+function Section({
+  label,
+  headline,
+  children,
+}: {
+  label: string;
+  headline: string;
+  children: React.ReactNode;
+}) {
   return (
-    <div>
-      <p style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 700, letterSpacing: "-.03em", lineHeight: 1.1 }}>
-        {value}
+    <section style={{ marginTop: "clamp(3rem, 6vw, 4.5rem)" }}>
+      <p
+        style={{
+          fontSize: "var(--label)",
+          fontWeight: 600,
+          letterSpacing: ".14em",
+          textTransform: "uppercase",
+          color: "var(--accent)",
+          margin: "0 0 .65rem",
+        }}
+      >
+        {label}
       </p>
-      <p style={{ fontSize: "var(--label)", color: "var(--mid)", marginTop: ".25rem" }}>{label}</p>
-    </div>
+      <h2
+        style={{
+          fontSize: "clamp(1.5rem, 3vw, 2rem)",
+          fontWeight: 700,
+          letterSpacing: "-.025em",
+          lineHeight: 1.18,
+          color: "var(--black)",
+          margin: "0 0 1.25rem",
+          maxWidth: "26ch",
+        }}
+      >
+        {headline}
+      </h2>
+      <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+        {children}
+      </div>
+    </section>
+  );
+}
+
+function Paragraph({ children }: { children: React.ReactNode }) {
+  return (
+    <p
+      style={{
+        fontSize: "var(--body)",
+        lineHeight: 1.7,
+        color: "var(--black)",
+        margin: 0,
+        maxWidth: "62ch",
+      }}
+    >
+      {children}
+    </p>
+  );
+}
+
+function Figure({
+  src,
+  alt,
+  caption,
+}: {
+  src: string;
+  alt: string;
+  caption: string;
+}) {
+  return (
+    <figure style={{ margin: ".5rem 0 0" }}>
+      <ImageLightbox
+        src={src}
+        alt={alt}
+        style={{
+          width: "100%",
+          borderRadius: 12,
+          border: "1px solid var(--rule)",
+          display: "block",
+        }}
+      />
+      <figcaption
+        style={{
+          fontSize: "var(--small)",
+          color: "var(--mid)",
+          textAlign: "center",
+          marginTop: ".85rem",
+          lineHeight: 1.55,
+          maxWidth: "60ch",
+          marginInline: "auto",
+        }}
+      >
+        {caption}
+      </figcaption>
+    </figure>
   );
 }
