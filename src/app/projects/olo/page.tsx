@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import PillNav from "@/components/PillNav";
 import ImageLightbox from "@/components/ImageLightbox";
 import OloHeroPuppet from "@/components/OloHeroPuppet";
+import OloPointer from "@/components/OloPointer";
 
 export const metadata: Metadata = {
   title: "The story of OLO",
@@ -317,6 +318,7 @@ export default function OloProject() {
                 }}
               />
             </div>
+            <OloPointer />
             <p style={paragraphStyle}>
               The send and stop buttons are OLO too, the same wordmark
               compressed into round controls so the chat feels like one
@@ -327,7 +329,7 @@ export default function OloProject() {
           </section>
 
           {/* ── The Live Thing ───────────────────────────────── */}
-          <section className="olo-section">
+          <section className="olo-section olo-live">
             <p style={labelStyle}>The live thing</p>
             <h2 style={headlineStyle}>He&apos;s right there</h2>
             <div className="olo-callout">
@@ -385,6 +387,8 @@ export default function OloProject() {
           </section>
         </div>
       </main>
+
+      <div id="olo-pointer-end" aria-hidden="true" style={{ height: 1 }} />
 
       {/* Back to Work */}
       <nav
